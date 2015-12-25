@@ -131,18 +131,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-//    self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-//    var nav1 = UINavigationController()
-//    var mainView = ViewController(nibName: nil, bundle: nil) //ViewController = Name of your controller
-//    nav1.viewControllers = [mainView]
-//    self.window!.rootViewController = nav1
-//    self.window?.makeKeyAndVisible()
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        var nav1 = UINavigationController()
-//        var mainView = mainStoryboard.instantiateViewControllerWithIdentifier("Page2") as? Page2
-        var page1 = Page1(nibName: nil, bundle: nil)
+        let nav1 = UINavigationController()
+        let page1 = Page1(nibName: nil, bundle: nil)
         nav1.viewControllers = [page1]
         nav1.title = "Page1"
 
