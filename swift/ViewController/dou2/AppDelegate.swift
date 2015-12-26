@@ -31,6 +31,12 @@ class Page1: UIViewController {
         button4.setTitle("Button4", forState: UIControlState.Normal)
         button4.addTarget(self, action: "buttonAction4:", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button4)
+        let button5   = UIButton(type: UIButtonType.System) as UIButton
+        button5.frame = CGRectMake(100, 350, 100, 50)
+        button5.backgroundColor = UIColor.blueColor()
+        button5.setTitle("Button5", forState: UIControlState.Normal)
+        button5.addTarget(self, action: "buttonAction5:", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(button5)
     }
     func buttonAction(sender:UIButton!){
         print("button clicked")
@@ -56,6 +62,14 @@ class Page1: UIViewController {
         let mainView = Page4(nibName: nil, bundle: nil)
         nav1.viewControllers = [mainView]
         nav1.title = "Page4"
+        nav1.modalPresentationStyle = .FormSheet
+        presentViewController(nav1, animated: true, completion: nil)
+    }
+    func buttonAction5(sender:UIButton!){
+        let nav1 = UINavigationController()
+        let mainView = Page5(nibName: nil, bundle: nil)
+        nav1.viewControllers = [mainView]
+        nav1.title = "Page5"
         nav1.modalPresentationStyle = .FormSheet
         presentViewController(nav1, animated: true, completion: nil)
     }
@@ -189,18 +203,52 @@ class Page4: UITableViewController {
         return cell!;
         
     }
+}
+
+// Customize cell 
+
+class MyCell : UITableViewCell{
+    var mainLabel : UILabel?
+    required override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style,reuseIdentifier: reuseIdentifier)
+            mainLabel = UILabel(frame:CGRectMake(0.0, 0.0, 220.0, 15.0))
+            mainLabel!.tag = MAINLABEL_TAG;
+            mainLabel!.textAlignment = .Left
+            mainLabel!.textColor = UIColor.blackColor()
+            self.contentView.addSubview(mainLabel!)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder:aDecoder)
+    }
+}
+class Page5: UITableViewController {
     
-    func goBack(){
-        dismissViewControllerAnimated(true, completion: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "section"
+    }
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let MyIdentifier = "MyCell"
+        var cell = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
+        if (cell == nil){
+            cell = MyCell(style: .Default, reuseIdentifier: MyIdentifier)
+        }
+        (cell as! MyCell).mainLabel?.text = "text1"
+        return cell!;
         
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
 }
+
+
 
 @UIApplicationMain
 
