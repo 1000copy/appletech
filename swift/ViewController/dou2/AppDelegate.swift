@@ -25,6 +25,12 @@ class Page1: UIViewController {
         button1.setTitle("Test Button", forState: UIControlState.Normal)
         button1.addTarget(self, action: "buttonAction1:", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button1)
+        let button4   = UIButton(type: UIButtonType.System) as UIButton
+        button4.frame = CGRectMake(100, 300, 100, 50)
+        button4.backgroundColor = UIColor.blueColor()
+        button4.setTitle("Button4", forState: UIControlState.Normal)
+        button4.addTarget(self, action: "buttonAction4:", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(button4)
     }
     func buttonAction(sender:UIButton!){
         print("button clicked")
@@ -45,7 +51,14 @@ class Page1: UIViewController {
         nav1.modalPresentationStyle = .FormSheet
         presentViewController(nav1, animated: true, completion: nil)
     }
-
+    func buttonAction4(sender:UIButton!){
+        let nav1 = UINavigationController()
+        let mainView = Page4(nibName: nil, bundle: nil)
+        nav1.viewControllers = [mainView]
+        nav1.title = "Page4"
+        nav1.modalPresentationStyle = .FormSheet
+        presentViewController(nav1, animated: true, completion: nil)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -87,6 +100,22 @@ There are many ways to put together a table view app. For example, you can use a
 Use an instance of a subclass of UITableViewController to create and manage a table view.
 Most apps use a custom UITableViewController object to manage a table view. As described in Navigating a Data Hierarchy with Table Views, UITableViewController automatically creates a table view, assigns itself as both delegate and data source (and adopts the corresponding protocols), and initiates the procedure for populating the table view with data. It also takes care of several other “housekeeping” details of behavior. The behavior of UITableViewController (a subclass of UIViewController) within the navigation controller architecture is described in Table View Controllers.
 */
+extension UIImage {
+    class func imageWithColor(color: UIColor) -> UIImage {
+        let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, rect)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
+    }
+}
+
 class Page3: UITableViewController {
     
     override func viewDidLoad() {
@@ -105,9 +134,11 @@ class Page3: UITableViewController {
         let MyIdentifier = "MyReuseIdentifier"
         var cell = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
         if cell == nil {
-            cell = UITableViewCell(style:UITableViewCellStyle.Default , reuseIdentifier:MyIdentifier);
+            cell = UITableViewCell(style:UITableViewCellStyle.Value1 , reuseIdentifier:MyIdentifier);
         }
-        cell!.textLabel!.text = "1"
+        cell!.textLabel!.text = "text"
+        cell!.detailTextLabel!.text = "detail"
+        cell!.imageView!.image = UIImage.imageWithColor(UIColor.redColor())
         return cell!;
         
     }
@@ -123,7 +154,53 @@ class Page3: UITableViewController {
     
     
 }
-
+//Adding subviews to a cell’s content view
+let MAINLABEL_TAG = 1
+class Page4: UITableViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "section"
+    }
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let MyIdentifier = "MyReuseIdentifier"
+        var cell = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
+        var mainLabel : UILabel
+        if cell == nil {
+            cell = UITableViewCell(style:UITableViewCellStyle.Default , reuseIdentifier:MyIdentifier);
+            mainLabel = UILabel(frame:CGRectMake(0.0, 0.0, 220.0, 15.0))
+            mainLabel.tag = MAINLABEL_TAG;
+            mainLabel.textAlignment = .Left
+            mainLabel.textColor = UIColor.blackColor()
+//            mainLabel.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin || UIViewAutoresizing.FlexibleHeight
+            cell?.contentView.addSubview(mainLabel)
+        }else{
+            mainLabel = cell!.contentView.viewWithTag(MAINLABEL_TAG) as! UILabel
+        }
+        mainLabel.text = "text"
+        return cell!;
+        
+    }
+    
+    func goBack(){
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+}
 
 @UIApplicationMain
 
