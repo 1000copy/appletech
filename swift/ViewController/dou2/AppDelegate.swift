@@ -37,6 +37,12 @@ class Page1: UIViewController {
         button5.setTitle("Button5", forState: UIControlState.Normal)
         button5.addTarget(self, action: "buttonAction5:", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button5)
+        let button6   = UIButton(type: UIButtonType.System) as UIButton
+        button6.frame = CGRectMake(100, 400, 100, 50)
+        button6.backgroundColor = UIColor.blueColor()
+        button6.setTitle("Button6", forState: UIControlState.Normal)
+        button6.addTarget(self, action: "buttonAction6:", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(button6)
     }
     func buttonAction(sender:UIButton!){
         print("button clicked")
@@ -73,13 +79,22 @@ class Page1: UIViewController {
         nav1.modalPresentationStyle = .FormSheet
         presentViewController(nav1, animated: true, completion: nil)
     }
+    func buttonAction6(sender:UIButton!){
+//        let nav1 = UINavigationController()
+        let mainView = Page6(nibName: nil, bundle: nil)
+//        nav1.viewControllers = [mainView]
+//        nav1.title = "Page5"
+//        nav1.modalPresentationStyle = .FormSheet
+        presentViewController(mainView, animated: true, completion: nil)
+//        mainView.modalPresentationStyle = .FullScreen
+//        pushViewController(mainView,animated: true)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     
 }
-
 
 class Page2: UIViewController {
     
@@ -99,7 +114,7 @@ class Page2: UIViewController {
     
     func goBack(){
         dismissViewControllerAnimated(true, completion: nil)
-    
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -249,8 +264,45 @@ class Page5: UITableViewController {
 }
 
 
+// Naviagtion Back> button
+class Page6: UITableViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "section"
+    }
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let MyIdentifier = "MyCell"
+        var cell = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
+        if (cell == nil){
+            cell = MyCell(style: .Default, reuseIdentifier: MyIdentifier)
+        }
+        (cell as! MyCell).mainLabel?.text = "text1"
+        return cell!;
+        
+    }
+}
+
+
 
 @UIApplicationMain
+
+//self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//// Override point for customization after application launch.
+//frstVwCntlr = [[firstViewController alloc] initWithNibName:@"firstViewController" bundle:nil];
+//self.navController = [[UINavigationController alloc] initWithRootViewController:self.frstVwCntlr];
+//self.window.rootViewController = self.navController;
+//self.window.backgroundColor = [UIColor whiteColor];
+//[self.window makeKeyAndVisible];
+
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -263,7 +315,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         nav1.viewControllers = [page1]
         nav1.title = "Page1"
 
-        self.window!.rootViewController = nav1
+        self.window!.rootViewController = page1
         self.window?.makeKeyAndVisible()
         return true
     }
