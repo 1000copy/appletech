@@ -135,7 +135,51 @@ extension UIImage {
         return image
     }
 }
+extension NSObject {
+    var theClassName: String {
+        return NSStringFromClass(self.dynamicType)//.componentsSeparatedByString(".").last!
+    }
+}
+class Page8:UIViewController{
+    var mainLabel :UILabel?
+    var button : UIButton?
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        mainLabel = UILabel(frame:CGRectMake(0.0, 200, 220.0, 15.0))
+        mainLabel!.text = "something"
+        mainLabel!.backgroundColor = UIColor.redColor()
+        view.addSubview(mainLabel!)
+        let button   = UIButton(type: UIButtonType.System) as UIButton
+        button.frame = CGRectMake(100, 220, 100, 50)
+        button.backgroundColor = UIColor.redColor()
+        button.setTitle("2", forState: UIControlState.Normal)
+        button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(button)
 
+        print (self.presentingViewController) // presentingVC is Nav
+/*When viewDidLoad is called, there is no guarantee that the view controller hierarchy is loaded in the navigation tree. Moving the logic to a later stage (for example: viewWillAppear) should resolve that issue as presentingController should be loaded by then.*/
+        
+    }
+    func buttonAction(sender:UIButton!){
+        dismissViewControllerAnimated(true){}
+    }
+    override func viewDidAppear(animated: Bool) {
+        print (self.presentingViewController)
+        print (self.presentingViewController?.theClassName)
+        print ((self.presentingViewController as! Nav).viewControllers.count)
+        print ((self.presentingViewController as! Nav).viewControllers[0].theClassName)
+        print ((self.presentingViewController as! Nav).viewControllers[1].theClassName)
+        let p7 =  (self.presentingViewController as! Nav).viewControllers[1] as! Page7
+        print(p7.texts[0].t1)
+        print(p7.texts[0].t2)
+        print(p7.texts[0].t3)
+        
+        //        let p7 = (self.presentingViewController as! Page7)
+                mainLabel!.text = p7.texts[1].t1
+        //        image1 = UIImageView(frame:CGRectMake(0.0, 60.0, 220.0, 15.0))
+        //        self.contentView.addSubview(image1!)
+    }
+}
 class Page7: UITableViewController {
     var texts = [AObj]()
 //    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -174,6 +218,17 @@ class Page7: UITableViewController {
         (cell as! MyCell).image1?.image = texts[indexPath.row].image
         return cell!;
         
+    }
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print(indexPath.row)
+//        print(texts[indexPath.row])
+        let p = Page8(nibName: nil, bundle: nil)
+//        navigationController?.pushViewController(p, animated: true)
+//        p.mainLabel!.text = "new value"
+        self.presentViewController(p, animated: true){
+            print(p.mainLabel?.text)
+        }
+//        (p, animated: true, completion: nil)
     }
 }
 class Page6: UITableViewController {
