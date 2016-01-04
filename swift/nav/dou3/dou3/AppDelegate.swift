@@ -140,10 +140,25 @@ extension NSObject {
         return NSStringFromClass(self.dynamicType)//.componentsSeparatedByString(".").last!
     }
 }
-class Page8:UIViewController{
-    var mainLabel :UILabel?
-    var button : UIButton?
-    var  p7 : Page7?
+///http://stackoverflow.com/questions/26838909/required-initializers-for-a-subclass-of-uiviewcontroller
+//http://www.codingexplorer.com/designated-initializers-convenience-initializers-swift/
+/*
+    fix : required init(coder:) must be provided by subclass of uiviewcontroller
+*/
+class Page : UIViewController{
+    init(){
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+}
+class Page8:Page{
+    var mainLabel :UILabel!
+    var button : UIButton!
+    var  p7 : Page7!
     override func viewDidLoad() {
         super.viewDidLoad()
         let app = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -227,8 +242,9 @@ class Page7: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         print(indexPath.row)
 //        print(texts[indexPath.row])
-        let p = Page8(nibName: nil, bundle: nil)
-//        navigationController?.pushViewController(p, animated: true)
+//        let p = Page8(nibName: nil, bundle: nil)
+        let p = Page8()
+        //        navigationController?.pushViewController(p, animated: true)
 //        p.mainLabel!.text = "new value"
         self.presentViewController(p, animated: true){
             print(p.mainLabel?.text)
