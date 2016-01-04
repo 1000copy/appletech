@@ -143,8 +143,11 @@ extension NSObject {
 class Page8:UIViewController{
     var mainLabel :UILabel?
     var button : UIButton?
+    var  p7 : Page7?
     override func viewDidLoad() {
         super.viewDidLoad()
+        let app = UIApplication.sharedApplication().delegate as! AppDelegate
+
         mainLabel = UILabel(frame:CGRectMake(0.0, 200, 220.0, 15.0))
         mainLabel!.text = "something"
         mainLabel!.backgroundColor = UIColor.redColor()
@@ -152,7 +155,7 @@ class Page8:UIViewController{
         let button   = UIButton(type: UIButtonType.System) as UIButton
         button.frame = CGRectMake(100, 220, 100, 50)
         button.backgroundColor = UIColor.redColor()
-        button.setTitle("2", forState: UIControlState.Normal)
+        button.setTitle(app.data, forState: UIControlState.Normal)
         button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
 
@@ -161,6 +164,8 @@ class Page8:UIViewController{
         
     }
     func buttonAction(sender:UIButton!){
+        p7!.texts[0].t1 = "new Value"
+        p7!.tableView.reloadData()
         dismissViewControllerAnimated(true){}
     }
     override func viewDidAppear(animated: Bool) {
@@ -169,13 +174,13 @@ class Page8:UIViewController{
         print ((self.presentingViewController as! Nav).viewControllers.count)
         print ((self.presentingViewController as! Nav).viewControllers[0].theClassName)
         print ((self.presentingViewController as! Nav).viewControllers[1].theClassName)
-        let p7 =  (self.presentingViewController as! Nav).viewControllers[1] as! Page7
-        print(p7.texts[0].t1)
-        print(p7.texts[0].t2)
-        print(p7.texts[0].t3)
-        
-        //        let p7 = (self.presentingViewController as! Page7)
-                mainLabel!.text = p7.texts[1].t1
+        p7 =  (self.presentingViewController as! Nav).viewControllers[1] as? Page7
+        print(p7!.texts[0].t1)
+        print(p7!.texts[0].t2)
+        print(p7!.texts[0].t3)
+
+        mainLabel!.text = p7!.texts[1].t1
+
         //        image1 = UIImageView(frame:CGRectMake(0.0, 60.0, 220.0, 15.0))
         //        self.contentView.addSubview(image1!)
     }
@@ -410,11 +415,12 @@ class Nav : UINavigationController{
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    
+    var data:String?
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.rootViewController = Nav()
         self.window?.makeKeyAndVisible()
+        data = "app delegate"
         return true
     }
 }
