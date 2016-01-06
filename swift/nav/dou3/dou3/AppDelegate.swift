@@ -89,6 +89,7 @@ struct CellValue{
 }
 class PageTodo: UITableViewController {
     var cellValue = [CellValue]()
+    var selectRow : Int?
     override func viewDidLoad() {
         super.viewDidLoad()
 //        navigationController!.navigationItem.rightBarButtonItem = editButtonItem()
@@ -96,6 +97,12 @@ class PageTodo: UITableViewController {
         cellValue+=[CellValue(t1:"2",t2:"-",t3: "-")]
         cellValue+=[CellValue(t1:"3",t2:"-",t3: "-")]
         navigationItem.rightBarButtonItem = editButtonItem()
+        let item = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "doAdd:")
+        navigationItem.leftBarButtonItem = item
+        
+    }
+    func doAdd(sender:UIButton!){
+        print("tap add ")
     }
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellValue.count
@@ -125,6 +132,15 @@ class PageTodo: UITableViewController {
             tableView.reloadData()
         }
     }
+    override func tableView(tableView: UITableView,didSelectRowAtIndexPath indexPath: NSIndexPath){
+        let p = NavTwo()
+        selectRow = indexPath.row
+        presentViewController(p, animated: true){}
+//        navigationController?.pushViewController(p, animated: true)
+    }
+    override func tableView(tableView: UITableView,shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool{
+        return true
+    }
 }
 
 class Nav : UINavigationController{
@@ -137,6 +153,63 @@ class Nav : UINavigationController{
     }
 }
 
+class NavTwo : UINavigationController{
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let  p = PageTwo()
+        //         navigationController?.navigationBar.topItem?.title = "page 1"
+        viewControllers = [p]
+        
+    }
+}
+
+class PageTwo:Page{
+    var mainLabel :UITextField!
+    var button : UIButton!
+    var form : PageTodo?
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let app = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        mainLabel = UITextField(frame:CGRectMake(0.0, 200, 220.0, 15.0))
+        mainLabel!.text = "something"
+        mainLabel.backgroundColor = UIColor.redColor()
+        view.addSubview(mainLabel!)
+        let button   = UIButton(type: UIButtonType.System) as UIButton
+        button.frame = CGRectMake(100, 220, 100, 50)
+        button.backgroundColor = UIColor.redColor()
+        button.setTitle(app.data, forState: UIControlState.Normal)
+        button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(button)
+        
+        print (self.presentingViewController) // presentingVC is Nav
+        /*When viewDidLoad is called, there is no guarantee that the view controller hierarchy is loaded in the navigation tree. Moving the logic to a later stage (for example: viewWillAppear) should resolve that issue as presentingController should be loaded by then.*/
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "save:")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
+    }
+    func save(sender:UIButton!){
+        form?.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
+        form?.tableView.reloadData()
+        dismissViewControllerAnimated(true){}
+    }
+    func cancel(sender:UIButton!){
+        dismissViewControllerAnimated(true){}
+    }
+    override func viewDidAppear(animated: Bool) {
+//        print (self.presentingViewController)
+//        print (self.presentingViewController?.theClassName)
+//        print ((self.presentingViewController as! Nav).viewControllers.count)
+//        print ((self.presentingViewController as! Nav).viewControllers[0].theClassName)
+
+        let p7 =  (self.presentingViewController as! Nav).viewControllers[0] as? PageTodo
+        mainLabel.text =  p7?.cellValue[p7!.selectRow!].t1
+        form = p7
+//        mainLabel!.text = p7!.texts[1].t1
+        
+        //        image1 = UIImageView(frame:CGRectMake(0.0, 60.0, 220.0, 15.0))
+        //        self.contentView.addSubview(image1!)
+    }
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
