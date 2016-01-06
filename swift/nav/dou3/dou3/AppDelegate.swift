@@ -8,16 +8,14 @@
 
 import UIKit
 
-// Naviagtion Back> button
-let MAINLABEL_TAG  = 1
-class MyCell : UITableViewCell{
+class CellTodo : UITableViewCell{
     var mainLabel : UILabel?
-        var mainLabel1 : UILabel?
-        var mainLabel2 : UILabel?
+    var mainLabel1 : UILabel?
+    var mainLabel2 : UILabel?
     var image1 : UIImageView?
     required override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style,reuseIdentifier: reuseIdentifier)
-
+        
         f2()
     }
     func f1(){
@@ -58,7 +56,7 @@ class MyCell : UITableViewCell{
         
         let v1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
         self.addConstraint(v1)
-
+        
         let h2 = NSLayoutConstraint(item: mainLabel1!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem:mainLabel!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
         self.addConstraint(h2)
         
@@ -83,351 +81,64 @@ class MyCell : UITableViewCell{
         super.init(coder:aDecoder)
     }
 }
-class Page1 : UIViewController{
+
+struct CellValue{
+    var t1:String
+    var t2:String
+    var t3:String
+}
+class PageTodo: UITableViewController {
+    var cellValue = [CellValue]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        let button   = UIButton(type: UIButtonType.System) as UIButton
-        button.frame = CGRectMake(100, 100, 100, 50)
-        button.backgroundColor = UIColor.redColor()
-        button.setTitle("1", forState: UIControlState.Normal)
-        button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(button)
-        self.navigationItem.title = "YourTitle"
-        
-    }
-    func buttonAction(sender:UIButton!){
-                let p2 = Page7(nibName: nil, bundle: nil)
-//        let p2 = Page7(coder: NSCoder())!
-        self.navigationController?.pushViewController(p2, animated: true)
-        //        navigationController?.navigationBar.topItem?.title = "page 2"
-    }
-    
-}
-class AObj : NSObject{
-    var t1 : String?
-    var t2 : String?
-    var t3 : String?
-    var image : UIImage?
-    init(_ t1:String,_ t2:String ,_ t3:String,_ image : UIImage){
-        self.t1 = t1
-        self.t2 = t2
-        self.t3 = t3
-        self.image = image
-    }
-//    override func init(){
-//        self.t1 = "t1"
-//        self.t2 = "t2"
-//        self.t3 = "t3"
-//    }
-}
-extension UIImage {
-    class func imageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
-        UIGraphicsBeginImageContext(rect.size)
-        let context = UIGraphicsGetCurrentContext()
-        
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
-    }
-}
-extension NSObject {
-    var theClassName: String {
-        return NSStringFromClass(self.dynamicType)//.componentsSeparatedByString(".").last!
-    }
-}
-///http://stackoverflow.com/questions/26838909/required-initializers-for-a-subclass-of-uiviewcontroller
-//http://www.codingexplorer.com/designated-initializers-convenience-initializers-swift/
-/*
-    fix : required init(coder:) must be provided by subclass of uiviewcontroller
-*/
-class Page : UIViewController{
-    init(){
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-}
-class Page8:Page{
-    var mainLabel :UILabel!
-    var button : UIButton!
-    var  p7 : Page7!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let app = UIApplication.sharedApplication().delegate as! AppDelegate
-
-        mainLabel = UILabel(frame:CGRectMake(0.0, 200, 220.0, 15.0))
-        mainLabel!.text = "something"
-        mainLabel!.backgroundColor = UIColor.redColor()
-        view.addSubview(mainLabel!)
-        let button   = UIButton(type: UIButtonType.System) as UIButton
-        button.frame = CGRectMake(100, 220, 100, 50)
-        button.backgroundColor = UIColor.redColor()
-        button.setTitle(app.data, forState: UIControlState.Normal)
-        button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(button)
-
-        print (self.presentingViewController) // presentingVC is Nav
-/*When viewDidLoad is called, there is no guarantee that the view controller hierarchy is loaded in the navigation tree. Moving the logic to a later stage (for example: viewWillAppear) should resolve that issue as presentingController should be loaded by then.*/
-        
-    }
-    func buttonAction(sender:UIButton!){
-        p7!.texts[0].t1 = "new Value"
-        p7!.tableView.reloadData()
-        dismissViewControllerAnimated(true){}
-    }
-    override func viewDidAppear(animated: Bool) {
-        print (self.presentingViewController)
-        print (self.presentingViewController?.theClassName)
-        print ((self.presentingViewController as! Nav).viewControllers.count)
-        print ((self.presentingViewController as! Nav).viewControllers[0].theClassName)
-        print ((self.presentingViewController as! Nav).viewControllers[1].theClassName)
-        p7 =  (self.presentingViewController as! Nav).viewControllers[1] as? Page7
-        print(p7!.texts[0].t1)
-        print(p7!.texts[0].t2)
-        print(p7!.texts[0].t3)
-
-        mainLabel!.text = p7!.texts[1].t1
-
-        //        image1 = UIImageView(frame:CGRectMake(0.0, 60.0, 220.0, 15.0))
-        //        self.contentView.addSubview(image1!)
-    }
-}
-class Page7: UITableViewController {
-    var texts = [AObj]()
-//    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-//        super.init(nibName:nibNameOrNil,bundle:nibBundleOrNil)
-//    }
-    func loadData(){
-        texts = [AObj]()
-        let t1 = AObj( "1","2","3",UIImage.imageWithColor(UIColor.redColor()))
-        let t2 = AObj("1","2","3",UIImage.imageWithColor(UIColor.yellowColor()))
-        let t3 = AObj("1","2","3",UIImage.imageWithColor(UIColor.blueColor()))
-        texts += [t1,t2,t3]
-//        super.init(coder: aDecoder)
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        loadData()
-    }
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+//        navigationController!.navigationItem.rightBarButtonItem = editButtonItem()
+        cellValue+=[CellValue(t1:"1",t2:"-",t3: "-")]
+        cellValue+=[CellValue(t1:"2",t2:"-",t3: "-")]
+        cellValue+=[CellValue(t1:"3",t2:"-",t3: "-")]
+        navigationItem.rightBarButtonItem = editButtonItem()
     }
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return texts.count
+        return cellValue.count
     }
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 90
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let MyIdentifier = "MyCell"
-        var cell = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
+        let cell = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
+        var c : CellTodo
         if (cell == nil){
-            cell = MyCell(style: .Default, reuseIdentifier: MyIdentifier)
+            c = CellTodo(style: .Default, reuseIdentifier: MyIdentifier)
+        }else{
+            c = cell as! CellTodo
         }
-        (cell as! MyCell).mainLabel?.text = texts[indexPath.row].t1
-        (cell as! MyCell).mainLabel1?.text = texts[indexPath.row].t2
-        (cell as! MyCell).mainLabel2?.text = texts[indexPath.row].t3
-        (cell as! MyCell).image1?.image = texts[indexPath.row].image
-        return cell!;
-        
-    }
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print(indexPath.row)
-//        print(texts[indexPath.row])
-//        let p = Page8(nibName: nil, bundle: nil)
-        let p = Page8()
-        //        navigationController?.pushViewController(p, animated: true)
-//        p.mainLabel!.text = "new value"
-        self.presentViewController(p, animated: true){
-            print(p.mainLabel?.text)
-        }
-//        (p, animated: true, completion: nil)
-    }
-}
-class Page6: UITableViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
-    }
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 90
-    }
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "section"
-    }
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let MyIdentifier = "MyCell"
-        var cell = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
-        if (cell == nil){
-            cell = MyCell(style: .Default, reuseIdentifier: MyIdentifier)
-        }
-        (cell as! MyCell).mainLabel?.text = "text1"
-        (cell as! MyCell).mainLabel1?.text = "text2"
-        (cell as! MyCell).mainLabel2?.text = "text3"
-        return cell!;
-        
-    }
-}
 
-
-
-class Page2 : UIViewController{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let button   = UIButton(type: UIButtonType.System) as UIButton
-        button.frame = CGRectMake(100, 100, 100, 50)
-        button.backgroundColor = UIColor.redColor()
-        button.setTitle("2", forState: UIControlState.Normal)
-        button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(button)
-//        navigationController?.navigationBar.topItem?.title = "page 2"
-                self.navigationItem.title = "YourTitle2"
+        c.mainLabel?.text = cellValue[indexPath.row].t1
+        c.mainLabel1?.text = cellValue[indexPath.row].t2
+        c.mainLabel2?.text = cellValue[indexPath.row].t3
+        return c;
+        
     }
-    func buttonAction(sender:UIButton!){
-        let alertController = UIAlertController(title: "Default Style", message: "A standard alert.", preferredStyle: .Alert)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-            print(action.title)
-        }
-        alertController.addAction(cancelAction)
-        
-        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-            print("2")
-        }
-        alertController.addAction(OKAction)
-        
-        self.presentViewController(alertController, animated: true) {
-         
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            cellValue.removeAtIndex(indexPath.row)
+            tableView.reloadData()
         }
     }
-}
-
-class Page3 : UIViewController{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let newView = UIView()
-        newView.backgroundColor = UIColor.redColor()
-        newView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(newView)
-        
-        let views = ["view": view, "newView": newView]
-        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:[view]-(<=0)-[newView(100)]", options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views)
-        view.addConstraints(horizontalConstraints)
-        let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:[view]-(<=0)-[newView(100)]", options: NSLayoutFormatOptions.AlignAllCenterX, metrics: nil, views: views)
-        view.addConstraints(verticalConstraints)
-    }
-}
-class Page4 : UIViewController{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let newView = UIView()
-        newView.backgroundColor = UIColor.redColor()
-        newView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(newView)
-        
-        let horizontalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
-        view.addConstraint(horizontalConstraint)
-        
-        let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
-        view.addConstraint(verticalConstraint)
-        
-        let widthConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
-        view.addConstraint(widthConstraint)
-        
-        let heightConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
-        view.addConstraint(heightConstraint)
-    }
-}
-
-class Red : UIView{
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-    }
-
-}
-class Page5 : UIViewController{
-    var mainView:UIView?
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        mainView = UIView()
-        vvv(mainView!)
-        let v = UIView()
-        v3(v)
-    }
-    func vvv(v1:UIView){
-        v1.backgroundColor = UIColor.yellowColor()
-        v1.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(v1)
-        let horizontalConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
-        view.addConstraint(horizontalConstraint)
-        
-        let verticalConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 100)
-        view.addConstraint(verticalConstraint)
-        
-        let widthConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
-        view.addConstraint(widthConstraint)
-        
-        let heightConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
-        view.addConstraint(heightConstraint)
-    }
-    func v3(v1:UIView){
-        v1.backgroundColor = UIColor.redColor()
-        v1.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(v1)
-        let horizontalConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: mainView, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: 5)
-        view.addConstraint(horizontalConstraint)
-        
-        let verticalConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 100)
-        view.addConstraint(verticalConstraint)
-        
-        let widthConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
-        view.addConstraint(widthConstraint)
-        
-        let heightConstraint = NSLayoutConstraint(item: v1, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 100)
-        view.addConstraint(heightConstraint)
-    }
-
-}
-
-class RedBlock : UIView{
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
 }
 
 class Nav : UINavigationController{
     override func viewDidLoad() {
         super.viewDidLoad()
-        let  p1 = Page1(nibName: nil, bundle: nil)
-//         navigationController?.navigationBar.topItem?.title = "page 1"
-        viewControllers = [p1]
-
+        let  p = PageTodo(nibName: nil, bundle: nil)
+        //         navigationController?.navigationBar.topItem?.title = "page 1"
+        viewControllers = [p]
+        
     }
 }
 
 
-
 @UIApplicationMain
-
-
-
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
