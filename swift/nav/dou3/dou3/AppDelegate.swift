@@ -90,6 +90,7 @@ struct CellValue{
 class PageTodo: UITableViewController {
     var cellValue = [CellValue]()
     var selectRow : Int?
+    var isAdd = false
     override func viewDidLoad() {
         super.viewDidLoad()
 //        navigationController!.navigationItem.rightBarButtonItem = editButtonItem()
@@ -103,6 +104,10 @@ class PageTodo: UITableViewController {
     }
     func doAdd(sender:UIButton!){
         print("tap add ")
+        isAdd = true
+        let p = NavTwo()
+        presentViewController(p, animated: true){}
+        
     }
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellValue.count
@@ -133,6 +138,7 @@ class PageTodo: UITableViewController {
         }
     }
     override func tableView(tableView: UITableView,didSelectRowAtIndexPath indexPath: NSIndexPath){
+        isAdd = false
         let p = NavTwo()
         selectRow = indexPath.row
         presentViewController(p, animated: true){}
@@ -179,7 +185,7 @@ class PageTwo:Page{
         button.frame = CGRectMake(100, 220, 100, 50)
         button.backgroundColor = UIColor.redColor()
         button.setTitle(app.data, forState: UIControlState.Normal)
-        button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        button.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         
         print (self.presentingViewController) // presentingVC is Nav
@@ -188,9 +194,16 @@ class PageTwo:Page{
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
     }
     func save(sender:UIButton!){
-        form?.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
-        form?.tableView.reloadData()
-        dismissViewControllerAnimated(true){}
+        if form!.isAdd {
+            let v = CellValue(t1:mainLabel.text!,t2:"",t3:"")
+            form?.cellValue.append(v)
+            form?.tableView.reloadData()
+            dismissViewControllerAnimated(true){}
+        }else{
+            form?.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
+            form?.tableView.reloadData()
+            dismissViewControllerAnimated(true){}
+        }
     }
     func cancel(sender:UIButton!){
         dismissViewControllerAnimated(true){}
@@ -202,7 +215,11 @@ class PageTwo:Page{
 //        print ((self.presentingViewController as! Nav).viewControllers[0].theClassName)
 
         let p7 =  (self.presentingViewController as! Nav).viewControllers[0] as? PageTodo
-        mainLabel.text =  p7?.cellValue[p7!.selectRow!].t1
+        if !p7!.isAdd{
+            mainLabel.text =  p7?.cellValue[p7!.selectRow!].t1
+        }else {
+            mainLabel.text =  ""
+        }
         form = p7
 //        mainLabel!.text = p7!.texts[1].t1
         
