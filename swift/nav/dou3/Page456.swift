@@ -203,8 +203,9 @@ class PageTwo:Page{
             mainLabel.text =  ""
             onoff.on = false
         }else {
-            mainLabel.text =  App.Delegate.todos[form!.selectRow!].info
-            onoff.on = App.Delegate.todos[form!.selectRow!].checked
+            let todo = App.Delegate.todos[form!.selectRow!]
+            mainLabel.text =  todo.info
+            onoff.on = todo.checked
         }
     }
 }
