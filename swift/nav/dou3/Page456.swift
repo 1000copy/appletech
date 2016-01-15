@@ -42,20 +42,6 @@ class CellTodo : UITableViewCell{
             self.addConstraints(c)
         }
     }
-    func dolayout1(){
-        let h1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 5)
-        self.addConstraint(h1)
-        
-        let v1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
-        self.addConstraint(v1)
-        
-        // for on off
-        let h2 = NSLayoutConstraint(item: onoff!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: mainLabel!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
-        self.addConstraint(h2)
-        
-        let v2 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
-        self.addConstraint(v2)
-    }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
