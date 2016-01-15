@@ -139,6 +139,7 @@ class PageTwo:Page{
     override func viewDidLoad() {
         super.viewDidLoad()
         initUI()
+        doLayout()
     }
     func initUI(){
         view.backgroundColor = UIColor.whiteColor()
@@ -150,14 +151,23 @@ class PageTwo:Page{
         mainLabel.becomeFirstResponder()
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "save:")
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
-        // layout
         mainLabel!.translatesAutoresizingMaskIntoConstraints = false
         onoff!.translatesAutoresizingMaskIntoConstraints = false
-        
-       layoutit()
+    }
+    func doLayout(){
+        let views = ["view":self,"onoff":onoff!,"mainLabel":mainLabel!]
+        let m = ["padding":5,"margin":80]
+        let vfls = [
+            "H:|-padding-[mainLabel]",
+            "V:|-margin-[mainLabel]-padding-[onoff]",
+            "H:|-padding-[onoff]"]
+        for index in 0...2 {
+            let c =  NSLayoutConstraint.constraintsWithVisualFormat(vfls[index], options: .AlignAllLeft, metrics: m,views:views )
+            self.view.addConstraints(c)
+        }
 
     }
-    func layoutit(){
+    func doLayout1(){
         let h1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 80)
         self.view.addConstraint(h1)
         
