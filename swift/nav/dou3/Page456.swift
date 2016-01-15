@@ -47,9 +47,9 @@ class CellTodo : UITableViewCell{
     }
 }
 
-struct CellValue{
-    var t1:String
-    var t4: Bool
+struct Todo{
+    var info:String
+    var checked : Bool
 }
 class PageTodo: UITableViewController {
     
@@ -73,7 +73,7 @@ class PageTodo: UITableViewController {
         
     }
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return App.Delegate.cellValue.count
+        return App.Delegate.todos.count
     }
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 70
@@ -88,14 +88,14 @@ class PageTodo: UITableViewController {
             c = cell as! CellTodo
         }
         
-        c.mainLabel?.text = App.Delegate.cellValue[indexPath.row].t1
-        c.onoff?.on = App.Delegate.cellValue[indexPath.row].t4
+        c.mainLabel?.text = App.Delegate.todos[indexPath.row].info
+        c.onoff?.on = App.Delegate.todos[indexPath.row].checked
         return c;
         
     }
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            App.Delegate.cellValue.removeAtIndex(indexPath.row)
+            App.Delegate.todos.removeAtIndex(indexPath.row)
             tableView.reloadData()
         }
     }
@@ -183,13 +183,13 @@ class PageTwo:Page{
     }
     func save(sender:UIButton!){
         if form!.isAdd {
-            let v = CellValue(t1:mainLabel.text!,t4:onoff.on)
-            App.Delegate.cellValue.append(v)
+            let v = Todo(info:mainLabel.text!,checked:onoff.on)
+            App.Delegate.todos.append(v)
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }else{
-            App.Delegate.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
-            App.Delegate.cellValue[(form?.selectRow)!].t4 = onoff.on
+            App.Delegate.todos[(form?.selectRow)!].info = mainLabel.text!
+            App.Delegate.todos[(form?.selectRow)!].checked = onoff.on
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }
@@ -198,14 +198,13 @@ class PageTwo:Page{
         dismissViewControllerAnimated(true){}
     }
     override func viewDidAppear(animated: Bool) {
-        let p7 = App.Delegate.list
-        if p7!.isAdd{
+        form = App.Delegate.list
+        if form!.isAdd{
             mainLabel.text =  ""
             onoff.on = false
         }else {
-            mainLabel.text =  App.Delegate.cellValue[p7!.selectRow!].t1
-            onoff.on = App.Delegate.cellValue[p7!.selectRow!].t4
+            mainLabel.text =  App.Delegate.todos[form!.selectRow!].info
+            onoff.on = App.Delegate.todos[form!.selectRow!].checked
         }
-        form = p7
     }
 }

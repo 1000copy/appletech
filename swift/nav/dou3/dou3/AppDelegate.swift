@@ -14,7 +14,7 @@ import UIKit
 class App: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var cellValue = [CellValue]()
+    var todos = [Todo]()
     static var Delegate:App{
       return UIApplication.sharedApplication().delegate as! App
     }
@@ -25,9 +25,9 @@ class App: UIResponder, UIApplicationDelegate {
         nav = Nav()
         self.window!.rootViewController = nav
         self.window?.makeKeyAndVisible()
-        cellValue+=[CellValue(t1:"1",t4: true)]
-        cellValue+=[CellValue(t1:"2",t4: false)]
-        cellValue+=[CellValue(t1:"3",t4: false)]
+        todos+=[Todo(info:"1",checked: true)]
+        todos+=[Todo(info:"2",checked: false)]
+        todos+=[Todo(info:"3",checked: false)]
         list = nav?.viewControllers[0] as? PageTodo
         return true
     }
