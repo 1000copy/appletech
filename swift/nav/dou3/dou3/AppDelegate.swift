@@ -11,10 +11,13 @@ import UIKit
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class App: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     var cellValue = [CellValue]()
+    static var Delegate:App{
+      return UIApplication.sharedApplication().delegate as! App
+    }
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.rootViewController = Nav()

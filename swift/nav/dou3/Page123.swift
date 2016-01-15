@@ -15,7 +15,7 @@ class Page8:Page{
     var  p7 : Page7!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let app = UIApplication.sharedApplication().delegate as! AppDelegate
+
         
         mainLabel = UILabel(frame:CGRectMake(0.0, 200, 220.0, 15.0))
         mainLabel!.text = "something"
@@ -24,7 +24,7 @@ class Page8:Page{
         let button   = UIButton(type: UIButtonType.System) as UIButton
         button.frame = CGRectMake(100, 220, 100, 50)
         button.backgroundColor = UIColor.redColor()
-        button.setTitle(app.data, forState: UIControlState.Normal)
+//        button.setTitle(app.data, forState: UIControlState.Normal)
         button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         

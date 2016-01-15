@@ -91,10 +91,7 @@ class PageTodo: UITableViewController {
     
     var selectRow : Int?
     var isAdd = false
-    var app: AppDelegate{
-        let app = UIApplication.sharedApplication().delegate as! AppDelegate
-        return app
-    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //        navigationController!.navigationItem.rightBarButtonItem = editButtonItem()
@@ -112,7 +109,7 @@ class PageTodo: UITableViewController {
         
     }
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return app.cellValue.count
+        return App.Delegate.cellValue.count
     }
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 90
@@ -127,15 +124,15 @@ class PageTodo: UITableViewController {
             c = cell as! CellTodo
         }
         
-        c.mainLabel?.text = app.cellValue[indexPath.row].t1
-        c.mainLabel1?.text = app.cellValue[indexPath.row].t2
-        c.mainLabel2?.text = app.cellValue[indexPath.row].t3
+        c.mainLabel?.text = App.Delegate.cellValue[indexPath.row].t1
+        c.mainLabel1?.text = App.Delegate.cellValue[indexPath.row].t2
+        c.mainLabel2?.text = App.Delegate.cellValue[indexPath.row].t3
         return c;
         
     }
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            app.cellValue.removeAtIndex(indexPath.row)
+            App.Delegate.cellValue.removeAtIndex(indexPath.row)
             tableView.reloadData()
         }
     }
@@ -175,10 +172,7 @@ class PageTwo:Page{
     var mainLabel :UITextField!
     var button : UIButton!
     var form : PageTodo?
-    var app: AppDelegate {
-        let app = UIApplication.sharedApplication().delegate as! AppDelegate
-        return app
-    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -202,11 +196,11 @@ class PageTwo:Page{
     func save(sender:UIButton!){
         if form!.isAdd {
             let v = CellValue(t1:mainLabel.text!,t2:"",t3:"")
-            app.cellValue.append(v)
+            App.Delegate.cellValue.append(v)
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }else{
-            app.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
+            App.Delegate.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }
@@ -222,7 +216,7 @@ class PageTwo:Page{
         
         let p7 =  (self.presentingViewController as! Nav).viewControllers[0] as? PageTodo
         if !p7!.isAdd{
-            mainLabel.text =  app.cellValue[p7!.selectRow!].t1
+            mainLabel.text =  App.Delegate.cellValue[p7!.selectRow!].t1
         }else {
             mainLabel.text =  ""
         }
