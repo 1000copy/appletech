@@ -26,19 +26,22 @@ class CellTodo : UITableViewCell{
         mainLabel!.translatesAutoresizingMaskIntoConstraints = false
         onoff!.translatesAutoresizingMaskIntoConstraints = false
         
+        dolayout()
+
+    }
+    func dolayout(){
         let h1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 5)
         self.addConstraint(h1)
         
         let v1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
         self.addConstraint(v1)
-
+        
         // for on off
         let h2 = NSLayoutConstraint(item: onoff!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: mainLabel!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
         self.addConstraint(h2)
         
         let v2 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
         self.addConstraint(v2)
-
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
@@ -74,7 +77,7 @@ class PageTodo: UITableViewController {
         return App.Delegate.cellValue.count
     }
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 90
+        return 70
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let MyIdentifier = "MyCell"
@@ -131,37 +134,53 @@ class NavTwo : UINavigationController{
 
 class PageTwo:Page{
     var mainLabel :UITextField!
-    var button : UIButton!
+    var onoff : UISwitch!
     var form : PageTodo?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        mainLabel = UITextField(frame:CGRectMake(0.0, 200, 220.0, 15.0))
-        mainLabel!.text = "something"
-        mainLabel.backgroundColor = UIColor.redColor()
+        initUI()
+    }
+    func initUI(){
+        view.backgroundColor = UIColor.whiteColor()
+        mainLabel = UITextField()
+        mainLabel.placeholder = "input TODO text"
+        onoff = UISwitch()
         view.addSubview(mainLabel!)
-        let button   = UIButton(type: UIButtonType.System) as UIButton
-        button.frame = CGRectMake(100, 220, 100, 50)
-        button.backgroundColor = UIColor.redColor()
-//        button.setTitle(app.data, forState: UIControlState.Normal)
-        button.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(button)
-        
-        print (self.presentingViewController) // presentingVC is Nav
-        /*When viewDidLoad is called, there is no guarantee that the view controller hierarchy is loaded in the navigation tree. Moving the logic to a later stage (for example: viewWillAppear) should resolve that issue as presentingController should be loaded by then.*/
+        view.addSubview(onoff!)
+        mainLabel.becomeFirstResponder()
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "save:")
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
+        // layout
+        mainLabel!.translatesAutoresizingMaskIntoConstraints = false
+        onoff!.translatesAutoresizingMaskIntoConstraints = false
+        
+       layoutit()
+
+    }
+    func layoutit(){
+        let h1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 80)
+        self.view.addConstraint(h1)
+        
+        let v1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
+        self.view.addConstraint(v1)
+        
+        // for on off
+        let h2 = NSLayoutConstraint(item: onoff!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: mainLabel!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
+        self.view.addConstraint(h2)
+        
+        let v2 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
+        self.view.addConstraint(v2)
     }
     func save(sender:UIButton!){
         if form!.isAdd {
-            let v = CellValue(t1:mainLabel.text!,t4:false)
+            let v = CellValue(t1:mainLabel.text!,t4:onoff.on)
             App.Delegate.cellValue.append(v)
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }else{
             App.Delegate.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
+            App.Delegate.cellValue[(form?.selectRow)!].t4 = onoff.on
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }
@@ -170,21 +189,14 @@ class PageTwo:Page{
         dismissViewControllerAnimated(true){}
     }
     override func viewDidAppear(animated: Bool) {
-        //        print (self.presentingViewController)
-        //        print (self.presentingViewController?.theClassName)
-        //        print ((self.presentingViewController as! Nav).viewControllers.count)
-        //        print ((self.presentingViewController as! Nav).viewControllers[0].theClassName)
-        
-        let p7 =  (self.presentingViewController as! Nav).viewControllers[0] as? PageTodo
-        if !p7!.isAdd{
-            mainLabel.text =  App.Delegate.cellValue[p7!.selectRow!].t1
-        }else {
+        let p7 = App.Delegate.list
+        if p7!.isAdd{
             mainLabel.text =  ""
+            onoff.on = false
+        }else {
+            mainLabel.text =  App.Delegate.cellValue[p7!.selectRow!].t1
+            onoff.on = App.Delegate.cellValue[p7!.selectRow!].t4
         }
         form = p7
-        //        mainLabel!.text = p7!.texts[1].t1
-        
-        //        image1 = UIImageView(frame:CGRectMake(0.0, 60.0, 220.0, 15.0))
-        //        self.contentView.addSubview(image1!)
     }
 }
