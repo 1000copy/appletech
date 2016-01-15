@@ -14,12 +14,14 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var data:String?
+    var cellValue = [CellValue]()
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.rootViewController = Nav()
         self.window?.makeKeyAndVisible()
-        data = "app delegate"
+        cellValue+=[CellValue(t1:"1",t2:"-",t3: "-")]
+        cellValue+=[CellValue(t1:"2",t2:"-",t3: "-")]
+        cellValue+=[CellValue(t1:"3",t2:"-",t3: "-")]
         return true
     }
 }

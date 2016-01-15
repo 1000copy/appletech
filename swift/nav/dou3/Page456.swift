@@ -88,15 +88,17 @@ struct CellValue{
     var t3:String
 }
 class PageTodo: UITableViewController {
-    var cellValue = [CellValue]()
+    
     var selectRow : Int?
     var isAdd = false
+    var app: AppDelegate{
+        let app = UIApplication.sharedApplication().delegate as! AppDelegate
+        return app
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         //        navigationController!.navigationItem.rightBarButtonItem = editButtonItem()
-        cellValue+=[CellValue(t1:"1",t2:"-",t3: "-")]
-        cellValue+=[CellValue(t1:"2",t2:"-",t3: "-")]
-        cellValue+=[CellValue(t1:"3",t2:"-",t3: "-")]
+
         navigationItem.rightBarButtonItem = editButtonItem()
         let item = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "doAdd:")
         navigationItem.leftBarButtonItem = item
@@ -110,7 +112,7 @@ class PageTodo: UITableViewController {
         
     }
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellValue.count
+        return app.cellValue.count
     }
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 90
@@ -125,15 +127,15 @@ class PageTodo: UITableViewController {
             c = cell as! CellTodo
         }
         
-        c.mainLabel?.text = cellValue[indexPath.row].t1
-        c.mainLabel1?.text = cellValue[indexPath.row].t2
-        c.mainLabel2?.text = cellValue[indexPath.row].t3
+        c.mainLabel?.text = app.cellValue[indexPath.row].t1
+        c.mainLabel1?.text = app.cellValue[indexPath.row].t2
+        c.mainLabel2?.text = app.cellValue[indexPath.row].t3
         return c;
         
     }
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            cellValue.removeAtIndex(indexPath.row)
+            app.cellValue.removeAtIndex(indexPath.row)
             tableView.reloadData()
         }
     }
@@ -173,9 +175,13 @@ class PageTwo:Page{
     var mainLabel :UITextField!
     var button : UIButton!
     var form : PageTodo?
+    var app: AppDelegate {
+        let app = UIApplication.sharedApplication().delegate as! AppDelegate
+        return app
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        let app = UIApplication.sharedApplication().delegate as! AppDelegate
+        
         
         mainLabel = UITextField(frame:CGRectMake(0.0, 200, 220.0, 15.0))
         mainLabel!.text = "something"
@@ -184,7 +190,7 @@ class PageTwo:Page{
         let button   = UIButton(type: UIButtonType.System) as UIButton
         button.frame = CGRectMake(100, 220, 100, 50)
         button.backgroundColor = UIColor.redColor()
-        button.setTitle(app.data, forState: UIControlState.Normal)
+//        button.setTitle(app.data, forState: UIControlState.Normal)
         button.addTarget(self, action: "save:", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         
@@ -196,11 +202,11 @@ class PageTwo:Page{
     func save(sender:UIButton!){
         if form!.isAdd {
             let v = CellValue(t1:mainLabel.text!,t2:"",t3:"")
-            form?.cellValue.append(v)
+            app.cellValue.append(v)
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }else{
-            form?.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
+            app.cellValue[(form?.selectRow)!].t1 = mainLabel.text!
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
         }
@@ -216,7 +222,7 @@ class PageTwo:Page{
         
         let p7 =  (self.presentingViewController as! Nav).viewControllers[0] as? PageTodo
         if !p7!.isAdd{
-            mainLabel.text =  p7?.cellValue[p7!.selectRow!].t1
+            mainLabel.text =  app.cellValue[p7!.selectRow!].t1
         }else {
             mainLabel.text =  ""
         }
