@@ -15,6 +15,7 @@ class CellTodo : UITableViewCell{
         super.init(style: style,reuseIdentifier: reuseIdentifier)
         
         f2()
+        dolayout()
     }
 
     func f2(){
@@ -26,10 +27,22 @@ class CellTodo : UITableViewCell{
         mainLabel!.translatesAutoresizingMaskIntoConstraints = false
         onoff!.translatesAutoresizingMaskIntoConstraints = false
         
-        dolayout()
+       
 
     }
     func dolayout(){
+        let views = ["view":self,"onoff":onoff!,"mainLabel":mainLabel!] //:[String:AnyObject]
+        let m = ["padding":5]
+        let vfls = [
+            "H:|-padding-[mainLabel]",
+            "V:|-padding-[mainLabel]-padding-[onoff]",
+            "H:|-padding-[onoff]"]
+        for index in 0...2 {
+            let c =  NSLayoutConstraint.constraintsWithVisualFormat(vfls[index], options: .AlignAllLeft, metrics: m,views:views )
+            self.addConstraints(c)
+        }
+    }
+    func dolayout1(){
         let h1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 5)
         self.addConstraint(h1)
         
