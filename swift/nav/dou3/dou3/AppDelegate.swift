@@ -22,9 +22,9 @@ class App: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.rootViewController = Nav()
         self.window?.makeKeyAndVisible()
-        cellValue+=[CellValue(t1:"1",t2:"-",t3: "-")]
-        cellValue+=[CellValue(t1:"2",t2:"-",t3: "-")]
-        cellValue+=[CellValue(t1:"3",t2:"-",t3: "-")]
+        cellValue+=[CellValue(t1:"1",t4: true)]
+        cellValue+=[CellValue(t1:"2",t4: false)]
+        cellValue+=[CellValue(t1:"3",t4: false)]
         return true
     }
 }

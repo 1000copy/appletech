@@ -10,72 +10,35 @@ import UIKit
 
 class CellTodo : UITableViewCell{
     var mainLabel : UILabel?
-    var mainLabel1 : UILabel?
-    var mainLabel2 : UILabel?
-    var image1 : UIImageView?
+    var onoff : UISwitch?
     required override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style,reuseIdentifier: reuseIdentifier)
         
         f2()
     }
-    func f1(){
-        mainLabel = UILabel(frame:CGRectMake(0.0, 0.0, 220.0, 15.0))
-        mainLabel1 = UILabel(frame:CGRectMake(0.0, 20.0, 220.0, 15.0))
-        mainLabel2 = UILabel(frame:CGRectMake(0.0, 40.0, 220.0, 15.0))
-        mainLabel!.tag = MAINLABEL_TAG;
-        mainLabel!.textAlignment = .Left
-        mainLabel!.textColor = UIColor.blackColor()
-        self.contentView.addSubview(mainLabel!)
-        mainLabel1!.tag = MAINLABEL_TAG;
-        mainLabel1!.textAlignment = .Left
-        mainLabel1!.textColor = UIColor.blackColor()
-        self.contentView.addSubview(mainLabel1!)
-        mainLabel2!.tag = MAINLABEL_TAG;
-        mainLabel2!.textAlignment = .Left
-        mainLabel2!.textColor = UIColor.blackColor()
-        self.contentView.addSubview(mainLabel2!)
-        image1 = UIImageView(frame:CGRectMake(0.0, 60.0, 220.0, 15.0))
-        self.contentView.addSubview(image1!)
-    }
+
     func f2(){
         mainLabel = UILabel()
-        mainLabel1 = UILabel()
-        mainLabel2 = UILabel()
-        image1 = UIImageView()
+        onoff = UISwitch()
         self.contentView.addSubview(mainLabel!)
-        self.contentView.addSubview(mainLabel1!)
-        self.contentView.addSubview(mainLabel2!)
-        self.contentView.addSubview(image1!)
+        self.contentView.addSubview(onoff!)
         
         mainLabel!.translatesAutoresizingMaskIntoConstraints = false
-        mainLabel1!.translatesAutoresizingMaskIntoConstraints = false
-        mainLabel2!.translatesAutoresizingMaskIntoConstraints = false
-        image1?.translatesAutoresizingMaskIntoConstraints = false
+        onoff!.translatesAutoresizingMaskIntoConstraints = false
+        
         let h1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 5)
         self.addConstraint(h1)
         
         let v1 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
         self.addConstraint(v1)
-        
-        let h2 = NSLayoutConstraint(item: mainLabel1!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem:mainLabel!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
+
+        // for on off
+        let h2 = NSLayoutConstraint(item: onoff!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: mainLabel!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
         self.addConstraint(h2)
         
-        let v2 = NSLayoutConstraint(item: mainLabel1!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
+        let v2 = NSLayoutConstraint(item: mainLabel!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
         self.addConstraint(v2)
-        
-        let h3 = NSLayoutConstraint(item: mainLabel2!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem:mainLabel1!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
-        self.addConstraint(h3)
-        
-        let v3 = NSLayoutConstraint(item: mainLabel2!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 5)
-        self.addConstraint(v3)
-        
-        
-        let h4 = NSLayoutConstraint(item: image1!, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem:mainLabel1!, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 5)
-        self.addConstraint(h4)
-        
-        let v4 = NSLayoutConstraint(item: image1!, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 100)
-        self.addConstraint(v4)
-        
+
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
@@ -84,8 +47,7 @@ class CellTodo : UITableViewCell{
 
 struct CellValue{
     var t1:String
-    var t2:String
-    var t3:String
+    var t4: Bool
 }
 class PageTodo: UITableViewController {
     
@@ -125,8 +87,7 @@ class PageTodo: UITableViewController {
         }
         
         c.mainLabel?.text = App.Delegate.cellValue[indexPath.row].t1
-        c.mainLabel1?.text = App.Delegate.cellValue[indexPath.row].t2
-        c.mainLabel2?.text = App.Delegate.cellValue[indexPath.row].t3
+        c.onoff?.on = App.Delegate.cellValue[indexPath.row].t4
         return c;
         
     }
@@ -195,7 +156,7 @@ class PageTwo:Page{
     }
     func save(sender:UIButton!){
         if form!.isAdd {
-            let v = CellValue(t1:mainLabel.text!,t2:"",t3:"")
+            let v = CellValue(t1:mainLabel.text!,t4:false)
             App.Delegate.cellValue.append(v)
             form?.tableView.reloadData()
             dismissViewControllerAnimated(true){}
