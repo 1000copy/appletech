@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Item1ViewController: UIViewController {
+class vc1: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let b = UIButton()
@@ -19,7 +19,7 @@ class Item1ViewController: UIViewController {
     }
 }
 
-class Item2ViewController: UIViewController {
+class vc2: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let  b = UIButton()
@@ -37,12 +37,11 @@ class Tabbar: UITabBarController, UITabBarControllerDelegate {
     }
     
     override func viewWillAppear(animated: Bool) {
-        let item1 = Item1ViewController()
-//        let icon1 =
+        let item1 = vc1()
         item1.tabBarItem = UITabBarItem(title: "Title1",
             image: UIImage.imageWithColor(UIColor.yellowColor()) ,
             selectedImage: UIImage.imageWithColor(UIColor.yellowColor()) )
-        let item2 = Item2ViewController()
+        let item2 = vc2()
         item2.tabBarItem = UITabBarItem(title: "Title2",
             image: UIImage.imageWithColor(UIColor.yellowColor()) ,
             selectedImage: UIImage.imageWithColor(UIColor.yellowColor()) )
@@ -51,9 +50,8 @@ class Tabbar: UITabBarController, UITabBarControllerDelegate {
     }
     
     //Delegate methods
-    func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
-        print("Should select viewController: \(viewController.title) ?")
-        return true;
+    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
+        print("did select viewController: \(viewController) ")
     }
 }
 extension UIImage {
