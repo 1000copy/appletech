@@ -8,7 +8,7 @@
 
 import UIKit
 // 通过 UIView: 需要自己设置实现协议UITableViewDataSource，设置 dataSource
-class ViewController1: UIViewController ,UITableViewDataSource{
+class ViewController: UIViewController ,UITableViewDataSource{
     override func viewDidLoad() {
         super.viewDidLoad()
         let a  = UITableView()
@@ -67,7 +67,7 @@ class mtb1 : UITableViewController{
         return a!
     }
 }
-class ViewController: UIViewController {
+class ViewController1: UIViewController {
     var  a : UITableViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +77,52 @@ class ViewController: UIViewController {
         self.view.backgroundColor = UIColor.redColor()
     }
 }
+
+
+let bcount  = 10000// 1.21s
+func benchmark () -> UITableViewCell{
+    let MyIdentifier = "cell1234"
+    let a = UITableView()
+    var cell = UITableViewCell()
+    a.registerClass(UITableViewCell.self, forCellReuseIdentifier: MyIdentifier)
+    for _ in 1...bcount{
+        cell = a.dequeueReusableCellWithIdentifier(MyIdentifier)!
+        
+    }
+    return cell
+}
+// 1.66s ,简直差不多。
+func benchmark1 () -> UITableViewCell{
+    var cell = UITableViewCell()
+    for _ in 1...bcount{
+        cell = UITableViewCell(style: .Default, reuseIdentifier: nil)
+    }
+    return cell
+}
+class ParkBenchTimer {
+    
+    let startTime:CFAbsoluteTime
+    var endTime:CFAbsoluteTime?
+    
+    init() {
+        startTime = CFAbsoluteTimeGetCurrent()
+    }
+    
+    func stop() -> CFAbsoluteTime {
+        endTime = CFAbsoluteTimeGetCurrent()
+        
+        return duration!
+    }
+    
+    var duration:CFAbsoluteTime? {
+        if let endTime = endTime {
+            return endTime - startTime
+        } else {
+            return nil
+        }
+    }
+}
+
 
 /*
 

@@ -16,6 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+//        let timer = ParkBenchTimer()
+//        
+//        let cell = benchmark1()
+//        func c(){
+//            print("The task took \(timer.stop()) seconds.")
+//        }
+//        c()
         return true
     }
 
