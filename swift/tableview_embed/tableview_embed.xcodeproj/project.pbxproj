@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B5091BB31C6CADFB00263599 /* PlainVsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5091BB21C6CADFB00263599 /* PlainVsGroup.swift */; };
 		B52C469D1C5F920900EC6754 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52C469C1C5F920900EC6754 /* AppDelegate.swift */; };
 		B52C469F1C5F920900EC6754 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52C469E1C5F920900EC6754 /* ViewController.swift */; };
 		B52C46A21C5F920900EC6754 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B52C46A01C5F920900EC6754 /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B5091BB21C6CADFB00263599 /* PlainVsGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainVsGroup.swift; sourceTree = "<group>"; };
 		B52C46991C5F920900EC6754 /* tableview_embed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tableview_embed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B52C469C1C5F920900EC6754 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B52C469E1C5F920900EC6754 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				B56EB4D81C698E6C00BC7CBF /* tableevent.swift */,
 				B52C469C1C5F920900EC6754 /* AppDelegate.swift */,
 				B52C469E1C5F920900EC6754 /* ViewController.swift */,
+				B5091BB21C6CADFB00263599 /* PlainVsGroup.swift */,
 				B52C46A01C5F920900EC6754 /* Main.storyboard */,
 				B52C46A31C5F920900EC6754 /* Assets.xcassets */,
 				B52C46A51C5F920900EC6754 /* LaunchScreen.storyboard */,
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5091BB31C6CADFB00263599 /* PlainVsGroup.swift in Sources */,
 				B52C469F1C5F920900EC6754 /* ViewController.swift in Sources */,
 				B56EB4D91C698E6C00BC7CBF /* tableevent.swift in Sources */,
 				B56EB4D71C66D56700BC7CBF /* tableviewUI.swift in Sources */,
