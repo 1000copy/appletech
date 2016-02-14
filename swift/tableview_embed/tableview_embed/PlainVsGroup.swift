@@ -28,6 +28,7 @@ class LangTablePlain : UITableView,UITableViewDataSource{
         a.textLabel?.text = String(arr[indexPath.row])
         return a
     }
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int{
         return 2
     }

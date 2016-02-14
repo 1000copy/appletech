@@ -73,15 +73,15 @@ class ViewController: UITableViewController {
         }
         
         // create users from the name list
-        var users: [User] = names.map { name in
-            var user = User(name: name)
+        let users: [User] = names.map { name in
+            let user = User(name: name)
             user.section = self.collation.sectionForObject(user, collationStringSelector: "name")
             return user
         }
         
         // create empty sections
         var sections = [Section]()
-        for i in 0..<self.collation.sectionIndexTitles.count {
+        for _ in 0..<self.collation.sectionIndexTitles.count {
             sections.append(Section())
         }
         
@@ -142,6 +142,7 @@ class ViewController: UITableViewController {
     /* section index titles
     displayed to the right of the `UITableView` */
     override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+//         print ( self.collation.sectionIndexTitles)
          return self.collation.sectionIndexTitles
     }
   
