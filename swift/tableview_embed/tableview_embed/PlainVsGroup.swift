@@ -1,10 +1,7 @@
 import UIKit
-
+let arrs = [["swift","c#","c++","delphi","c"],["javascript","php","python","ruby","tcl/tk","bash"]]
+let titles  = ["compiler","interupter"]
 class LangTablePlain : UITableView,UITableViewDataSource{
-    let arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-    let arr1 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-    let titles  = ["header1","header2"]
-    let footers  = ["footer1","footer2"]
     convenience init(){
         self.init(frame: CGRectZero, style:UITableViewStyle.Plain)
     }
@@ -14,18 +11,18 @@ class LangTablePlain : UITableView,UITableViewDataSource{
         
     }
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder:aDecoder)
+         fatalError("NSCoding not supported")
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return arr.count
+            return arrs[0].count
         }else{
-            return arr1.count
+            return arrs[1].count
         }
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let a = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: nil)
-        a.textLabel?.text = String(arr[indexPath.row])
+        a.textLabel?.text = String(arrs[indexPath.section][indexPath.row])
         return a
     }
 
@@ -35,15 +32,9 @@ class LangTablePlain : UITableView,UITableViewDataSource{
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?{
         return titles[section]
     }
-    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String?{
-        return footers[section]
-    }
 }
 class LangTableGrouped : UITableView,UITableViewDataSource{
-    let arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-    let arr1 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-    let titles  = ["header1","header2"]
-    let footers  = ["footer1","footer2"]
+
     convenience init(){
         self.init(frame: CGRectZero, style:UITableViewStyle.Grouped)
     }
@@ -57,33 +48,30 @@ class LangTableGrouped : UITableView,UITableViewDataSource{
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return arr.count
+            return arrs[0].count
         }else{
-            return arr1.count
+            return arrs[1].count
         }
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let a = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: nil)
-        a.textLabel?.text = String(arr[indexPath.row])
+        a.textLabel?.text = String(arrs[indexPath.section][indexPath.row])
         return a
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int{
-        return 2
+        return arrs.count
     }
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?{
         return titles[section]
-    }
-    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String?{
-        return footers[section]
     }
 }
 
 func PlainVsGrouped (view: UIView){
     let a  = LangTablePlain()
-    a.frame = CGRectMake(0,200,300,200)
+    a.frame = CGRectMake(0,20,150,500)
     view.addSubview(a)
     
     let b  = LangTableGrouped()
-    b.frame = CGRectMake(0,400,300,200)
+    b.frame = CGRectMake(160,20,150,500)
     view.addSubview(b)
 }

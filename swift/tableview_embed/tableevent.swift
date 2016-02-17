@@ -8,11 +8,40 @@
 
 import UIKit
 
+class LangTableRowDelete: UITableView,UITableViewDataSource,UITableViewDelegate{
+    var arr = NSMutableArray.init(array: ["java","swift","js"])
+    override init(frame: CGRect, style: UITableViewStyle) {
+        super.init(frame:frame,style:style)
+        self.dataSource = self
+        self.delegate = self
+    }
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder:aDecoder)
+    }
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return arr.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
+        a.textLabel?.text = String(arr[indexPath.row])
+        return a
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle ==  .Delete{
+            arr.removeObjectAtIndex(indexPath.row)
+            self.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+        }
+    }
+    
+}
+
 class ViewController2: UIViewController {
-    var a : LangTableRowDelete?
+    var a : LangTableRowOper?
     override func viewDidLoad() {
         super.viewDidLoad()
-        a  = LangTableRowDelete()
+        a  = LangTableRowOper()
         a!.frame = CGRectMake(0,200,300,200)
         self.view.addSubview(a!)
         let b = UIButton()
@@ -68,7 +97,7 @@ class ViewController2: UIViewController {
 }
 
 
-class LangTableRowDelete : UITableView,UITableViewDataSource,UITableViewDelegate{
+class LangTableRowOper : UITableView,UITableViewDataSource,UITableViewDelegate{
     var arr = NSMutableArray.init(array: ["java","swift","js"])
 //    var arr = ["java","swift","js"]
     func add(newlang : String){
