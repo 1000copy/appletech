@@ -68,8 +68,6 @@ class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
         return vcs[i]
     }
     
-    
-    
     func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int
     {
         return vcs.count
@@ -96,8 +94,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         return true
 
     }
-
-   
 }
 //        let pageControl = UIPageControl.appearance()
 //        pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
