@@ -46,7 +46,7 @@ class v3 : UIViewController{
     }
 
 }
-class UIPageViewController1: UIPageViewController
+class UIPageViewController1: UIPageViewController,UIPageViewControllerDataSource
 {
     var pageIndex : Int = 0
     var pageViewController : UIPageViewController?
