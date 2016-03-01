@@ -1,5 +1,46 @@
 import UIKit
+class DemoCollectionView: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    var collectionView: UICollectionView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        layout.itemSize = CGSize(width: 60, height: 60)
+        
+        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.backgroundColor = UIColor.whiteColor()
+        self.view.addSubview(collectionView)
+    }
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
+        cell.backgroundColor = UIColor.blackColor()
+        return cell
+    }
+}
+class DemoUIActivityIndicatorView :UIViewController{
+    var acview : UIActivityIndicatorView?
+    override func viewDidLoad() {
+        acview = UIActivityIndicatorView()
+        acview!.frame = CGRectMake(100, 100, 100, 100)
+        view.addSubview(acview!)
+        self.view.backgroundColor = UIColor.blackColor()
 
+    }
+    override func viewDidAppear(animated: Bool) {
+        acview!.startAnimating()
+    }
+    override func viewDidDisappear(animated: Bool) {
+        acview!.stopAnimating()
+    }
+
+}
 // Alert View
 class DemoAlertViewOfUIAlertController:UIViewController{
     override func viewDidAppear(animated: Bool) {
@@ -50,7 +91,7 @@ class DemoActionSheetOfUIAlertController:UIViewController{
 class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
-        vcs = [DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
+        vcs = [DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
         super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
     }
     required  init?(coder: NSCoder){
@@ -102,7 +143,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window!.rootViewController = PageViewController()
+        self.window!.rootViewController = DemoCollectionView()
         self.window?.makeKeyAndVisible()
         return true
     }
