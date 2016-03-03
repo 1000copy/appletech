@@ -1,4 +1,45 @@
 import UIKit
+// scroll view 
+
+class DemoScrollView: UIViewController, UIScrollViewDelegate {
+    
+    
+    var scrollView: UIScrollView!
+    var containerView = UIView()
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.whiteColor()
+        self.scrollView = UIScrollView()
+        self.scrollView.delegate = self
+        self.scrollView.contentSize = CGSizeMake(1000, 1000)
+        
+        containerView = UIView()        
+        
+        scrollView.addSubview(containerView)
+        view.addSubview(scrollView)
+
+        for var i = 0 ;i < 10 ; i++ {
+            let buttonOne = UILabel()
+            buttonOne.frame = CGRectMake(100, CGFloat(100 * i) , 100, 100)
+            buttonOne.backgroundColor = UIColor.greenColor()
+            buttonOne.text = "Drag me ! "
+            containerView.addSubview(buttonOne)
+        }
+        
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        scrollView.frame = view.bounds
+        containerView.frame = CGRectMake(0, 0, scrollView.contentSize.width, scrollView.contentSize.height)
+    }
+    
+}
 
 // progress bar.进度值从 0到 1 ，而不是从 0 到 100
 class DemoProgressBarViewController: UIViewController{
@@ -234,7 +275,8 @@ class DemoActionSheetOfUIAlertController:UIViewController{
 class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
-        vcs = [DemoProgressBarViewController(),DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
+        vcs = [DemoScrollView(),
+            DemoProgressBarViewController(),DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
         super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
     }
     required  init?(coder: NSCoder){
