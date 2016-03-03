@@ -1,5 +1,36 @@
 import UIKit
 
+// progress bar.进度值从 0到 1 ，而不是从 0 到 100
+class DemoProgressBarViewController: UIViewController{
+    var timer : NSTimer!
+    var pv: UIProgressView!
+    var pv1: UIProgressView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.whiteColor()
+        pv = UIProgressView()
+        pv.frame = CGRectMake(100, 100, 100, 100)
+        view.addSubview(pv)
+        pv.progress = 0.51
+        pv.progressViewStyle = .Bar
+        
+        pv1 = UIProgressView()
+        pv1.frame = CGRectMake(100, 300, 100, 100)
+        view.addSubview(pv1)
+        pv1.progress = 0.90
+        pv1.progressViewStyle = .Default
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "update", userInfo: nil, repeats: true)
+    }
+    func update() {
+        pv.progress = pv.progress +  0.01
+        print (pv.progress)
+        if pv.progress >= 1 {
+            pv.progress = 0
+        }
+    }
+}
+
+
 // picker view
 class DemoPickerViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -203,7 +234,7 @@ class DemoActionSheetOfUIAlertController:UIViewController{
 class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
-        vcs = [DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
+        vcs = [DemoProgressBarViewController(),DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
         super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
     }
     required  init?(coder: NSCoder){
