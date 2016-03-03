@@ -1,5 +1,52 @@
 import UIKit
 
+// picker view
+class DemoPickerViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    var gradeTextField: UITextField!
+    var gradePicker: UIPickerView!
+    
+    let gradePickerValues = ["1", "2", "3"]
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return gradePickerValues.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return gradePickerValues[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
+        gradeTextField.text = gradePickerValues[row]
+        self.view.endEditing(true)
+    }
+    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        return 100
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.whiteColor()
+        gradeTextField = UITextField()
+        // 这个frame太小的话，会看不到文字，以至于误以为代码错误。
+        gradeTextField.frame = CGRectMake(10,40,100,20)
+        view.addSubview(gradeTextField)
+        gradePicker = UIPickerView()
+        gradePicker.frame =  CGRectMake(10,50,320,200)
+        gradePicker.dataSource = self
+        gradePicker.delegate = self
+        gradeTextField.inputView = gradePicker
+        gradeTextField.text = gradePickerValues[0]
+        gradePicker.showsSelectionIndicator = true
+        view.addSubview(gradePicker)
+    }
+}
+
+
+
 extension UIImage {
     class func imageWithColor(color: UIColor) -> UIImage {
         let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
@@ -156,7 +203,7 @@ class DemoActionSheetOfUIAlertController:UIViewController{
 class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
-        vcs = [DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
+        vcs = [DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
         super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
     }
     required  init?(coder: NSCoder){
