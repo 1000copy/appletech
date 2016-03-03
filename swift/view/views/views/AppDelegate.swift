@@ -1,14 +1,27 @@
 import UIKit
-// scroll view 
 
+
+// progress bar.进度值从 0到 1 ，而不是从 0 到 100
+class DemoSearchBarViewController: UIViewController,UISearchBarDelegate{
+    var c : UISearchBar!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        c = UISearchBar()
+        c.frame = CGRectMake(100, 100, 200, 50)
+        view.addSubview(c)
+        c.delegate = self
+    }
+     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        print ("search : \(searchBar.text)")
+    }
+}
+
+
+
+// scroll view
 class DemoScrollView: UIViewController, UIScrollViewDelegate {
-    
-    
     var scrollView: UIScrollView!
     var containerView = UIView()
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.whiteColor()
@@ -28,10 +41,7 @@ class DemoScrollView: UIViewController, UIScrollViewDelegate {
             buttonOne.text = "Drag me ! "
             containerView.addSubview(buttonOne)
         }
-        
-        
     }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -275,7 +285,9 @@ class DemoActionSheetOfUIAlertController:UIViewController{
 class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
-        vcs = [DemoScrollView(),
+        vcs = [
+            DemoSearchBarViewController(),
+            DemoScrollView(),
             DemoProgressBarViewController(),DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
         super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
     }
