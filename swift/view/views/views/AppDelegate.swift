@@ -1,4 +1,66 @@
 import UIKit
+
+extension UIImage {
+    class func imageWithColor(color: UIColor) -> UIImage {
+        let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, rect)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
+    }
+}
+//Animating a Sequence of Images
+class DemoImageViewAnimating: UIViewController {
+    var bgImage: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //        let image: UIImage = UIImage(named: "afternoon")!
+        bgImage = UIImageView()
+        bgImage.animationImages = [UIImage.imageWithColor(UIColor.redColor()),
+            UIImage.imageWithColor(UIColor.yellowColor()),
+            UIImage.imageWithColor(UIColor.blackColor()),
+            UIImage.imageWithColor(UIColor.blueColor())]
+        bgImage!.frame = CGRectMake(0,0,100,100)
+        self.view.addSubview(bgImage!)
+        bgImage.animationDuration = 1
+        bgImage.startAnimating()
+    }
+    override func viewDidDisappear(animated: Bool) {
+        bgImage.stopAnimating()
+    }
+}
+
+// Show image 
+//Responding to Touch Events
+
+class DemoImageView: UIViewController {
+    var bgImage: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+//        let image: UIImage = UIImage(named: "afternoon")!
+        let image = UIImage.imageWithColor(UIColor.redColor())
+        bgImage = UIImageView(image: image,highlightedImage:UIImage.imageWithColor(UIColor.blueColor()) )
+        bgImage!.frame = CGRectMake(0,0,100,100)
+        self.view.addSubview(bgImage!)
+        //mage views ignore user events by default. Normally, you use image views only to present visual content in your interface. If you want an image view to handle user interactions as well, change the value of its userInteractionEnabled property to YES. After doing that, you can attach gesture recognizers or use any other event handling techniques to respond to touch events or other user-initiated events.
+        // gesture 
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        bgImage.userInteractionEnabled = true
+        bgImage.addGestureRecognizer(tapGestureRecognizer)
+    }
+    func imageTapped(img: AnyObject)
+    {
+       bgImage.highlighted = !bgImage!.highlighted
+    }
+}
 class DemoCollectionView: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     var collectionView: UICollectionView!
     override func viewDidLoad() {
@@ -13,6 +75,9 @@ class DemoCollectionView: UIViewController, UICollectionViewDelegateFlowLayout, 
         collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(collectionView)
+    }
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int{
+        return 1
     }
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 5
@@ -91,7 +156,7 @@ class DemoActionSheetOfUIAlertController:UIViewController{
 class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
-        vcs = [DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
+        vcs = [DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
         super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
     }
     required  init?(coder: NSCoder){
@@ -143,7 +208,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window!.rootViewController = DemoCollectionView()
+        self.window!.rootViewController = PageViewController()
         self.window?.makeKeyAndVisible()
         return true
     }
