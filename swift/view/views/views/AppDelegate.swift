@@ -1,5 +1,27 @@
 import UIKit
 
+//labels are read-only
+//textfields are editable, and provide horizontal character seeking (not really scrolling) when the text is too long to display all at once. Generally used to input short text.
+//textviews are also editable, but provide vertical scrolling when the text is too long to display all at one.
+// text view
+
+class DemoTextViewViewController: UIViewController,UITextViewDelegate{
+    var c : UITextView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        c = UITextView()
+        c.frame = CGRectMake(100, 100, 200, 50)
+        view.addSubview(c)
+        c.text = "textfields are editable,\n and provide horizontal character seeking \n(not really scrolling) when the text is too long to \ndisplay all at once. "
+        c.delegate = self
+    }
+    
+    func textViewDidChange(textView: UITextView){
+        // 字符串内的对象和属性写错了，一样可以报编译错。
+        print ("new value : \(c.text)")
+    }
+}
+
 
 // progress bar.进度值从 0到 1 ，而不是从 0 到 100
 class DemoSearchBarViewController: UIViewController,UISearchBarDelegate{
@@ -286,6 +308,7 @@ class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
         vcs = [
+            DemoTextViewViewController(),
             DemoSearchBarViewController(),
             DemoScrollView(),
             DemoProgressBarViewController(),DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
