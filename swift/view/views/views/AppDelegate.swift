@@ -1,5 +1,21 @@
 import UIKit
 
+class DemoWebViewController: UIViewController{
+    var c : UIWebView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        c = UIWebView()
+        c.frame = super.view.frame
+        view.addSubview(c)
+         c.frame.origin.y += 20
+//        c.loadRequest(NSURLRequest(URL:NSURL(string:"http://www.apple.com/")!))
+        c.loadHTMLString("<h>title</h>", baseURL: NSURL(string:"http://www.apple.com/")!)
+    }
+    
+
+}
+
+
 //labels are read-only
 //textfields are editable, and provide horizontal character seeking (not really scrolling) when the text is too long to display all at once. Generally used to input short text.
 //textviews are also editable, but provide vertical scrolling when the text is too long to display all at one.
@@ -308,6 +324,7 @@ class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
         vcs = [
+            DemoWebViewController(),
             DemoTextViewViewController(),
             DemoSearchBarViewController(),
             DemoScrollView(),
