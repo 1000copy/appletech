@@ -1,7 +1,81 @@
 
 import UIKit
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    var window: UIWindow?
+    
+    
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        // Override point for customization after application launch.
+        //        self.window!.rootViewController = DatePickerDemo()
+        //                self.window!.rootViewController = PageControlDemo()
+        //        self.window!.rootViewController =  UISegmentedControlDemo()
+        self.window!.rootViewController = UISwitchDemo()
+        self.window!.backgroundColor = UIColor.whiteColor()
+        self.window!.makeKeyAndVisible()
+        return true
+    }
+}
 
-//UISegmentedControl 
+//UISwitch
+class UISwitchDemo : UIViewController{
+    var p :  UISwitch!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        p =   UISwitch ()
+        p.frame = view.frame
+        p.frame.origin.y += 40
+        p.frame.size.height = 50
+        view.addSubview(p)
+        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+    }
+    func changed (sender: AnyObject){
+        print(p.on)
+    }
+}
+
+// UIStepper
+class UIStepperDemo : UIViewController{
+    var p :  UIStepper!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        p =   UIStepper ()
+        p.frame = view.frame
+        p.frame.origin.y += 40
+        p.frame.size.height = 50
+        view.addSubview(p)
+        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.maximumValue = 10
+        p.minimumValue = 1
+        p.value = 5
+    }
+    func changed (sender: AnyObject){
+        print(p.value)
+    }
+}
+// UISlider
+
+class UISliderDemo : UIViewController{
+    var p :  UISlider!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        p =   UISlider ()
+        p.frame = view.frame
+        p.frame.origin.y += 40
+        p.frame.size.height = 50
+        view.addSubview(p)
+        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.value = 0.5
+    }
+    func changed (sender: AnyObject){
+        print(p.value)
+    }
+}
+
+
+//UISegmentedControl
 extension UIImage {
     class func imageWithColor(color: UIColor) -> UIImage {
         let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
@@ -86,21 +160,3 @@ class DatePickerDemo : UIViewController{
         print(p.date)
     }
 }
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    var window: UIWindow?
-
-
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        // Override point for customization after application launch.
-//        self.window!.rootViewController = DatePickerDemo()
-//                self.window!.rootViewController = PageControlDemo()
-        self.window!.rootViewController =  UISegmentedControlDemo()
-        self.window!.backgroundColor = UIColor.whiteColor()
-        self.window!.makeKeyAndVisible()
-        return true
-    }
-}
-
