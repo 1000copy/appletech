@@ -1,4 +1,12 @@
 //
+//  app.swift
+//  helloapp
+//
+//  Created by lcj on 2017/2/17.
+//  Copyright © 2017年 liu. All rights reserved.
+//
+
+//
 //  AppDelegate.swift
 //  dou2
 //
@@ -7,7 +15,23 @@
 //
 
 import UIKit
+import AVFoundation
 
+var player: AVAudioPlayer?
+
+func playSound() {
+    let url = Bundle.main.url(forResource: "a-sound2", withExtension: "mp3")!
+    
+    do {
+        player = try AVAudioPlayer(contentsOf: url)
+        guard let player = player else { return }
+        
+        player.prepareToPlay()
+        player.play()
+    } catch let error {
+        print(error.localizedDescription)
+    }
+}
 class Page1: UIViewController {
     
     override func viewDidLoad() {
@@ -18,31 +42,38 @@ class Page1: UIViewController {
         button.setTitle("Test Button", for: UIControlState())
         button.addTarget(self, action: #selector(Page1.buttonAction(_:)), for: UIControlEvents.touchUpInside)
         view.addSubview(button)
-//        // button 2
-//        let button1   = UIButton(type: UIButtonType.System) as UIButton
-//        button1.frame = CGRectMake(100, 200, 100, 50)
-//        button1.backgroundColor = UIColor.blueColor()
-//        button1.setTitle("Test Button", forState: UIControlState.Normal)
-//        button1.addTarget(self, action: "buttonAction1:", forControlEvents: UIControlEvents.TouchUpInside)
-//        view.addSubview(button1)
-//        let button4   = UIButton(type: UIButtonType.System) as UIButton
-//        button4.frame = CGRectMake(100, 300, 100, 50)
-//        button4.backgroundColor = UIColor.blueColor()
-//        button4.setTitle("Button4", forState: UIControlState.Normal)
-//        button4.addTarget(self, action: "buttonAction4:", forControlEvents: UIControlEvents.TouchUpInside)
-//        view.addSubview(button4)
-//        let button5   = UIButton(type: UIButtonType.System) as UIButton
-//        button5.frame = CGRectMake(100, 350, 100, 50)
-//        button5.backgroundColor = UIColor.blueColor()
-//        button5.setTitle("Button5", forState: UIControlState.Normal)
-//        button5.addTarget(self, action: "buttonAction5:", forControlEvents: UIControlEvents.TouchUpInside)
-//        view.addSubview(button5)
-//        let button6   = UIButton(type: UIButtonType.System) as UIButton
-//        button6.frame = CGRectMake(100, 400, 100, 50)
-//        button6.backgroundColor = UIColor.blueColor()
-//        button6.setTitle("Button6", forState: UIControlState.Normal)
-//        button6.addTarget(self, action: "buttonAction6:", forControlEvents: UIControlEvents.TouchUpInside)
-//        view.addSubview(button6)
+        let button1   = UIButton(type: UIButtonType.system) as UIButton
+        button1.frame = CGRect(x: 100, y: 300, width: 100, height: 50)
+        button1.backgroundColor = UIColor.red
+        button1.setTitle("θ", for: UIControlState())
+        button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
+        view.addSubview(button1)
+        
+        //        // button 2
+        //        let button1   = UIButton(type: UIButtonType.System) as UIButton
+        //        button1.frame = CGRectMake(100, 200, 100, 50)
+        //        button1.backgroundColor = UIColor.blueColor()
+        //        button1.setTitle("Test Button", forState: UIControlState.Normal)
+        //        button1.addTarget(self, action: "buttonAction1:", forControlEvents: UIControlEvents.TouchUpInside)
+        //        view.addSubview(button1)
+        //        let button4   = UIButton(type: UIButtonType.System) as UIButton
+        //        button4.frame = CGRectMake(100, 300, 100, 50)
+        //        button4.backgroundColor = UIColor.blueColor()
+        //        button4.setTitle("Button4", forState: UIControlState.Normal)
+        //        button4.addTarget(self, action: "buttonAction4:", forControlEvents: UIControlEvents.TouchUpInside)
+        //        view.addSubview(button4)
+        //        let button5   = UIButton(type: UIButtonType.System) as UIButton
+        //        button5.frame = CGRectMake(100, 350, 100, 50)
+        //        button5.backgroundColor = UIColor.blueColor()
+        //        button5.setTitle("Button5", forState: UIControlState.Normal)
+        //        button5.addTarget(self, action: "buttonAction5:", forControlEvents: UIControlEvents.TouchUpInside)
+        //        view.addSubview(button5)
+        //        let button6   = UIButton(type: UIButtonType.System) as UIButton
+        //        button6.frame = CGRectMake(100, 400, 100, 50)
+        //        button6.backgroundColor = UIColor.blueColor()
+        //        button6.setTitle("Button6", forState: UIControlState.Normal)
+        //        button6.addTarget(self, action: "buttonAction6:", forControlEvents: UIControlEvents.TouchUpInside)
+        //        view.addSubview(button6)
     }
     func buttonAction(_ sender:UIButton!){
         print("button clicked")
@@ -56,12 +87,13 @@ class Page1: UIViewController {
     }
     func buttonAction1(_ sender:UIButton!){
         print("button1 clicked")
-        let nav1 = UINavigationController()
-        let mainView = Page3(nibName: nil, bundle: nil)
-        nav1.viewControllers = [mainView]
-        nav1.title = "Page3"
-        nav1.modalPresentationStyle = .formSheet
-        present(nav1, animated: true, completion: nil)
+        playSound()
+//        let nav1 = UINavigationController()
+//        let mainView = Page3(nibName: nil, bundle: nil)
+//        nav1.viewControllers = [mainView]
+//        nav1.title = "Page3"
+//        nav1.modalPresentationStyle = .formSheet
+//        present(nav1, animated: true, completion: nil)
     }
     func buttonAction4(_ sender:UIButton!){
         let nav1 = UINavigationController()
@@ -80,14 +112,14 @@ class Page1: UIViewController {
         present(nav1, animated: true, completion: nil)
     }
     func buttonAction6(_ sender:UIButton!){
-//        let nav1 = UINavigationController()
+        //        let nav1 = UINavigationController()
         let mainView = Page6(nibName: nil, bundle: nil)
-//        nav1.viewControllers = [mainView]
-//        nav1.title = "Page5"
-//        nav1.modalPresentationStyle = .FormSheet
+        //        nav1.viewControllers = [mainView]
+        //        nav1.title = "Page5"
+        //        nav1.modalPresentationStyle = .FormSheet
         present(mainView, animated: true, completion: nil)
-//        mainView.modalPresentationStyle = .FullScreen
-//        pushViewController(mainView,animated: true)
+        //        mainView.modalPresentationStyle = .FullScreen
+        //        pushViewController(mainView,animated: true)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -124,11 +156,11 @@ class Page2: UIViewController {
     
 }
 /*
-There are many ways to put together a table view app. For example, you can use an instance of a custom NSObject subclass to create, configure, and manage a table view. However, you will find the task much easier if you adopt the classes, techniques, and design patterns that the UIKit framework offers for this purpose. The following approaches are recommended:
-
-Use an instance of a subclass of UITableViewController to create and manage a table view.
-Most apps use a custom UITableViewController object to manage a table view. As described in Navigating a Data Hierarchy with Table Views, UITableViewController automatically creates a table view, assigns itself as both delegate and data source (and adopts the corresponding protocols), and initiates the procedure for populating the table view with data. It also takes care of several other “housekeeping” details of behavior. The behavior of UITableViewController (a subclass of UIViewController) within the navigation controller architecture is described in Table View Controllers.
-*/
+ There are many ways to put together a table view app. For example, you can use an instance of a custom NSObject subclass to create, configure, and manage a table view. However, you will find the task much easier if you adopt the classes, techniques, and design patterns that the UIKit framework offers for this purpose. The following approaches are recommended:
+ 
+ Use an instance of a subclass of UITableViewController to create and manage a table view.
+ Most apps use a custom UITableViewController object to manage a table view. As described in Navigating a Data Hierarchy with Table Views, UITableViewController automatically creates a table view, assigns itself as both delegate and data source (and adopts the corresponding protocols), and initiates the procedure for populating the table view with data. It also takes care of several other “housekeeping” details of behavior. The behavior of UITableViewController (a subclass of UIViewController) within the navigation controller architecture is described in Table View Controllers.
+ */
 extension UIImage {
     class func imageWithColor(_ color: UIColor) -> UIImage {
         let rect = CGRect(x: 0.0, y: 0.0, width: 10.0,height: 10.0 )
@@ -209,7 +241,7 @@ class Page4: UITableViewController {
             mainLabel.tag = MAINLABEL_TAG;
             mainLabel.textAlignment = .left
             mainLabel.textColor = UIColor.black
-//            mainLabel.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin || UIViewAutoresizing.FlexibleHeight
+            //            mainLabel.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin || UIViewAutoresizing.FlexibleHeight
             cell?.contentView.addSubview(mainLabel)
         }else{
             mainLabel = cell!.contentView.viewWithTag(MAINLABEL_TAG) as! UILabel
@@ -220,19 +252,19 @@ class Page4: UITableViewController {
     }
 }
 
-// Customize cell 
+// Customize cell
 
 class MyCell : UITableViewCell{
     var mainLabel : UILabel?
     required override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style,reuseIdentifier: reuseIdentifier)
-            mainLabel = UILabel(frame:CGRect(x: 0.0, y: 0.0, width: 220.0, height: 15.0))
-            mainLabel!.tag = MAINLABEL_TAG;
-            mainLabel!.textAlignment = .left
-            mainLabel!.textColor = UIColor.black
-            self.contentView.addSubview(mainLabel!)
+        mainLabel = UILabel(frame:CGRect(x: 0.0, y: 0.0, width: 220.0, height: 15.0))
+        mainLabel!.tag = MAINLABEL_TAG;
+        mainLabel!.textAlignment = .left
+        mainLabel!.textColor = UIColor.black
+        self.contentView.addSubview(mainLabel!)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
@@ -305,43 +337,43 @@ class Page6: UITableViewController {
 
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let nav1 = UINavigationController()
         let page1 = Page1(nibName: nil, bundle: nil)
         nav1.viewControllers = [page1]
         nav1.title = "Page1"
-
+        
         self.window!.rootViewController = page1
         self.window?.makeKeyAndVisible()
         return true
     }
-
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
-
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
-
+    
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
-
+    
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+    
 }
 

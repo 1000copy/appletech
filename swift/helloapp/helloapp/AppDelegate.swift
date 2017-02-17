@@ -13,22 +13,22 @@ class ViewController1: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.greenColor()
+        view.backgroundColor = UIColor.green
         let button = UIButton()
-        button.setTitle("transit", forState: .Normal)
-        button.frame = CGRectMake(20, 20, 100,20)
-        button.addTarget(self, action: "click:", forControlEvents: .TouchDown)
+        button.setTitle("transit", for: UIControlState())
+        button.frame = CGRect(x: 20, y: 20, width: 100,height: 20)
+        button.addTarget(self, action: #selector(ViewController1.click(_:)), for: .touchDown)
         view.addSubview(button)
     }
-    func click(sender:UIButton!){
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    func click(_ sender:UIButton!){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         if let window = appDelegate.window {
 //            let v2 = ViewController2()
             
             if let r = window.rootViewController{
-                r.transitionFromViewController(
-                    appDelegate.v1!
-                    ,toViewController:appDelegate.v2!,duration:0.8,options: .TransitionFlipFromLeft,animations:nil){_ in }
+                r.transition(
+                    from: appDelegate.v1!
+                    ,to:appDelegate.v2!,duration:0.8,options: .transitionFlipFromLeft,animations:nil){_ in }
             }
         }
     }
@@ -40,9 +40,9 @@ class ViewController2: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.blueColor()
+        view.backgroundColor = UIColor.blue
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         print(animated)
     }
 
@@ -52,7 +52,7 @@ class ViewController3: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.redColor()
+        view.backgroundColor = UIColor.red
     }
 }
 
@@ -63,8 +63,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var v1 : ViewController1?
     var v2 : ViewController2?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.rootViewController = ViewController3()
         v1 = ViewController1()
         v2 = ViewController2()
