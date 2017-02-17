@@ -1,58 +1,197 @@
-//
-//  app.swift
-//  helloapp
-//
-//  Created by lcj on 2017/2/17.
-//  Copyright © 2017年 liu. All rights reserved.
-//
 
-//
-//  AppDelegate.swift
-//  dou2
-//
-//  Created by quota on 12/21/15.
-//  Copyright © 2015 liu. All rights reserved.
-//
 
 import UIKit
 import AVFoundation
 
-var player: AVAudioPlayer?
 
-func playSound() {
-    let url = Bundle.main.url(forResource: "a-sound2", withExtension: "mp3")!
-    
-    do {
-        player = try AVAudioPlayer(contentsOf: url)
-        guard let player = player else { return }
-        
-        player.prepareToPlay()
-        player.play()
-    } catch let error {
-        print(error.localizedDescription)
-    }
-}
+
 class Page1: UIViewController {
-    
+    var def : [Abc]?
+    var player: AVAudioPlayer?
+    func join(abc:[Abc]){
+        for a in abc{
+            self.def!.append(a)
+        }
+    }
+    func LongYuan (){
+        let Y = 50
+        var abc = [Abc]()
+        // 长元音 [iː] [ɜː] [ɔː] [uː] [ɑː]
+        abc.append(Abc(alpha: "ɑː",mp3: "mp3/Long/a-sound2"))
+        abc.append(Abc(alpha: "uː",mp3: "mp3/Long/u-sound2"))
+        abc.append(Abc(alpha: "ɔː",mp3: "mp3/Long/o-sound2"))
+        abc.append(Abc(alpha: "ɜː",mp3: "mp3/Long/er-sound"))
+        abc.append(Abc(alpha: "iː",mp3: "mp3/Long/i-sound2"))
+        var i = 0
+        for a in abc{
+            let button1   = UIButton(type: UIButtonType.system) as UIButton
+            button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
+            button1.titleLabel!.textColor = UIColor.white
+            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.backgroundColor = UIColor.green
+            button1.setTitle(a.alpha, for: UIControlState())
+            button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(button1)
+            i += 1
+        }
+        self.join(abc:abc)
+    }
+    func ShortYuan (){
+        let Y = 100
+        var abc = [Abc]()
+        // 短元音	[ɪ] [e] [ʌ] [ə] [ɒ] [ʊ] [æ]
+        abc.append(Abc(alpha: "ɪ",mp3: "mp3/Duan/i-sound"))
+        abc.append(Abc(alpha: "e",mp3: "mp3/Duan/e-sound"))
+        abc.append(Abc(alpha: "ʌ",mp3: "mp3/Duan/^-sound"))
+        abc.append(Abc(alpha: "ə",mp3: "mp3/Duan/e^-sound"))
+        abc.append(Abc(alpha: "ɒ",mp3: "mp3/Duan/o-sound"))
+        abc.append(Abc(alpha: "ʊ",mp3: "mp3/Duan/u-sound"))
+        abc.append(Abc(alpha: "æ",mp3: "mp3/Duan/an-sound"))
+        var i = 0
+        for a in abc{
+            let button1   = UIButton(type: UIButtonType.system) as UIButton
+            button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
+            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.backgroundColor = UIColor.green
+            button1.setTitle(a.alpha, for: UIControlState())
+            button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(button1)
+            i += 1
+        }
+        self.join(abc:abc)
+    }
+    func ShuangYuan (){
+        let Y = 150
+        var abc = [Abc]()
+        // 双元音	[eɪ] [aɪ] [ɔɪ] [aʊ] [əʊ] [ɪə] [eə] [ʊə]
+        abc.append(Abc(alpha: "eɪ",mp3: "mp3/Shuang/ei"))
+        abc.append(Abc(alpha: "aɪ",mp3: "mp3/Shuang/ai"))
+        abc.append(Abc(alpha: "ɔɪ",mp3: "mp3/Shuang/oi"))
+        abc.append(Abc(alpha: "aʊ",mp3: "mp3/Shuang/ao"))
+        abc.append(Abc(alpha: "əʊ",mp3: "mp3/Shuang/eu"))
+        abc.append(Abc(alpha: "ɪə",mp3: "mp3/Shuang/ir"))
+        abc.append(Abc(alpha: "eə",mp3: "mp3/Shuang/er"))
+        abc.append(Abc(alpha: "ʊə",mp3: "mp3/Shuang/uer"))
+        var i = 0
+        for a in abc{
+            let button1   = UIButton(type: UIButtonType.system) as UIButton
+            button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
+            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.backgroundColor = UIColor.green
+            button1.setTitle(a.alpha, for: UIControlState())
+            button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(button1)
+            i += 1
+        }
+        self.join(abc:abc)
+    }
+    func QingFu (){
+        let Y = 200
+        var abc = [Abc]()
+        // 清辅音	[p] [t] [k] [f] [θ] [s] [ts][tr] [∫] [t∫]
+        abc.append(Abc(alpha: "p",mp3: "mp3/Qingfu/p"))
+        abc.append(Abc(alpha: "t",mp3: "mp3/Qingfu/t"))
+        abc.append(Abc(alpha: "k",mp3: "mp3/Qingfu/k"))
+        abc.append(Abc(alpha: "f",mp3: "mp3/Qingfu/f"))
+        abc.append(Abc(alpha: "θ",mp3: "mp3/Qingfu/si"))
+        abc.append(Abc(alpha: "ts",mp3: "mp3/Qingfu/ts"))
+        abc.append(Abc(alpha: "tr",mp3: "mp3/Qingfu/tr"))
+        abc.append(Abc(alpha: "∫",mp3: "mp3/Qingfu/ss"))
+        abc.append(Abc(alpha: "t∫",mp3: "mp3/Qingfu/tss"))
+        var i = 0
+        for a in abc{
+            let button1   = UIButton(type: UIButtonType.system) as UIButton
+            button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
+            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.backgroundColor = UIColor.green
+            button1.setTitle(a.alpha, for: UIControlState())
+            button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(button1)
+            i += 1
+        }
+        self.join(abc:abc)
+    }
+    func ZuoFu (){
+        let Y = 250
+        var abc = [Abc]()
+        // 浊辅音	[b] [d] [g] [v] [ð] [z] [dz] [dr] [ʒ] [dʒ]
+        abc.append(Abc(alpha: "b",mp3: "mp3/Zuofu/b"))
+        abc.append(Abc(alpha: "d",mp3: "mp3/Zuofu/d"))
+        abc.append(Abc(alpha: "g",mp3: "mp3/Zuofu/g"))
+        abc.append(Abc(alpha: "v",mp3: "mp3/Zuofu/v"))
+        abc.append(Abc(alpha: "ð",mp3: "mp3/Zuofu/qq"))
+        abc.append(Abc(alpha: "z",mp3: "mp3/Zuofu/z"))
+        abc.append(Abc(alpha: "dz",mp3: "mp3/Zuofu/dz"))
+        abc.append(Abc(alpha: "dr",mp3: "mp3/Zuofu/dr"))
+        abc.append(Abc(alpha: "ʒ",mp3: "mp3/Zuofu/n3"))
+        abc.append(Abc(alpha: "dʒ",mp3: "mp3/Zuofu/d3"))
+        var i = 0
+        for a in abc{
+            let button1   = UIButton(type: UIButtonType.system) as UIButton
+            button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
+            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.backgroundColor = UIColor.green
+            button1.setTitle(a.alpha, for: UIControlState())
+            button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(button1)
+            i += 1
+        }
+        self.join(abc:abc)
+    }
+    func Other (){
+        let Y = 300
+        var abc = [Abc]()
+        // 其他 	[m][n][ŋ][h][l][r][j][w]
+        abc.append(Abc(alpha: "m",mp3: "mp3/Other/m"))
+        abc.append(Abc(alpha: "n",mp3: "mp3/Other/n"))
+        abc.append(Abc(alpha: "ŋ",mp3: "mp3/Other/ng"))
+        abc.append(Abc(alpha: "h",mp3: "mp3/Other/h"))
+        abc.append(Abc(alpha: "l",mp3: "mp3/Other/l"))
+        abc.append(Abc(alpha: "r",mp3: "mp3/Other/r"))
+        abc.append(Abc(alpha: "j",mp3: "mp3/Other/j"))
+        abc.append(Abc(alpha: "w",mp3: "mp3/Other/w"))
+        var i = 0
+        for a in abc{
+            let button1   = UIButton(type: UIButtonType.system) as UIButton
+            button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
+            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.backgroundColor = UIColor.green
+            button1.setTitle(a.alpha, for: UIControlState())
+            button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(button1)
+            i += 1
+        }
+        self.join(abc:abc)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        let button   = UIButton(type: UIButtonType.system) as UIButton
-        button.frame = CGRect(x: 100, y: 100, width: 100, height: 50)
-        button.backgroundColor = UIColor.red
-        button.setTitle("Test Button", for: UIControlState())
-        button.addTarget(self, action: #selector(Page1.buttonAction(_:)), for: UIControlEvents.touchUpInside)
-        view.addSubview(button)
-        let button1   = UIButton(type: UIButtonType.system) as UIButton
-        button1.frame = CGRect(x: 100, y: 300, width: 100, height: 50)
-        button1.backgroundColor = UIColor.red
-        button1.setTitle("θ", for: UIControlState())
-        button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
-        view.addSubview(button1)
+       def = [Abc]()
+       LongYuan()
+       ShortYuan()
+       ShuangYuan()
+       QingFu()
+       ZuoFu()
+       Other()
+//
+        
     }
+    func playSound(file:String) {
+//        let url = Bundle.main.url(forResource: "a-sound2", withExtension: "mp3")!
+        let url = Bundle.main.url(forResource: file, withExtension: "mp3")!
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            guard let player = player else { return }
+            
+            player.prepareToPlay()
+            player.play()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+
     func buttonAction(_ sender:UIButton!){
         print("button clicked")
         let nav1 = UINavigationController()
-        //        var mainView = mainStoryboard.instantiateViewControllerWithIdentifier("Page2") as? Page2
         let mainView = Page2(nibName: nil, bundle: nil)
         nav1.viewControllers = [mainView]
         nav1.title = "Page2"
@@ -61,7 +200,13 @@ class Page1: UIViewController {
     }
     func buttonAction1(_ sender:UIButton!){
         print("button1 clicked")
-        playSound()
+        var a = sender.titleLabel!.text!
+        print(a)
+        for b in def!{
+            if b.alpha == a{
+                playSound(file:b.mp3)
+            }
+        }
     }
     func buttonAction4(_ sender:UIButton!){
         let nav1 = UINavigationController()
@@ -167,7 +312,7 @@ class Page3: UITableViewController {
         }
         cell!.textLabel!.text = "text"
         cell!.detailTextLabel!.text = "detail"
-        cell!.imageView!.image = UIImage.imageWithColor(UIColor.red)
+        cell!.imageView!.image = UIImage.imageWithColor(UIColor.green)
         return cell!;
         
     }
@@ -290,7 +435,14 @@ class Page6: UITableViewController {
         
     }
 }
-
+class Abc{
+    var alpha : String
+    var mp3: String
+    init(alpha:String,mp3:String){
+        self.alpha = alpha
+        self.mp3 = mp3
+    }
+}
 
 
 @UIApplicationMain
@@ -345,3 +497,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 }
 
+//
+//  app.swift
+//  helloapp
+//
+//  Created by lcj on 2017/2/17.
+//  Copyright © 2017年 liu. All rights reserved.
+//
+
+//
+//  AppDelegate.swift
+//  dou2
+//
+//  Created by quota on 12/21/15.
+//  Copyright © 2015 liu. All rights reserved.
+//
