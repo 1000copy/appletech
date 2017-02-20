@@ -3,8 +3,17 @@
 import UIKit
 import AVFoundation
 
-
-
+let screenwidth = 300
+let gap = 3
+let buttonwidth = 40
+let buttonheight = 40
+let ystart = 70
+var currentx = 0
+var currenty = ystart
+let nr = 10
+class Alphabet:UIButton{
+    
+}
 class Page1: UIViewController {
     
     override func viewDidLoad() {
@@ -16,31 +25,23 @@ class Page1: UIViewController {
         QingFu()
         ZuoFu()
         Other()
-        let button1   = UIButton(type: UIButtonType.system) as UIButton
-        button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
-        button1.frame = CGRect(x: 0, y: 500, width: 30, height: 40)
-        button1.backgroundColor = UIColor.green
-        button1.setTitle("LongPress", for: UIControlState())
-        view.addSubview(button1)
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(Page1.normalTap(_:)))
-        let longGesture = UILongPressGestureRecognizer(target: self,  action:#selector(Page1.longTap(sender:)))
-        tapGesture.numberOfTapsRequired = 1
-        button1.addGestureRecognizer(tapGesture)
-        button1.addGestureRecognizer(longGesture)
-        
     }
     func normalTap(_ sender:UIButton!){
         print("normalTap clicked")
         
     }
     func longTap(sender : UIGestureRecognizer){
+        
         if sender.state == .began{
             print("longTap clicked")
-            let mainView = Page2(nibName: nil, bundle: nil)
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.nav1!.pushViewController(mainView,animated: true)
-        }
+            if let button = sender.view as? UIButton {
+                print(button.titleLabel!.text!)
+                    let mainView = Page2(nibName: nil, bundle: nil)
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.nav1!.pushViewController(mainView,animated: true)
+
+            }
+                  }
     }
     func longTap1(sender : UIGestureRecognizer){
         if sender.state == .ended{
@@ -59,7 +60,7 @@ class Page1: UIViewController {
         }
     }
     func LongYuan (){
-        let Y = 50
+        
         var abc = [Abc]()
         // 长元音 [iː] [ɜː] [ɔː] [uː] [ɑː]
         abc.append(Abc(alpha: "ɑː",mp3: "mp3/Long/a-sound2"))
@@ -72,17 +73,28 @@ class Page1: UIViewController {
             let button1   = UIButton(type: UIButtonType.system) as UIButton
             button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
             button1.titleLabel!.textColor = UIColor.white
-            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            
+            button1.frame = CGRect(x: currentx, y: currenty, width: buttonwidth, height: buttonheight)
+            currentx += buttonwidth + gap
+            if currentx + buttonwidth >= screenwidth {
+                currentx = 0
+                if i+1 < abc.count{
+                    currenty += buttonheight + gap
+                }
+            }
             button1.backgroundColor = UIColor.green
             button1.setTitle(a.alpha, for: UIControlState())
             button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
             view.addSubview(button1)
+            let longGesture = UILongPressGestureRecognizer(target: self,  action:#selector(Page1.longTap(sender:)))
+            button1.addGestureRecognizer(longGesture)
             i += 1
         }
         self.join(abc:abc)
     }
     func ShortYuan (){
-        let Y = 100
+        currentx = 0
+        currenty += buttonheight + gap + nr
         var abc = [Abc]()
         // 短元音	[ɪ] [e] [ʌ] [ə] [ɒ] [ʊ] [æ]
         abc.append(Abc(alpha: "ɪ",mp3: "mp3/Duan/i-sound"))
@@ -96,7 +108,16 @@ class Page1: UIViewController {
         for a in abc{
             let button1   = UIButton(type: UIButtonType.system) as UIButton
             button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
-            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.frame = CGRect(x: currentx, y: currenty, width: buttonwidth, height: buttonheight)
+            currentx += buttonwidth + gap
+            if currentx + buttonwidth >= screenwidth {
+                currentx = 0
+                if i+1 < abc.count{
+                    currenty += buttonheight + gap
+                }
+
+                
+            }
             button1.backgroundColor = UIColor.green
             button1.setTitle(a.alpha, for: UIControlState())
             button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
@@ -106,7 +127,8 @@ class Page1: UIViewController {
         self.join(abc:abc)
     }
     func ShuangYuan (){
-        let Y = 150
+        currentx = 0
+        currenty += buttonheight + gap + nr
         var abc = [Abc]()
         // 双元音	[eɪ] [aɪ] [ɔɪ] [aʊ] [əʊ] [ɪə] [eə] [ʊə]
         abc.append(Abc(alpha: "eɪ",mp3: "mp3/Shuang/ei"))
@@ -121,7 +143,12 @@ class Page1: UIViewController {
         for a in abc{
             let button1   = UIButton(type: UIButtonType.system) as UIButton
             button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
-            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.frame = CGRect(x: currentx, y: currenty, width: buttonwidth, height: buttonheight)
+            currentx += buttonwidth + gap
+            if currentx + buttonwidth >= screenwidth {
+                currentx = 0
+                currenty += buttonheight + gap
+            }
             button1.backgroundColor = UIColor.green
             button1.setTitle(a.alpha, for: UIControlState())
             button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
@@ -131,7 +158,8 @@ class Page1: UIViewController {
         self.join(abc:abc)
     }
     func QingFu (){
-        let Y = 200
+        currentx = 0
+        currenty += buttonheight + gap + nr
         var abc = [Abc]()
         // 清辅音	[p] [t] [k] [f] [θ] [s] [ts][tr] [∫] [t∫]
         abc.append(Abc(alpha: "p",mp3: "mp3/Qingfu/p"))
@@ -147,7 +175,12 @@ class Page1: UIViewController {
         for a in abc{
             let button1   = UIButton(type: UIButtonType.system) as UIButton
             button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
-            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.frame = CGRect(x: currentx, y: currenty, width: buttonwidth, height: buttonheight)
+            currentx += buttonwidth + gap
+            if currentx + buttonwidth >= screenwidth {
+                currentx = 0
+                currenty += buttonheight + gap
+            }
             button1.backgroundColor = UIColor.green
             button1.setTitle(a.alpha, for: UIControlState())
             button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
@@ -157,7 +190,8 @@ class Page1: UIViewController {
         self.join(abc:abc)
     }
     func ZuoFu (){
-        let Y = 250
+        currentx = 0
+        currenty += buttonheight + gap + nr
         var abc = [Abc]()
         // 浊辅音	[b] [d] [g] [v] [ð] [z] [dz] [dr] [ʒ] [dʒ]
         abc.append(Abc(alpha: "b",mp3: "mp3/Zuofu/b"))
@@ -174,7 +208,12 @@ class Page1: UIViewController {
         for a in abc{
             let button1   = UIButton(type: UIButtonType.system) as UIButton
             button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
-            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.frame = CGRect(x: currentx, y: currenty, width: buttonwidth, height: buttonheight)
+            currentx += buttonwidth + gap
+            if currentx + buttonwidth >= screenwidth {
+                currentx = 0
+                currenty += buttonheight + gap
+            }
             button1.backgroundColor = UIColor.green
             button1.setTitle(a.alpha, for: UIControlState())
             button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
@@ -184,7 +223,8 @@ class Page1: UIViewController {
         self.join(abc:abc)
     }
     func Other (){
-        let Y = 300
+        currentx = 0
+        currenty += buttonheight + gap + nr
         var abc = [Abc]()
         // 其他 	[m][n][ŋ][h][l][r][j][w]
         abc.append(Abc(alpha: "m",mp3: "mp3/Other/m"))
@@ -199,7 +239,12 @@ class Page1: UIViewController {
         for a in abc{
             let button1   = UIButton(type: UIButtonType.system) as UIButton
             button1.titleLabel!.font =   UIFont(name: "HelveticaNeue", size: 26)
-            button1.frame = CGRect(x: 30*i, y: Y, width: 30, height: 40)
+            button1.frame = CGRect(x: currentx, y: currenty, width: buttonwidth, height: buttonheight)
+            currentx += buttonwidth + gap
+            if currentx + buttonwidth >= screenwidth {
+                currentx = 0
+                currenty += buttonheight + gap
+            }
             button1.backgroundColor = UIColor.green
             button1.setTitle(a.alpha, for: UIControlState())
             button1.addTarget(self, action: #selector(Page1.buttonAction1(_:)), for: UIControlEvents.touchUpInside)
