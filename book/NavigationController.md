@@ -41,12 +41,12 @@ NavigationController可以通过属性包含多个ViewController、一个UINavig
             override func viewDidLoad() {
                 super.viewDidLoad()
                 self.title = "Level 1"
-                        self.view.backgroundColor = .white
-                        let button   = UIButton(type: .system)
-                        button.frame = CGRect(x: 120, y: 100, width: 100, height: 50)
-                        button.setTitle("Dive Into 2",for: .normal)
-                        button.addTarget(self, action: #selector(Level1.buttonAction(_:)), for: .touchUpInside)
-                        view.addSubview(button)
+                self.view.backgroundColor = .white
+                let button   = UIButton(type: .system)
+                button.frame = CGRect(x: 120, y: 100, width: 100, height: 50)
+                button.setTitle("Dive Into 2",for: .normal)
+                button.addTarget(self, action: #selector(Level1.buttonAction(_:)), for: .touchUpInside)
+                view.addSubview(button)
             }
             func buttonAction(_ sender:UIButton!){
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate

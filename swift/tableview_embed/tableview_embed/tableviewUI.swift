@@ -15,49 +15,49 @@ class LangTableTotalUI : UITableView,UITableViewDataSource{
     let tableheader = "Table Header"
     let tablefooter = "Table Footer"
     convenience init(){
-        self.init(frame: CGRectZero, style:UITableViewStyle.Grouped)
+        self.init(frame: CGRect.zero, style:UITableViewStyle.grouped)
     }
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
         self.dataSource = self
         self.tableHeaderView = UIView()
-        self.tableHeaderView!.frame = CGRectMake(0, 0,200,20)
+        self.tableHeaderView!.frame = CGRect(x: 0, y: 0,width: 200,height: 20)
         let l = UILabel()
         l.text = tableheader
-        l.frame = CGRectMake(0, 0,200,20)
+        l.frame = CGRect(x: 0, y: 0,width: 200,height: 20)
         self.tableHeaderView?.addSubview(l)
         
         self.tableFooterView = UIView()
-        self.tableFooterView!.frame = CGRectMake(0, 0,200,20)
+        self.tableFooterView!.frame = CGRect(x: 0, y: 0,width: 200,height: 20)
         let f = UILabel()
         f.text = tablefooter
-        f.frame = CGRectMake(0, 0,200,20)
+        f.frame = CGRect(x: 0, y: 0,width: 200,height: 20)
         self.tableFooterView?.addSubview(f)
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrs[section].count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        let a = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        let a = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: nil)
         a.textLabel?.text = String(arrs[indexPath.section][indexPath.row])
         return a
     }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int{
+    func numberOfSections(in tableView: UITableView) -> Int{
         return arrs.count
     }
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?{
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?{
         return titles[section]
     }
     
-    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String?{
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String?{
         return footers[section]
     }
-    class func dock(view : UIView){
+    class func dock(_ view : UIView){
         let b  = LangTableTotalUI()
-        b.frame = CGRectMake(20,20,150,500)
+        b.frame = CGRect(x: 20,y: 20,width: 150,height: 500)
         view.addSubview(b)
     }
 }
@@ -81,23 +81,23 @@ class LangTableCellStyle: UITableView,UITableViewDataSource{
         Row(
             text:"java",
             text2:"old plain",
-            image:UIImage.imageWithColor(UIColor.redColor()),
-            style: UITableViewCellStyle.Default),
+            image:UIImage.imageWithColor(UIColor.red),
+            style: UITableViewCellStyle.default),
         Row(
             text:"java",
             text2:"old plain",
-            image:UIImage.imageWithColor(UIColor.redColor()),
-            style: UITableViewCellStyle.Value1),
+            image:UIImage.imageWithColor(UIColor.red),
+            style: UITableViewCellStyle.value1),
         Row(
             text:"java",
             text2:"old plain",
-            image:UIImage.imageWithColor(UIColor.redColor()),
-            style: UITableViewCellStyle.Value2),
+            image:UIImage.imageWithColor(UIColor.red),
+            style: UITableViewCellStyle.value2),
         Row(
             text:"java",
             text2:"old plain",
-            image:UIImage.imageWithColor(UIColor.redColor()),
-            style: UITableViewCellStyle.Subtitle)
+            image:UIImage.imageWithColor(UIColor.red),
+            style: UITableViewCellStyle.subtitle)
     ]
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
@@ -107,20 +107,20 @@ class LangTableCellStyle: UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let a = UITableViewCell(style: arr[indexPath.row].style, reuseIdentifier: nil)
         a.textLabel?.text = arr[indexPath.row].text
         a.detailTextLabel?.text = arr[indexPath.row].text2
         a.imageView?.image = arr[indexPath.row].image
         return a
     }
-    class func dock(view : UIView){
+    class func dock(_ view : UIView){
         let t = LangTableCellStyle();
-        t.frame = CGRectMake(0,100,200,300)
+        t.frame = CGRect(x: 0,y: 100,width: 200,height: 300)
         view.addSubview(t)
     }
     
@@ -129,8 +129,8 @@ class LangTableCellStyle: UITableView,UITableViewDataSource{
 class LangTableCustomCell : UITableViewCell{
     var mainLabel : UILabel?
     required override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        mainLabel = UILabel(frame:CGRectMake(0.0, 0.0, 220.0, 15.0))
-        mainLabel!.backgroundColor = UIColor.redColor()
+        mainLabel = UILabel(frame:CGRect(x: 0.0, y: 0.0, width: 220.0, height: 15.0))
+        mainLabel!.backgroundColor = UIColor.red
         super.init(style: style,reuseIdentifier: reuseIdentifier)
         self.contentView.addSubview(mainLabel!)
     }
@@ -148,29 +148,29 @@ class LangTableCustom : UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = LangTableCustomCell(style: UITableViewCellStyle.Value1, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = LangTableCustomCell(style: UITableViewCellStyle.value1, reuseIdentifier: nil)
         a.mainLabel?.text = arr[indexPath.row]
         return a
     }
 }
 extension UIImage {
-    class func imageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
+    class func imageWithColor(_ color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0.0, y: 0.0, width: 10.0,height: 10.0 )
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
         
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
 }
 
@@ -179,13 +179,13 @@ class LangTableViewController : UITableViewController{
     let MyIdentifier = "cell"
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: MyIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: MyIdentifier)
     }
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = tableView.dequeueReusableCell(withIdentifier: MyIdentifier)
         a!.textLabel?.text = arr[indexPath.row]
         return a!
     }
@@ -210,21 +210,21 @@ class LangTableManyStyle: UITableView,UITableViewDataSource{
         Row(
             text:"java",
             text2:"old plain",
-            image:UIImage.imageWithColor(UIColor.redColor()),
-            access:UITableViewCellAccessoryType.Checkmark,
-            style: UITableViewCellStyle.Value1),
+            image:UIImage.imageWithColor(UIColor.red),
+            access:UITableViewCellAccessoryType.checkmark,
+            style: UITableViewCellStyle.value1),
         Row(
             text:"ruby",
             text2:"new cool slow",
-            image:UIImage.imageWithColor(UIColor.greenColor()),
-            access:UITableViewCellAccessoryType.DetailButton,
-            style: UITableViewCellStyle.Value2),
+            image:UIImage.imageWithColor(UIColor.green),
+            access:UITableViewCellAccessoryType.detailButton,
+            style: UITableViewCellStyle.value2),
         Row(
             text:"swift",
             text2:"new cool quick ",
-            image:UIImage.imageWithColor(UIColor.blueColor()),
-            access:UITableViewCellAccessoryType.DetailDisclosureButton,
-            style: UITableViewCellStyle.Subtitle)
+            image:UIImage.imageWithColor(UIColor.blue),
+            access:UITableViewCellAccessoryType.detailDisclosureButton,
+            style: UITableViewCellStyle.subtitle)
     ]
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
@@ -234,11 +234,11 @@ class LangTableManyStyle: UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let a = UITableViewCell(style: arr[indexPath.row].style, reuseIdentifier: nil)
         a.textLabel?.text = arr[indexPath.row].text
         a.detailTextLabel?.text = arr[indexPath.row].text2
@@ -261,15 +261,15 @@ class LangTableValue1 : UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count / 2
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         a.detailTextLabel?.text = String(arr[indexPath.row+1])
-        a.imageView?.image = UIImage.imageWithColor(UIColor.redColor())
+        a.imageView?.image = UIImage.imageWithColor(UIColor.red)
         return a
     }
 }
@@ -285,15 +285,15 @@ class LangTableSubtitle : UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count / 2
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         a.detailTextLabel?.text = String(arr[indexPath.row+1])
-        a.imageView?.image = UIImage.imageWithColor(UIColor.redColor())
+        a.imageView?.image = UIImage.imageWithColor(UIColor.red)
         return a
     }
 }
@@ -307,15 +307,15 @@ class LangTableValue2 : UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count / 2
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: UITableViewCellStyle.Value2, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: UITableViewCellStyle.value2, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         a.detailTextLabel?.text = String(arr[indexPath.row+1])
-        a.imageView?.image = UIImage.imageWithColor(UIColor.redColor())
+        a.imageView?.image = UIImage.imageWithColor(UIColor.red)
         return a
     }
 }
@@ -330,12 +330,12 @@ class LangTable : UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         return a
     }
@@ -347,17 +347,17 @@ class LangTableWithDequeueReusableCellWithIdentifier: UITableView,UITableViewDat
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
         self.dataSource = self
-        self.registerClass(UITableViewCell.self, forCellReuseIdentifier: MyIdentifier)
+        self.register(UITableViewCell.self, forCellReuseIdentifier: MyIdentifier)
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = tableView.dequeueReusableCellWithIdentifier(MyIdentifier)!
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = tableView.dequeueReusableCell(withIdentifier: MyIdentifier)!
         a.textLabel?.text = String(arr[indexPath.row])
         return a
     }

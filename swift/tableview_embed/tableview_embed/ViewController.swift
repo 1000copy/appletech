@@ -6,26 +6,26 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         a  = LangTableRowOper1()
-        a!.frame = CGRectMake(0,200,300,200)
+        a!.frame = CGRect(x: 0,y: 200,width: 300,height: 200)
         self.view.addSubview(a!)
         let b = UIButton()
-        b.setTitle("edit", forState: .Normal)
-        b.backgroundColor = UIColor.redColor()
-        b.addTarget(self, action: "edit:", forControlEvents: .TouchDown)
+        b.setTitle("edit", for: UIControlState())
+        b.backgroundColor = UIColor.red
+        b.addTarget(self, action: #selector(ViewController.edit(_:)), for: .touchDown)
         
         let e = UIButton()
-        e.setTitle("Done", forState: .Normal)
-        e.backgroundColor = UIColor.blueColor()
-        e.addTarget(self, action: "reordered:", forControlEvents: .TouchDown)
+        e.setTitle("Done", for: UIControlState())
+        e.backgroundColor = UIColor.blue
+        e.addTarget(self, action: #selector(ViewController.reordered(_:)), for: .touchDown)
         
         let sv = UIStackView()
         
-        sv.backgroundColor = UIColor.grayColor()
-        sv.axis = UILayoutConstraintAxis.Horizontal
-        sv.distribution = .EqualCentering;
-        sv.alignment = .Center;
+        sv.backgroundColor = UIColor.gray
+        sv.axis = UILayoutConstraintAxis.horizontal
+        sv.distribution = .equalCentering;
+        sv.alignment = .center;
         sv.spacing = 10;
-        sv.frame = CGRectMake(0,100,300,50)
+        sv.frame = CGRect(x: 0,y: 100,width: 300,height: 50)
         sv.addArrangedSubview(b)
 
         sv.addArrangedSubview(e)
@@ -33,16 +33,16 @@ class ViewController: UIViewController {
         self.view.addSubview(sv)
         
     }
-    func edit( b : UIButton!){
+    func edit( _ b : UIButton!){
         a!.setEditing(true, animated: true)
     }
-    func add( b : UIButton!){
+    func add( _ b : UIButton!){
         a!.add("new lang")
     }
-    func update( b : UIButton!){
+    func update( _ b : UIButton!){
         a!.update(1, newlang: "new lang")
     }
-    func reordered( b : UIButton!){
+    func reordered( _ b : UIButton!){
         a!.setEditing(false, animated: true)
         a?.reloadData()
     }
@@ -52,20 +52,20 @@ class ViewController: UIViewController {
 class LangTableRowOper1 : UITableView,UITableViewDataSource,UITableViewDelegate{
     var arr = NSMutableArray.init(array: ["java","swift","js"])
     //    var arr = ["java","swift","js"]
-    func add(newlang : String){
+    func add(_ newlang : String){
         
-        arr.insertObject(newlang, atIndex: arr.count )
+        arr.insert(newlang, at: arr.count )
         beginUpdates()
-        insertRowsAtIndexPaths([
-            NSIndexPath(forRow: arr.count - 1  , inSection: 0)
-            ], withRowAnimation: .Automatic)
+        insertRows(at: [
+            IndexPath(row: arr.count - 1  , section: 0)
+            ], with: .automatic)
         endUpdates()
         //            reloadData()
     }
-    func update(forRow : Int ,newlang : String){
+    func update(_ forRow : Int ,newlang : String){
         arr[forRow] = newlang
-        let p = NSIndexPath(forRow: forRow, inSection: 0)
-        self.reloadRowsAtIndexPaths([p], withRowAnimation: .Fade)
+        let p = IndexPath(row: forRow, section: 0)
+        self.reloadRows(at: [p], with: .fade)
     }
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
@@ -76,42 +76,42 @@ class LangTableRowOper1 : UITableView,UITableViewDataSource,UITableViewDelegate{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
-        a.textLabel?.text = String(arr[indexPath.row])
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
+        a.textLabel?.text = String(describing: arr[indexPath.row])
         a.showsReorderControl = true
         return a
     }
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         
-        if editing && indexPath.row == arr.count  {
-            return UITableViewCellEditingStyle.Insert
+        if isEditing && indexPath.row == arr.count  {
+            return UITableViewCellEditingStyle.insert
         }else{
-            return UITableViewCellEditingStyle.Delete
+            return UITableViewCellEditingStyle.delete
         }
         //        return UITableViewCellEditingStyle.Insert
     }
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle ==  .Delete{
-            arr.removeObjectAtIndex(indexPath.row) // http://stackoverflow.com/questions/21870680/invalid-update-invalid-number-of-rows-in-section-0
-            self.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle ==  .delete{
+            arr.removeObject(at: indexPath.row) // http://stackoverflow.com/questions/21870680/invalid-update-invalid-number-of-rows-in-section-0
+            self.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         }
     }
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
     {
         return true;
     }
-    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
 
         let s = sourceIndexPath.row
         let d = destinationIndexPath.row
         let temp = arr[s]
-        arr.removeObjectAtIndex(s)
-        arr.insertObject(temp, atIndex: d)
+        arr.removeObject(at: s)
+        arr.insert(temp, at: d)
     }
 }
 

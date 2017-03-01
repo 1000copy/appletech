@@ -18,20 +18,20 @@ class LangTableRowDelete: UITableView,UITableViewDataSource,UITableViewDelegate{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
-        a.textLabel?.text = String(arr[indexPath.row])
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
+        a.textLabel?.text = String(describing: arr[indexPath.row])
         return a
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle ==  .Delete{
-            arr.removeObjectAtIndex(indexPath.row)
-            self.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle ==  .delete{
+            arr.removeObject(at: indexPath.row)
+            self.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         }
     }
     
@@ -42,37 +42,37 @@ class ViewController2: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         a  = LangTableRowOper()
-        a!.frame = CGRectMake(0,200,300,200)
+        a!.frame = CGRect(x: 0,y: 200,width: 300,height: 200)
         self.view.addSubview(a!)
         let b = UIButton()
-        b.setTitle("edit", forState: .Normal)
-        b.backgroundColor = UIColor.redColor()
-        b.addTarget(self, action: "edit:", forControlEvents: .TouchDown)
+        b.setTitle("edit", for: UIControlState())
+        b.backgroundColor = UIColor.red
+        b.addTarget(self, action: #selector(ViewController2.edit(_:)), for: .touchDown)
         
         let c = UIButton()
-        c.setTitle("add", forState: .Normal)
-        c.backgroundColor = UIColor.yellowColor()
-        c.addTarget(self, action: "add:", forControlEvents: .TouchDown)
+        c.setTitle("add", for: UIControlState())
+        c.backgroundColor = UIColor.yellow
+        c.addTarget(self, action: #selector(ViewController2.add(_:)), for: .touchDown)
         
         let d = UIButton()
-        d.setTitle("update", forState: .Normal)
-        d.backgroundColor = UIColor.blueColor()
-        d.addTarget(self, action: "update:", forControlEvents: .TouchDown)
+        d.setTitle("update", for: UIControlState())
+        d.backgroundColor = UIColor.blue
+        d.addTarget(self, action: #selector(ViewController2.update(_:)), for: .touchDown)
         
 
         let e = UIButton()
-        e.setTitle("reordered", forState: .Normal)
-        e.backgroundColor = UIColor.blueColor()
-        e.addTarget(self, action: "reordered:", forControlEvents: .TouchDown)
+        e.setTitle("reordered", for: UIControlState())
+        e.backgroundColor = UIColor.blue
+        e.addTarget(self, action: #selector(ViewController2.reordered(_:)), for: .touchDown)
         
         let sv = UIStackView()
         
-        sv.backgroundColor = UIColor.grayColor()
-        sv.axis = UILayoutConstraintAxis.Horizontal
-        sv.distribution = .EqualCentering;
-        sv.alignment = .Center;
+        sv.backgroundColor = UIColor.gray
+        sv.axis = UILayoutConstraintAxis.horizontal
+        sv.distribution = .equalCentering;
+        sv.alignment = .center;
         sv.spacing = 10;
-        sv.frame = CGRectMake(0,100,300,50)
+        sv.frame = CGRect(x: 0,y: 100,width: 300,height: 50)
         sv.addArrangedSubview(b)
         sv.addArrangedSubview(c)
         sv.addArrangedSubview(d)
@@ -81,16 +81,16 @@ class ViewController2: UIViewController {
         self.view.addSubview(sv)
         
     }
-    func edit( b : UIButton!){
+    func edit( _ b : UIButton!){
         a!.setEditing(true, animated: true)
     }
-    func add( b : UIButton!){
+    func add( _ b : UIButton!){
         a!.add("new lang")
     }
-    func update( b : UIButton!){
+    func update( _ b : UIButton!){
         a!.update(1, newlang: "new lang")
     }
-    func reordered( b : UIButton!){
+    func reordered( _ b : UIButton!){
         a!.setEditing(false, animated: true)
         a?.reloadData()
     }
@@ -100,20 +100,20 @@ class ViewController2: UIViewController {
 class LangTableRowOper : UITableView,UITableViewDataSource,UITableViewDelegate{
     var arr = NSMutableArray.init(array: ["java","swift","js"])
 //    var arr = ["java","swift","js"]
-    func add(newlang : String){
+    func add(_ newlang : String){
         
-        arr.insertObject(newlang, atIndex: arr.count )
+        arr.insert(newlang, at: arr.count )
         beginUpdates()
-        insertRowsAtIndexPaths([
-            NSIndexPath(forRow: arr.count - 1  , inSection: 0)
-            ], withRowAnimation: .Automatic)
+        insertRows(at: [
+            IndexPath(row: arr.count - 1  , section: 0)
+            ], with: .automatic)
         endUpdates()
 //            reloadData()
     }
-    func update(forRow : Int ,newlang : String){
+    func update(_ forRow : Int ,newlang : String){
         arr[forRow] = newlang
-        let p = NSIndexPath(forRow: forRow, inSection: 0)
-        self.reloadRowsAtIndexPaths([p], withRowAnimation: .Fade)
+        let p = IndexPath(row: forRow, section: 0)
+        self.reloadRows(at: [p], with: .fade)
     }
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
@@ -124,36 +124,36 @@ class LangTableRowOper : UITableView,UITableViewDataSource,UITableViewDelegate{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
-        a.textLabel?.text = String(arr[indexPath.row])
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
+        a.textLabel?.text = String(describing: arr[indexPath.row])
         a.showsReorderControl = true
         return a
     }
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         
-        if editing && indexPath.row == arr.count  {
-            return UITableViewCellEditingStyle.Insert
+        if isEditing && indexPath.row == arr.count  {
+            return UITableViewCellEditingStyle.insert
         }else{
-            return UITableViewCellEditingStyle.Delete
+            return UITableViewCellEditingStyle.delete
         }
 //        return UITableViewCellEditingStyle.Insert
     }
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle ==  .Delete{
-            arr.removeObjectAtIndex(indexPath.row) // http://stackoverflow.com/questions/21870680/invalid-update-invalid-number-of-rows-in-section-0
-            self.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle ==  .delete{
+            arr.removeObject(at: indexPath.row) // http://stackoverflow.com/questions/21870680/invalid-update-invalid-number-of-rows-in-section-0
+            self.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         }
     }
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
     {
         return true;
     }
-    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let f = sourceIndexPath.row
         let t = destinationIndexPath.row
         (arr[f], arr[t]) = (arr[t], arr[f])
@@ -172,29 +172,29 @@ class LangTableMultiSelection : UITableView,UITableViewDataSource,UITableViewDel
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         return a
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
-        let r = self.cellForRowAtIndexPath(indexPath)!
-        if r.accessoryType == .None {
-            r.accessoryType = .Checkmark
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        let r = self.cellForRow(at: indexPath)!
+        if r.accessoryType == .none {
+            r.accessoryType = .checkmark
         }else{
-            r.accessoryType = .None
+            r.accessoryType = .none
         }
-        self.deselectRowAtIndexPath(indexPath, animated: false)
+        self.deselectRow(at: indexPath, animated: false)
     }
 }
 
 class LangTableSingleSelection : UITableView,UITableViewDataSource,UITableViewDelegate{
     let arr = ["java","swift","js"]
-    var ii = NSIndexPath (index:-1)
+    var ii = IndexPath (index:-1)
     var selected = false
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
@@ -205,26 +205,26 @@ class LangTableSingleSelection : UITableView,UITableViewDataSource,UITableViewDe
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         return a
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         if !selected {
             selected = true
             ii = indexPath
-            self.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
+            self.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }else{
-            self.cellForRowAtIndexPath(ii)?.accessoryType = .None
-            self.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
+            self.cellForRow(at: ii)?.accessoryType = .none
+            self.cellForRow(at: indexPath)?.accessoryType = .checkmark
             ii = indexPath
         }
-        self.deselectRowAtIndexPath(indexPath, animated: false)
+        self.deselectRow(at: indexPath, animated: false)
     }
 }
 
@@ -239,22 +239,22 @@ class LangTableAccessView : UITableView,UITableViewDataSource{
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         let s = UISwitch()
-        s.frame = CGRectMake(0,0,20,20)
-        s.addTarget(self, action: "action:", forControlEvents: .ValueChanged)
-        s.on = true
+        s.frame = CGRect(x: 0,y: 0,width: 20,height: 20)
+        s.addTarget(self, action: #selector(LangTableAccessView.action(_:)), for: .valueChanged)
+        s.isOn = true
         a.accessoryView = s
         return a
     }
-    func action(sender : UISwitch!){
-        print(sender.on)
+    func action(_ sender : UISwitch!){
+        print(sender.isOn)
     }
 }
 
@@ -270,22 +270,22 @@ class LangTableHandleSelection : UITableView,UITableViewDataSource,UITableViewDe
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arr.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let a = UITableViewCell(style: .Default, reuseIdentifier: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let a = UITableViewCell(style: .default, reuseIdentifier: nil)
         a.textLabel?.text = String(arr[indexPath.row])
         return a
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         print("did select \(indexPath.row)")
-        self.deselectRowAtIndexPath(indexPath, animated: false)
-        if  self.cellForRowAtIndexPath(indexPath)?.accessoryType !=  .Checkmark{
-            self.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
+        self.deselectRow(at: indexPath, animated: false)
+        if  self.cellForRow(at: indexPath)?.accessoryType !=  .checkmark{
+            self.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }else{
-            self.cellForRowAtIndexPath(indexPath)?.accessoryType = .None
+            self.cellForRow(at: indexPath)?.accessoryType = .none
         }
     }
 }
