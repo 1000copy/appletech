@@ -135,9 +135,7 @@ Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate�
                 a.frame = CGRect(x: 0,y: 50,width: 300,height: 500)
                 self.view.addSubview(a)
             }
-        }
-        
-        
+        }      
         class Table : UITableView,UITableViewDataSource,UITableViewDelegate{
             var sect = NSMutableArray.init(array: ["Lang","OS"])
             var lang = NSMutableArray.init(array: ["java","swift","js"])
@@ -271,8 +269,6 @@ IndexPath)
                 a!.setEditing(false, animated: true)
             }
         }
-
-
         class Table : UITableView,UITableViewDataSource,UITableViewDelegate{
             var arr = NSMutableArray.init(array: ["java","swift","js"])
             override init(frame: CGRect, style: UITableViewStyle) {
@@ -409,6 +405,334 @@ IndexPath)
             return footers[section]
         }
 告诉TableView，每个指定section的尾标题。
+
+
+
+##标记
+
+类UITableView支持对每个行做标记和取消标记，标记可以有多种。其中比较常用的是打对号图标。如下代码，演示了如何对每个行打对号和取消打对号：
+
+
+        import UIKit
+        @UIApplicationMain
+        class AppDelegate: UIResponder, UIApplicationDelegate {
+            var window: UIWindow?
+            func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                let page = Page()
+                page.view.backgroundColor = .blue
+                self.window!.rootViewController = page
+                self.window?.makeKeyAndVisible()
+                return true
+            }
+        }
+        class Table : UITableView,UITableViewDataSource,UITableViewDelegate{
+            let arr = ["java","swift","js"]
+            override init(frame: CGRect, style: UITableViewStyle) {
+                super.init(frame:frame,style:style)
+                self.dataSource = self
+                self.delegate = self
+                
+            }
+            required init?(coder aDecoder: NSCoder) {
+                super.init(coder:aDecoder)
+            }
+            func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+                return arr.count
+            }
+            
+            func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                let a = UITableViewCell(style: .default, reuseIdentifier: nil)
+                a.textLabel?.text = String(arr[indexPath.row])
+                return a
+            }
+            func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+                print("did select \(indexPath.row)")
+                self.deselectRow(at: indexPath, animated: false)
+                if  self.cellForRow(at: indexPath)?.accessoryType !=  .checkmark{
+                    self.cellForRow(at: indexPath)?.accessoryType = .checkmark
+                }else{
+                    self.cellForRow(at: indexPath)?.accessoryType = .none
+                }
+            }
+        }
+        class Page: UIViewController {
+            var a : Table!
+            override func viewDidLoad() {
+                super.viewDidLoad()
+                a  = Table()
+                a.frame = CGRect(x: 0,y: 30,width: 300,height: 400)
+                self.view.addSubview(a)
+            }
+        }
+
+运行起来后，可看到三个行，点击任何一个行都会显示对号标记在行尾，再点击一次就会取消此标记。查询UITableViewCellAccessoryType的官方文档可以得到更多的标记类型。
+
+## 重用cell创建
+
+在之前的代码中，每次调用到函数：
+
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+需要一个UITableViewCell实例时，都是采用临时创建的方式。如果创建的UITableViewCell实例比较多时，可以通过重用已经创建的UITableViewCell实例来提高效率。做法就是：
+
+1. 注册一个UITableViewCell类，指定其的重用标识符
+2. 通过重用标识符创建实例
+
+UIKit会在内部对此过程优化。实例代码如下：
+
+        import UIKit
+        @UIApplicationMain
+        class AppDelegate: UIResponder, UIApplicationDelegate {
+            var window: UIWindow?
+            func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                let page = Page()
+                page.view.backgroundColor = .blue
+                self.window!.rootViewController = page
+                self.window?.makeKeyAndVisible()
+                return true
+            }
+        }
+        class Table: UITableView,UITableViewDataSource{
+            let arr = ["javascript","delphi"]
+            let MyIdentifier = "cell"
+            override init(frame: CGRect, style: UITableViewStyle) {
+                super.init(frame:frame,style:style)
+                self.dataSource = self
+                self.register(UITableViewCell.self, forCellReuseIdentifier: MyIdentifier)
+            }
+            required init?(coder aDecoder: NSCoder) {
+                super.init(coder:aDecoder)
+            }
+            func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+                return arr.count
+            }
+            
+            func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                let a = tableView.dequeueReusableCell(withIdentifier: MyIdentifier)!
+                a.textLabel?.text = String(arr[indexPath.row])
+                return a
+            }
+        }
+        class Page: UIViewController {
+            var a : Table!
+            override func viewDidLoad() {
+                super.viewDidLoad()
+                a  = Table()
+                a.frame = CGRect(x: 0,y: 30,width: 300,height: 400)
+                self.view.addSubview(a)
+            }
+        }
+
+##复合的Cell
+
+之前的代码，创建的Cell都是简单文字；实际上，每个Cell都可以作为一个容器，装入更多的元素。如下代码展示了一个复合的Cell的创建：
+
+        import UIKit
+        @UIApplicationMain
+        class AppDelegate: UIResponder, UIApplicationDelegate {
+            var window: UIWindow?
+            func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                let page = Page()
+                page.view.backgroundColor = .blue
+                self.window!.rootViewController = page
+                self.window?.makeKeyAndVisible()
+                return true
+            }
+        }
+        class Table : UITableView,UITableViewDataSource{
+                let arr = ["java","swift","js"]
+                override init(frame: CGRect, style: UITableViewStyle) {
+                    super.init(frame:frame,style:style)
+                    self.dataSource = self
+                }
+                required init?(coder aDecoder: NSCoder) {
+                    super.init(coder:aDecoder)
+                }
+                func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+                    return arr.count
+                }
+                
+                func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                    let a = UITableViewCell(style: .default, reuseIdentifier: nil)
+                    a.textLabel?.text = String(arr[indexPath.row])
+                    let s = UISwitch()
+                    s.frame = CGRect(x: 0,y: 0,width: 20,height: 20)
+                    s.addTarget(self, action: #selector(Table.action(_:)), for: .valueChanged)
+                    s.isOn = true
+                    a.accessoryView = s
+                    return a
+                }
+                func action(_ sender : UISwitch!){
+                    print(sender.isOn)
+                }
+            }
+        class Page: UIViewController {
+            var a : Table!
+            override func viewDidLoad() {
+                super.viewDidLoad()
+                a  = Table()
+                a.frame = CGRect(x: 0,y: 30,width: 300,height: 400)
+                self.view.addSubview(a)
+            }
+        }
+
+本案例在每个Cell中添加了一个UISwitch按钮，并且可以如同一般的UIView一样的响应此按钮的事件。
+
+
+## 默认的Cell风格
+
+可以不必自己定制Cell样式，而是直接使用系统提供的，这样你可以通过设置不同的UITableViewCellAccessoryType、文字、文字1、图片、UITableViewCellStyle而让Cell外观变得丰富多彩：
+
+        import UIKit
+        @UIApplicationMain
+        class AppDelegate: UIResponder, UIApplicationDelegate {
+            var window: UIWindow?
+            func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                let page = Page()
+                page.view.backgroundColor = .blue
+                self.window!.rootViewController = page
+                self.window?.makeKeyAndVisible()
+                return true
+            }
+        }
+
+
+        class Page: UIViewController {
+            var a : Table!
+            override func viewDidLoad() {
+                super.viewDidLoad()
+                a  = Table()
+                a.frame = CGRect(x: 0,y: 30,width: 300,height: 400)
+                self.view.addSubview(a)
+            }
+        }
+
+
+        class Row {
+            var text : String = ""
+            var text2 : String = ""
+            var image : UIImage
+            var access : UITableViewCellAccessoryType
+            var style :  UITableViewCellStyle
+            init( text : String ,text2:String ,image:UIImage,access:UITableViewCellAccessoryType,style :  UITableViewCellStyle){
+                self.text = text
+                self.text2 = text2
+                self.image = image
+                self.access = access
+                self.style = style
+            }
+        }
+        class Table: UITableView,UITableViewDataSource{
+            let arr = [
+                Row(
+                    text:"java",
+                    text2:"old plain",
+                    image:UIImage.imageWithColor(UIColor.red),
+                    access:UITableViewCellAccessoryType.checkmark,
+                    style: UITableViewCellStyle.value1),
+                Row(
+                    text:"ruby",
+                    text2:"new cool slow",
+                    image:UIImage.imageWithColor(UIColor.green),
+                    access:UITableViewCellAccessoryType.detailButton,
+                    style: UITableViewCellStyle.value2),
+                Row(
+                    text:"swift",
+                    text2:"new cool quick ",
+                    image:UIImage.imageWithColor(UIColor.blue),
+                    access:UITableViewCellAccessoryType.detailDisclosureButton,
+                    style: UITableViewCellStyle.subtitle)
+            ]
+            override init(frame: CGRect, style: UITableViewStyle) {
+                super.init(frame:frame,style:style)
+                self.dataSource = self
+                
+            }
+            required init?(coder aDecoder: NSCoder) {
+                super.init(coder:aDecoder)
+            }
+            func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+                return arr.count
+            }
+            
+            func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                let a = UITableViewCell(style: arr[indexPath.row].style, reuseIdentifier: nil)
+                a.textLabel?.text = arr[indexPath.row].text
+                a.detailTextLabel?.text = arr[indexPath.row].text2
+                a.imageView?.image = arr[indexPath.row].image
+                a.accessoryType = arr[indexPath.row].access
+                return a
+            }
+        }
+        extension UIImage {
+            class func imageWithColor(_ color: UIColor) -> UIImage {
+                let rect = CGRect(x: 0.0, y: 0.0, width: 10.0,height: 10.0 )
+                UIGraphicsBeginImageContext(rect.size)
+                let context = UIGraphicsGetCurrentContext()
+                
+                context?.setFillColor(color.cgColor)
+                context?.fill(rect)
+                
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                
+                return image!
+            }
+        }
+
+案例显示了三行，每行有不同的风格组合，都是通过设置UITableViewCellAccessoryType、文字、文字1、图片、UITableViewCellStyle来达成的。你可以实际运行此代码，了解不同样式的差异。可以通过官方手册查询UITableViewCellStyle和UITableViewCellAccessoryType的不同选择。这里列出的类为UIImage扩展出来的方法：
+
+        class func imageWithColor(_ color: UIColor) -> UIImage
+
+是为了不必寻找图片，而可以即席按需创建出可以用于实例的图片，传递不同的颜色值，可以得到不同颜色的小方块图片。我们只是需要展示Cell的显示图片的能力，因此只有通过代码创建出图就好，不必为此单独寻找适合工程使用的图片。
+
+
+## UITableViewController
+
+我们一直使用UITableView，把它加入到一个ViewController内，然后由AppDelegate加载后者。实际上，可以使用UITableViewController直接由AppDelegate加载：
+
+        import UIKit
+        @UIApplicationMain
+        class AppDelegate: UIResponder, UIApplicationDelegate {
+            var window: UIWindow?
+            func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                let page = LangTableViewController()
+                page.view.backgroundColor = .blue
+                self.window!.rootViewController = page
+                self.window?.makeKeyAndVisible()
+                return true
+            }
+        }
+
+        class LangTableViewController : UITableViewController{
+            let arr = ["swift","obj-c","ruby"]
+            let MyIdentifier = "cell"
+            override func viewDidLoad() {
+                super.viewDidLoad()
+                tableView.register(UITableViewCell.self, forCellReuseIdentifier: MyIdentifier)
+            }
+            override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+                return arr.count
+            }
+            override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                let a = tableView.dequeueReusableCell(withIdentifier: MyIdentifier)
+                a!.textLabel?.text = arr[indexPath.row]
+                return a!
+            }
+        }
+
+和UITableView的使用的不同之处，在于：
+
+1. 本来需要实现UITableViewDataSource和UITableViewDelegate的方法，现在已经有UITableViewController实现，作为UITableViewController的子类，新类需要的是覆盖父类的方法。
+2. 使用UITableViewController会自动把UITableView填满AppDelegate.window视图内。无需程序员指定位置和大小。
+
+
+
+
 
 
 
