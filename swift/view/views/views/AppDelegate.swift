@@ -10,68 +10,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-
-extension UIImage {
-    class func imageWithColor(_ color: UIColor) -> UIImage {
-        let rect = CGRect(x: 0.0, y: 0.0, width: 10.0,height: 10.0 )
-        UIGraphicsBeginImageContext(rect.size)
-        let context = UIGraphicsGetCurrentContext()
-        
-        context?.setFillColor(color.cgColor)
-        context?.fill(rect)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image!
-    }
-}
-//Animating a Sequence of Images
-class Page: UIViewController {
-    var bgImage: UIImageView!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        //        let image: UIImage = UIImage(named: "afternoon")!
-        bgImage = UIImageView()
-        bgImage.animationImages = [UIImage.imageWithColor(UIColor.red),
-                                   UIImage.imageWithColor(UIColor.yellow),
-                                   UIImage.imageWithColor(UIColor.black),
-                                   UIImage.imageWithColor(UIColor.blue)]
-        bgImage!.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
-        self.view.addSubview(bgImage!)
-        bgImage.animationDuration = 1
-        bgImage.startAnimating()
-    }
-    override func viewDidDisappear(_ animated: Bool) {
-        bgImage.stopAnimating()
-    }
-}
-//
-//// Show image
-////Responding to Touch Events
-//
-//class DemoImageView: UIViewController {
-//    var bgImage: UIImageView!
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        
-//        //        let image: UIImage = UIImage(named: "afternoon")!
-//        let image = UIImage.imageWithColor(UIColor.red)
-//        bgImage = UIImageView(image: image,highlightedImage:UIImage.imageWithColor(UIColor.blue) )
-//        bgImage!.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
-//        self.view.addSubview(bgImage!)
-//        //mage views ignore user events by default. Normally, you use image views only to present visual content in your interface. If you want an image view to handle user interactions as well, change the value of its userInteractionEnabled property to YES. After doing that, you can attach gesture recognizers or use any other event handling techniques to respond to touch events or other user-initiated events.
-//        // gesture
-//        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(DemoImageView.imageTapped(_:)))
-//        bgImage.isUserInteractionEnabled = true
-//        bgImage.addGestureRecognizer(tapGestureRecognizer)
-//    }
-//    func imageTapped(_ img: AnyObject)
-//    {
-//        bgImage.isHighlighted = !bgImage!.isHighlighted
-//    }
-//}
 //class DemoCollectionView: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 //    var collectionView: UICollectionView!
 //    override func viewDidLoad() {
@@ -368,5 +306,67 @@ class Page6: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
         p.dataSource = self
         p.delegate = self
         view.addSubview(p)
+    }
+}
+extension UIImage {
+    class func imageWithColor(_ color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0.0, y: 0.0, width: 10.0,height: 10.0 )
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
+}
+//Animating a Sequence of Images
+class Page101: UIViewController {
+    var bgImage: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        bgImage = UIImageView()
+        bgImage!.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
+        bgImage.image = UIImage.imageWithColor(UIColor.red)
+        self.view.addSubview(bgImage!)
+    }
+}
+class Page100: UIViewController {
+    var bgImage: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        bgImage = UIImageView()
+        bgImage.animationImages = [UIImage.imageWithColor(UIColor.red),
+                                   UIImage.imageWithColor(UIColor.yellow),
+                                   UIImage.imageWithColor(UIColor.black),
+                                   UIImage.imageWithColor(UIColor.blue)]
+        bgImage!.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
+        self.view.addSubview(bgImage!)
+        bgImage.animationDuration = 1
+        bgImage.startAnimating()
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        bgImage.stopAnimating()
+    }
+}
+class Page102: UIViewController {
+    var v: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let image1 = UIImage.imageWithColor(UIColor.red)
+        let image2 = UIImage.imageWithColor(UIColor.blue)
+        v = UIImageView(image: image1,highlightedImage:image2)
+        v!.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
+        self.view.addSubview(v!)
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(imageTapped(_:)))
+        v.isUserInteractionEnabled = true
+        v.addGestureRecognizer(tapGestureRecognizer)
+    }
+    func imageTapped(_ img: AnyObject)
+    {
+        v.isHighlighted = !v!.isHighlighted
     }
 }
