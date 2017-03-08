@@ -14,11 +14,11 @@ class ViewController: UIViewController
 //    pageViewController!.dataSource = self
     
 
-    pageViewController!.view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height - 200);
+    pageViewController!.view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height - 200);
     
     addChildViewController(pageViewController!)
     view.addSubview(pageViewController!.view)
-    pageViewController!.didMoveToParentViewController(self)
+    pageViewController!.didMove(toParentViewController: self)
   }
   
 

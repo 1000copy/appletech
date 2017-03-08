@@ -6,14 +6,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         // Override point for customization after application launch.
         //        self.window!.rootViewController = DatePickerDemo()
         //                self.window!.rootViewController = PageControlDemo()
         //        self.window!.rootViewController =  UISegmentedControlDemo()
         self.window!.rootViewController = UISwitchDemo()
-        self.window!.backgroundColor = UIColor.whiteColor()
+        self.window!.backgroundColor = UIColor.white
         self.window!.makeKeyAndVisible()
         return true
     }
@@ -29,10 +29,10 @@ class UISwitchDemo : UIViewController{
         p.frame.origin.y += 40
         p.frame.size.height = 50
         view.addSubview(p)
-        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.addTarget(self, action: #selector(UISwitchDemo.changed(_:)), for: .valueChanged)
     }
-    func changed (sender: AnyObject){
-        print(p.on)
+    func changed (_ sender: AnyObject){
+        print(p.isOn)
     }
 }
 
@@ -46,12 +46,12 @@ class UIStepperDemo : UIViewController{
         p.frame.origin.y += 40
         p.frame.size.height = 50
         view.addSubview(p)
-        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.addTarget(self, action: #selector(UISwitchDemo.changed(_:)), for: .valueChanged)
         p.maximumValue = 10
         p.minimumValue = 1
         p.value = 5
     }
-    func changed (sender: AnyObject){
+    func changed (_ sender: AnyObject){
         print(p.value)
     }
 }
@@ -66,10 +66,10 @@ class UISliderDemo : UIViewController{
         p.frame.origin.y += 40
         p.frame.size.height = 50
         view.addSubview(p)
-        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.addTarget(self, action: #selector(UISwitchDemo.changed(_:)), for: .valueChanged)
         p.value = 0.5
     }
-    func changed (sender: AnyObject){
+    func changed (_ sender: AnyObject){
         print(p.value)
     }
 }
@@ -77,18 +77,18 @@ class UISliderDemo : UIViewController{
 
 //UISegmentedControl
 extension UIImage {
-    class func imageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
+    class func imageWithColor(_ color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0.0, y: 0.0, width: 10.0,height: 10.0 )
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
         
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
 }
 class UISegmentedControlDemo : UIViewController{
@@ -101,11 +101,11 @@ class UISegmentedControlDemo : UIViewController{
         p.frame.size.height = 50
         view.addSubview(p)
         // A segment may either have a text title or an image, but not both
-        p.setImage(UIImage.imageWithColor(UIColor.redColor()), forSegmentAtIndex: 0)
-        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.setImage(UIImage.imageWithColor(UIColor.red), forSegmentAt: 0)
+        p.addTarget(self, action: #selector(UISwitchDemo.changed(_:)), for: .valueChanged)
         p.selectedSegmentIndex = 0
     }
-    func changed (sender: AnyObject){
+    func changed (_ sender: AnyObject){
         print(p.selectedSegmentIndex)
     }
 }
@@ -115,26 +115,26 @@ class PageControlDemo : UIViewController{
     var p :  UIPageControl!
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.blackColor()
+        view.backgroundColor = UIColor.black
         p =   UIPageControl ()
         p.numberOfPages = 5
-        p.pageIndicatorTintColor = UIColor.blueColor()
-        p.currentPageIndicatorTintColor = UIColor.redColor()
+        p.pageIndicatorTintColor = UIColor.blue
+        p.currentPageIndicatorTintColor = UIColor.red
         p.frame = view.frame
         p.frame.origin.y += 40
         view.addSubview(p)
-        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.addTarget(self, action: #selector(UISwitchDemo.changed(_:)), for: .valueChanged)
         // button 
         let button = UIButton()
         button.frame = view.frame
         button.frame.size.height = 20
         button.frame.origin.y += 20
-        button.setTitle("+1", forState: .Normal)
+        button.setTitle("+1", for: UIControlState())
         view.addSubview(button)
-        button.addTarget(self, action: "addone:", forControlEvents: .TouchDown)
-        button.backgroundColor = UIColor.redColor()
+        button.addTarget(self, action: #selector(PageControlDemo.addone(_:)), for: .touchDown)
+        button.backgroundColor = UIColor.red
     }
-    func addone (sender: AnyObject){
+    func addone (_ sender: AnyObject){
         let newpage = p.currentPage + 1
         if newpage > p.numberOfPages - 1 {
             p.currentPage = 0
@@ -143,7 +143,7 @@ class PageControlDemo : UIViewController{
         }
         
     }
-    func changed (sender: AnyObject){
+    func changed (_ sender: AnyObject){
         print(p.currentPage)
     }
 }
@@ -154,9 +154,9 @@ class DatePickerDemo : UIViewController{
         p =   UIDatePicker ()
         p.frame = view.frame
         view.addSubview(p)
-        p.addTarget(self, action: "changed:", forControlEvents: .ValueChanged)
+        p.addTarget(self, action: #selector(UISwitchDemo.changed(_:)), for: .valueChanged)
     }
-    func changed (sender: AnyObject){
+    func changed (_ sender: AnyObject){
         print(p.date)
     }
 }

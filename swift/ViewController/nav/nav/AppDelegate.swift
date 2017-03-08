@@ -5,12 +5,12 @@ class Level1: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Level 1"
         let btn = UIButton()
-        btn.frame = CGRectMake(10,100,100,100)
-        btn.setTitle("Push", forState: .Normal)
-        btn.addTarget(self, action: "drill:", forControlEvents: .TouchDown)
+        btn.frame = CGRect(x: 10,y: 100,width: 100,height: 100)
+        btn.setTitle("Push", for: UIControlState())
+        btn.addTarget(self, action: #selector(Level1.drill(_:)), for: .touchDown)
         self.view.addSubview(btn)
     }
-    func drill(sender: UIButton!){
+    func drill(_ sender: UIButton!){
         self.navigationController!.pushViewController(Level2(), animated: true)
     }
 }
@@ -20,13 +20,13 @@ class Level2: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Level 2"
         let btn = UIButton()
-        btn.frame = CGRectMake(10,100,100,100)
-        btn.setTitle("Pop", forState: .Normal)
+        btn.frame = CGRect(x: 10,y: 100,width: 100,height: 100)
+        btn.setTitle("Pop", for: UIControlState())
         self.view.addSubview(btn)
-        btn.addTarget(self, action: "pop:", forControlEvents: .TouchDown)
+        btn.addTarget(self, action: #selector(Level2.pop(_:)), for: .touchDown)
     }
-    func pop(sender: UIButton!){
-        self.navigationController!.popViewControllerAnimated(true)
+    func pop(_ sender: UIButton!){
+        self.navigationController!.popViewController(animated: true)
     }
 }
 
@@ -41,12 +41,12 @@ class Nav : UINavigationController{
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     static var Delegate:AppDelegate{
-        return UIApplication.sharedApplication().delegate as! AppDelegate
+        return UIApplication.shared.delegate as! AppDelegate
     }
     var nav :Nav?
     var window: UIWindow?
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         nav = Nav()
         self.window!.rootViewController = nav
         self.window?.makeKeyAndVisible()

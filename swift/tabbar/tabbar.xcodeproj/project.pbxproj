@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B57853F91C5D948F001B6589 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57853F81C5D948F001B6589 /* AppDelegate.swift */; };
-		B57853FB1C5D948F001B6589 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57853FA1C5D948F001B6589 /* ViewController.swift */; };
 		B57853FE1C5D948F001B6589 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B57853FC1C5D948F001B6589 /* Main.storyboard */; };
 		B57854001C5D948F001B6589 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57853FF1C5D948F001B6589 /* Assets.xcassets */; };
 		B57854031C5D948F001B6589 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B57854011C5D948F001B6589 /* LaunchScreen.storyboard */; };
@@ -17,7 +16,6 @@
 /* Begin PBXFileReference section */
 		B57853F51C5D948F001B6589 /* tabbar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tabbar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B57853F81C5D948F001B6589 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B57853FA1C5D948F001B6589 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B57853FD1C5D948F001B6589 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B57853FF1C5D948F001B6589 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B57854021C5D948F001B6589 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -55,7 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				B57853F81C5D948F001B6589 /* AppDelegate.swift */,
-				B57853FA1C5D948F001B6589 /* ViewController.swift */,
 				B57853FC1C5D948F001B6589 /* Main.storyboard */,
 				B57853FF1C5D948F001B6589 /* Assets.xcassets */,
 				B57854011C5D948F001B6589 /* LaunchScreen.storyboard */,
@@ -97,6 +94,7 @@
 					B57853F41C5D948F001B6589 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 62KYF3H5LN;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -136,7 +134,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B57853FB1C5D948F001B6589 /* ViewController.swift in Sources */,
 				B57853F91C5D948F001B6589 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,6 +251,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = liu.tabbar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -265,6 +263,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = liu.tabbar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -287,6 +286,7 @@
 				B57854091C5D948F001B6589 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

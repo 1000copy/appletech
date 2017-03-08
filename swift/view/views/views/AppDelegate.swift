@@ -1,400 +1,372 @@
 import UIKit
-
-class DemoWebViewController: UIViewController{
-    var c : UIWebView!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        c = UIWebView()
-        c.frame = super.view.frame
-        view.addSubview(c)
-         c.frame.origin.y += 20
-//        c.loadRequest(NSURLRequest(URL:NSURL(string:"http://www.apple.com/")!))
-        c.loadHTMLString("<h>title</h>", baseURL: NSURL(string:"http://www.apple.com/")!)
-    }
-    
-
-}
-
-
-//labels are read-only
-//textfields are editable, and provide horizontal character seeking (not really scrolling) when the text is too long to display all at once. Generally used to input short text.
-//textviews are also editable, but provide vertical scrolling when the text is too long to display all at one.
-// text view
-
-class DemoTextViewViewController: UIViewController,UITextViewDelegate{
-    var c : UITextView!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        c = UITextView()
-        c.frame = CGRectMake(100, 100, 200, 50)
-        view.addSubview(c)
-        c.text = "textfields are editable,\n and provide horizontal character seeking \n(not really scrolling) when the text is too long to \ndisplay all at once. "
-        c.delegate = self
-    }
-    
-    func textViewDidChange(textView: UITextView){
-        // 字符串内的对象和属性写错了，一样可以报编译错。
-        print ("new value : \(c.text)")
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window!.rootViewController = Page()
+        self.window?.makeKeyAndVisible()
+        return true
     }
 }
-
-
-// progress bar.进度值从 0到 1 ，而不是从 0 到 100
-class DemoSearchBarViewController: UIViewController,UISearchBarDelegate{
-    var c : UISearchBar!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        c = UISearchBar()
-        c.frame = CGRectMake(100, 100, 200, 50)
-        view.addSubview(c)
-        c.delegate = self
-    }
-     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        print ("search : \(searchBar.text)")
-    }
-}
-
-
-
-// scroll view
-class DemoScrollView: UIViewController, UIScrollViewDelegate {
-    var scrollView: UIScrollView!
-    var containerView = UIView()
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.whiteColor()
-        self.scrollView = UIScrollView()
-        self.scrollView.delegate = self
-        self.scrollView.contentSize = CGSizeMake(1000, 1000)
-        
-        containerView = UIView()        
-        
-        scrollView.addSubview(containerView)
-        view.addSubview(scrollView)
-
-        for var i = 0 ;i < 10 ; i++ {
-            let buttonOne = UILabel()
-            buttonOne.frame = CGRectMake(100, CGFloat(100 * i) , 100, 100)
-            buttonOne.backgroundColor = UIColor.greenColor()
-            buttonOne.text = "Drag me ! "
-            containerView.addSubview(buttonOne)
-        }
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        scrollView.frame = view.bounds
-        containerView.frame = CGRectMake(0, 0, scrollView.contentSize.width, scrollView.contentSize.height)
-    }
-    
-}
-
-// progress bar.进度值从 0到 1 ，而不是从 0 到 100
-class DemoProgressBarViewController: UIViewController{
-    var timer : NSTimer!
-    var pv: UIProgressView!
-    var pv1: UIProgressView!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.whiteColor()
-        pv = UIProgressView()
-        pv.frame = CGRectMake(100, 100, 100, 100)
-        view.addSubview(pv)
-        pv.progress = 0.51
-        pv.progressViewStyle = .Bar
-        
-        pv1 = UIProgressView()
-        pv1.frame = CGRectMake(100, 300, 100, 100)
-        view.addSubview(pv1)
-        pv1.progress = 0.90
-        pv1.progressViewStyle = .Default
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "update", userInfo: nil, repeats: true)
-    }
-    func update() {
-        pv.progress = pv.progress +  0.01
-        print (pv.progress)
-        if pv.progress >= 1 {
-            pv.progress = 0
-        }
-    }
-}
-
-
-// picker view
-class DemoPickerViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    var gradeTextField: UITextField!
-    var gradePicker: UIPickerView!
-    
-    let gradePickerValues = ["1", "2", "3"]
-    
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
-        return gradePickerValues.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return gradePickerValues[row]
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
-        gradeTextField.text = gradePickerValues[row]
-        self.view.endEditing(true)
-    }
-    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return 100
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.whiteColor()
-        gradeTextField = UITextField()
-        // 这个frame太小的话，会看不到文字，以至于误以为代码错误。
-        gradeTextField.frame = CGRectMake(10,40,100,20)
-        view.addSubview(gradeTextField)
-        gradePicker = UIPickerView()
-        gradePicker.frame =  CGRectMake(10,50,320,200)
-        gradePicker.dataSource = self
-        gradePicker.delegate = self
-        gradeTextField.inputView = gradePicker
-        gradeTextField.text = gradePickerValues[0]
-        gradePicker.showsSelectionIndicator = true
-        view.addSubview(gradePicker)
-    }
-}
-
 
 
 extension UIImage {
-    class func imageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0.0, 0.0, 10.0,10.0 )
+    class func imageWithColor(_ color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0.0, y: 0.0, width: 10.0,height: 10.0 )
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
         
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
 }
 //Animating a Sequence of Images
-class DemoImageViewAnimating: UIViewController {
+class Page: UIViewController {
     var bgImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //        let image: UIImage = UIImage(named: "afternoon")!
         bgImage = UIImageView()
-        bgImage.animationImages = [UIImage.imageWithColor(UIColor.redColor()),
-            UIImage.imageWithColor(UIColor.yellowColor()),
-            UIImage.imageWithColor(UIColor.blackColor()),
-            UIImage.imageWithColor(UIColor.blueColor())]
-        bgImage!.frame = CGRectMake(0,0,100,100)
+        bgImage.animationImages = [UIImage.imageWithColor(UIColor.red),
+                                   UIImage.imageWithColor(UIColor.yellow),
+                                   UIImage.imageWithColor(UIColor.black),
+                                   UIImage.imageWithColor(UIColor.blue)]
+        bgImage!.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
         self.view.addSubview(bgImage!)
         bgImage.animationDuration = 1
         bgImage.startAnimating()
     }
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         bgImage.stopAnimating()
     }
 }
+//
+//// Show image
+////Responding to Touch Events
+//
+//class DemoImageView: UIViewController {
+//    var bgImage: UIImageView!
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        
+//        //        let image: UIImage = UIImage(named: "afternoon")!
+//        let image = UIImage.imageWithColor(UIColor.red)
+//        bgImage = UIImageView(image: image,highlightedImage:UIImage.imageWithColor(UIColor.blue) )
+//        bgImage!.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
+//        self.view.addSubview(bgImage!)
+//        //mage views ignore user events by default. Normally, you use image views only to present visual content in your interface. If you want an image view to handle user interactions as well, change the value of its userInteractionEnabled property to YES. After doing that, you can attach gesture recognizers or use any other event handling techniques to respond to touch events or other user-initiated events.
+//        // gesture
+//        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(DemoImageView.imageTapped(_:)))
+//        bgImage.isUserInteractionEnabled = true
+//        bgImage.addGestureRecognizer(tapGestureRecognizer)
+//    }
+//    func imageTapped(_ img: AnyObject)
+//    {
+//        bgImage.isHighlighted = !bgImage!.isHighlighted
+//    }
+//}
+//class DemoCollectionView: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+//    var collectionView: UICollectionView!
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+//        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+//        layout.itemSize = CGSize(width: 60, height: 60)
+//        
+//        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+//        collectionView.dataSource = self
+//        collectionView.delegate = self
+//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+//        collectionView.backgroundColor = UIColor.white
+//        self.view.addSubview(collectionView)
+//    }
+//    func numberOfSections(in collectionView: UICollectionView) -> Int{
+//        return 1
+//    }
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return 5
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+//        cell.backgroundColor = UIColor.black
+//        return cell
+//    }
+//}
+//class DemoUIActivityIndicatorView :UIViewController{
+//    var acview : UIActivityIndicatorView?
+//    override func viewDidLoad() {
+//        acview = UIActivityIndicatorView()
+//        acview!.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
+//        view.addSubview(acview!)
+//        self.view.backgroundColor = UIColor.black
+//        
+//    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        acview!.startAnimating()
+//    }
+//    override func viewDidDisappear(_ animated: Bool) {
+//        acview!.stopAnimating()
+//    }
+//    
+//}
+//// Alert View
+//class DemoAlertViewOfUIAlertController:UIViewController{
+//    override func viewDidAppear(_ animated: Bool) {
+//        Alert()
+//    }
+//    func Alert(){
+//        let alert = UIAlertController(title: "Hi", message: "I am message", preferredStyle:.alert)
+//        // Closure
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
+//            print("OK")
+//        }))
+//        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:nil))
+//        AppDelegate.Top?.present(alert, animated: true, completion: nil)
+//    }
+//    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        self.view.backgroundColor = UIColor.black
+//    }
+//    
+//}
+//
+//
+//// Action Sheet
+//class DemoActionSheetOfUIAlertController:UIViewController{
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        self.view.backgroundColor = UIColor.black
+//    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        ActionSheet()
+//    }
+//    func ActionSheet() {
+//        let sheet: UIAlertController = UIAlertController(title:nil, message:nil, preferredStyle:UIAlertControllerStyle.actionSheet)
+//        sheet.addAction(UIAlertAction(title:"Do something 1", style:UIAlertActionStyle.default, handler:{ action in
+//            print ("Do something 1")
+//        }))
+//        sheet.addAction(UIAlertAction(title:"Do something 2", style:UIAlertActionStyle.default, handler:{ action in
+//            print ("Do something 2")
+//        }))
+//        sheet.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.cancel, handler:nil))
+//        AppDelegate.Top?.present(sheet, animated:true, completion:nil)
+//    }
+//}
+//
+//
+//
+//class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
+//    var vcs :[UIViewController]
+//    required init(){
+//        vcs = [
+//            //            DemoWebViewController(),
+//            DemoTextViewViewController(),
+//            DemoSearchBarViewController(),
+//            DemoScrollView(),
+//            DemoProgressBarViewController(),DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
+//        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+//    }
+//    required  init?(coder: NSCoder){
+//        fatalError()
+//    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        setViewControllers([vcs[0]], direction: .forward, animated: false, completion: nil)
+//        
+//    }
+//    override func viewDidLoad() {
+//        self.dataSource = self
+//        
+//    }
+//    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
+//    {
+//        let v = (viewController)
+//        let i = vcs.index(of: v)! - 1
+//        if i < 0 {
+//            return nil
+//        }
+//        return vcs[i]
+//    }
+//    
+//    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
+//    {
+//        let v = (viewController)
+//        let i = vcs.index(of: v)! + 1
+//        if i > vcs.count - 1 {
+//            return nil
+//        }
+//        return vcs[i]
+//    }
+//    
+//    func presentationCount(for pageViewController: UIPageViewController) -> Int
+//    {
+//        return vcs.count
+//    }
+//    
+//    func presentationIndex(for pageViewController: UIPageViewController) -> Int
+//    {
+//        return 0
+//    }
+//    
+//}
+//
 
-// Show image 
-//Responding to Touch Events
-
-class DemoImageView: UIViewController {
-    var bgImage: UIImageView!
+class Page1: UIViewController{
+    var c : UIWebView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        c = UIWebView()
+        c.frame = super.view.frame
+        view.addSubview(c)
+        c.frame.origin.y += 20
+        let url = URL(string:"http://apple.com")
+        let ro = URLRequest(url:url!)
+        c.loadRequest(ro)
+    }
+}
+class Page2: UIViewController,UITextViewDelegate{
+    var c : UITextView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        c = UITextView()
+        c.frame = CGRect(x: 10, y: 50, width: 200, height: 400)
+        view.addSubview(c)
+        c.text = "text\nand new lines\nand more lines"
+        c.delegate = self
+    }
+    
+    func textViewDidChange(_ textView: UITextView){
+        // 字符串内的对象和属性写错了，一样可以报编译错。
+        print ("new value : \(c.text)")
+    }
+}
+class Page3: UIViewController,UISearchBarDelegate{
+    var c : UISearchBar!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        c = UISearchBar()
+        c.frame = CGRect(x: 100, y: 100, width: 200, height: 50)
+        view.addSubview(c)
+        c.delegate = self
+        c.showsCancelButton = true
+        c.showsBookmarkButton = true
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print ("search : \(searchBar.text)")
+    }
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        print ("bookmark : \(searchBar.text)")
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print ("cancel : \(searchBar.text)")
+    }
+}
+
+
+class Page4: UIViewController {
+    var scroll: UIScrollView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.white
+        self.scroll = UIScrollView()
+        scroll.backgroundColor = UIColor.red
+        self.scroll.contentSize = CGSize(width: 100, height: 300)
+        scroll.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
+        for i in 0  ..< 3 {
+            let b = UILabel()
+            b.backgroundColor = UIColor.blue
+            b.frame = CGRect(x: 0, y: CGFloat(100 * i) , width: 100, height: 100)
+            b.backgroundColor = UIColor.green
+            b.text = "Drag Me ! "
+            scroll.addSubview(b)
+        }
+        view.addSubview(scroll)
+    }
+}
+
+//@UIApplicationMain
+//class AppDelegate: UIResponder, UIApplicationDelegate {
+//    var window: UIWindow?
+//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+//        self.window = UIWindow(frame: UIScreen.main.bounds)
+//        self.window!.rootViewController = Page()
+//        self.window?.makeKeyAndVisible()
+//        return true
+//    }
+//    //http://pinkstone.co.uk/how-to-avoid-whose-view-is-not-in-the-window-hierarchy-error-when-presenting-a-uiviewcontroller/
+//   func topMost ()-> UIViewController?{
+//        var  top = UIApplication.shared.keyWindow?.rootViewController!
+//        while top?.presentedViewController != nil{
+//            top = top!.presentedViewController
+//        }
+//        return top
+//    }
+//    class var Top :  UIViewController?{
+//        get {
+//        return (UIApplication.shared.delegate as! AppDelegate).topMost()
+//        }
+//    }
+//}
+
+
+// progress bar.进度值从 0到 1 ，而不是从 0 到 100
+class Page5: UIViewController{
+    var timer : Timer!
+    var pv: UIProgressView!
+    var pv1: UIProgressView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.white
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(Page5.update), userInfo: nil, repeats: true)
+        pv = UIProgressView()
+        pv.frame = CGRect(x: 100, y: 100, width: 100, height: 10)
+        view.addSubview(pv)
+        pv.progress = 0.51
+        pv.progressViewStyle = .bar
         
-//        let image: UIImage = UIImage(named: "afternoon")!
-        let image = UIImage.imageWithColor(UIColor.redColor())
-        bgImage = UIImageView(image: image,highlightedImage:UIImage.imageWithColor(UIColor.blueColor()) )
-        bgImage!.frame = CGRectMake(0,0,100,100)
-        self.view.addSubview(bgImage!)
-        //mage views ignore user events by default. Normally, you use image views only to present visual content in your interface. If you want an image view to handle user interactions as well, change the value of its userInteractionEnabled property to YES. After doing that, you can attach gesture recognizers or use any other event handling techniques to respond to touch events or other user-initiated events.
-        // gesture 
-        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
-        bgImage.userInteractionEnabled = true
-        bgImage.addGestureRecognizer(tapGestureRecognizer)
     }
-    func imageTapped(img: AnyObject)
-    {
-       bgImage.highlighted = !bgImage!.highlighted
+    func update() {
+        pv.progress = pv.progress +  0.01
+        if pv.progress >= 1 {
+            pv.progress = 0
+        }
     }
 }
-class DemoCollectionView: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-    var collectionView: UICollectionView!
+// picker view
+class Page6: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    var p: UIPickerView!
+    let values = [["1", "2", "3"],["one", "two", "three"]]
+    func numberOfComponents(in pickerView: UIPickerView) -> Int{
+        return 2
+    }
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return values[component].count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return values[component][row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
+        print(values[component][row])
+    }
+    func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        return 100
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        layout.itemSize = CGSize(width: 60, height: 60)
-        
-        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionView.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(collectionView)
-    }
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int{
-        return 1
-    }
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
-        cell.backgroundColor = UIColor.blackColor()
-        return cell
-    }
-}
-class DemoUIActivityIndicatorView :UIViewController{
-    var acview : UIActivityIndicatorView?
-    override func viewDidLoad() {
-        acview = UIActivityIndicatorView()
-        acview!.frame = CGRectMake(100, 100, 100, 100)
-        view.addSubview(acview!)
-        self.view.backgroundColor = UIColor.blackColor()
-
-    }
-    override func viewDidAppear(animated: Bool) {
-        acview!.startAnimating()
-    }
-    override func viewDidDisappear(animated: Bool) {
-        acview!.stopAnimating()
-    }
-
-}
-// Alert View
-class DemoAlertViewOfUIAlertController:UIViewController{
-    override func viewDidAppear(animated: Bool) {
-        Alert()
-    }
-    func Alert(){
-        let alert = UIAlertController(title: "Hi", message: "I am message", preferredStyle:.Alert)
-        // Closure
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action: UIAlertAction!) in
-            print("OK")
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler:nil))
-        AppDelegate.Top?.presentViewController(alert, animated: true, completion: nil)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = UIColor.blackColor()
-    }
-
-}
-
-
-// Action Sheet
-class DemoActionSheetOfUIAlertController:UIViewController{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = UIColor.blackColor()
-    }
-    override func viewDidAppear(animated: Bool) {
-        ActionSheet()
-    }
-    func ActionSheet() {
-        let sheet: UIAlertController = UIAlertController(title:nil, message:nil, preferredStyle:UIAlertControllerStyle.ActionSheet)
-        sheet.addAction(UIAlertAction(title:"Do something 1", style:UIAlertActionStyle.Default, handler:{ action in
-            print ("Do something 1")
-        }))
-        sheet.addAction(UIAlertAction(title:"Do something 2", style:UIAlertActionStyle.Default, handler:{ action in
-            print ("Do something 2")
-        }))
-        sheet.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.Cancel, handler:nil))
-        AppDelegate.Top?.presentViewController(sheet, animated:true, completion:nil)
-    }
-}
-
-
-
-class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
-    var vcs :[UIViewController]
-    required init(){
-        vcs = [
-            DemoWebViewController(),
-            DemoTextViewViewController(),
-            DemoSearchBarViewController(),
-            DemoScrollView(),
-            DemoProgressBarViewController(),DemoPickerViewController(),DemoImageViewAnimating(),DemoImageView(),DemoCollectionView(),DemoUIActivityIndicatorView(),DemoActionSheetOfUIAlertController(),DemoAlertViewOfUIAlertController()]
-        super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
-    }
-    required  init?(coder: NSCoder){
-        fatalError()
-    }
-    override func viewDidAppear(animated: Bool) {
-        setViewControllers([vcs[0]], direction: .Forward, animated: false, completion: nil)
-        
-    }
-    override func viewDidLoad() {
-        self.dataSource = self
-
-    }
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
-    {
-        let v = (viewController)
-        let i = vcs.indexOf(v)! - 1
-        if i < 0 {
-            return nil
-        }
-        return vcs[i]
-    }
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?
-    {
-        let v = (viewController)
-        let i = vcs.indexOf(v)! + 1
-        if i > vcs.count - 1 {
-            return nil
-        }
-        return vcs[i]
-    }
-    
-    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int
-    {
-        return vcs.count
-    }
-    
-    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int
-    {
-        return 0
-    }
-    
-}
-
-
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window!.rootViewController = PageViewController()
-        self.window?.makeKeyAndVisible()
-        return true
-    }
-    //http://pinkstone.co.uk/how-to-avoid-whose-view-is-not-in-the-window-hierarchy-error-when-presenting-a-uiviewcontroller/
-   func topMost ()-> UIViewController?{
-        var  top = UIApplication.sharedApplication().keyWindow?.rootViewController!
-        while top?.presentedViewController != nil{
-            top = top!.presentedViewController
-        }
-        return top
-    }
-    class var Top :  UIViewController?{
-        get {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).topMost()
-        }
+        view.backgroundColor = UIColor.white
+        // 这个frame太小的话，会看不到文字，以至于误以为代码错误。
+        p = UIPickerView()
+        p.frame =  CGRect(x: 10,y: 50,width: 320,height: 200)
+        p.dataSource = self
+        p.delegate = self
+        view.addSubview(p)
     }
 }

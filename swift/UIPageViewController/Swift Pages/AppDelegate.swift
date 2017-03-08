@@ -1,6 +1,4 @@
-
 import UIKit
-
 class VCBase: UIViewController
 {
     
@@ -8,15 +6,13 @@ class VCBase: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
-        label = UILabel(frame: CGRectMake(0, 0, view.frame.width, 200))
-        label!.textAlignment = .Center
+        label = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+        label!.textAlignment = .center
         view.addSubview(label!)
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
     }
 }
-
-class v1: VCBase
+class Page1: VCBase
 {
     override func viewDidLoad()
     {
@@ -24,7 +20,7 @@ class v1: VCBase
         label!.text = "#1"
     }
 }
-class v2: VCBase
+class Page2: VCBase
 {
     override func viewDidLoad()
     {
@@ -32,70 +28,54 @@ class v2: VCBase
         label!.text = "#2"
     }
 }
-
 class PageViewController :UIPageViewController,UIPageViewControllerDataSource{
     var vcs :[UIViewController]
     required init(){
-        vcs = [v1(),v2()]
-        super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+        vcs = [Page1(),Page2()]
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     required  init?(coder: NSCoder){
         fatalError()
     }
     override func viewDidLoad() {
         self.dataSource = self
-        let startingViewController: UIViewController = vcs[0]
-        let viewControllers = [startingViewController]
-        setViewControllers(viewControllers, direction: .Forward, animated: false, completion: nil)
+        setViewControllers( [vcs[0]], direction: .forward, animated: false, completion: nil)
     }
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
     {
         let v = (viewController)
-        let i = vcs.indexOf(v)! - 1
+        let i = vcs.index(of: v)! - 1
         if i < 0 {
             return nil
         }
         return vcs[i]
     }
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
     {
         let v = (viewController)
-        let i = vcs.indexOf(v)! + 1
+        let i = vcs.index(of: v)! + 1
         if i > vcs.count - 1 {
             return nil
         }
         return vcs[i]
     }
-    
-    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int
+    func presentationCount(for pageViewController: UIPageViewController) -> Int
     {
         return vcs.count
     }
-    
-    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int
     {
         return 0
     }
-    
 }
-
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
-                            
     var window: UIWindow?
-    
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.rootViewController = PageViewController()
         self.window?.makeKeyAndVisible()
         return true
-
     }
 }
-//        let pageControl = UIPageControl.appearance()
-//        pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
-//        pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
-//        pageControl.backgroundColor = UIColor.blueColor()
