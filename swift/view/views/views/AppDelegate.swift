@@ -10,95 +10,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-//class DemoCollectionView: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-//    var collectionView: UICollectionView!
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-//        layout.itemSize = CGSize(width: 60, height: 60)
-//        
-//        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-//        collectionView.dataSource = self
-//        collectionView.delegate = self
-//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-//        collectionView.backgroundColor = UIColor.white
-//        self.view.addSubview(collectionView)
-//    }
-//    func numberOfSections(in collectionView: UICollectionView) -> Int{
-//        return 1
-//    }
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 5
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-//        cell.backgroundColor = UIColor.black
-//        return cell
-//    }
-//}
-//class DemoUIActivityIndicatorView :UIViewController{
-//    var acview : UIActivityIndicatorView?
-//    override func viewDidLoad() {
-//        acview = UIActivityIndicatorView()
-//        acview!.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
-//        view.addSubview(acview!)
-//        self.view.backgroundColor = UIColor.black
-//        
-//    }
-//    override func viewDidAppear(_ animated: Bool) {
-//        acview!.startAnimating()
-//    }
-//    override func viewDidDisappear(_ animated: Bool) {
-//        acview!.stopAnimating()
-//    }
-//    
-//}
-//// Alert View
-//class DemoAlertViewOfUIAlertController:UIViewController{
-//    override func viewDidAppear(_ animated: Bool) {
-//        Alert()
-//    }
-//    func Alert(){
-//        let alert = UIAlertController(title: "Hi", message: "I am message", preferredStyle:.alert)
-//        // Closure
-//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
-//            print("OK")
-//        }))
-//        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:nil))
-//        AppDelegate.Top?.present(alert, animated: true, completion: nil)
-//    }
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        self.view.backgroundColor = UIColor.black
-//    }
-//    
-//}
-//
-//
-//// Action Sheet
-//class DemoActionSheetOfUIAlertController:UIViewController{
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        self.view.backgroundColor = UIColor.black
-//    }
-//    override func viewDidAppear(_ animated: Bool) {
-//        ActionSheet()
-//    }
-//    func ActionSheet() {
-//        let sheet: UIAlertController = UIAlertController(title:nil, message:nil, preferredStyle:UIAlertControllerStyle.actionSheet)
-//        sheet.addAction(UIAlertAction(title:"Do something 1", style:UIAlertActionStyle.default, handler:{ action in
-//            print ("Do something 1")
-//        }))
-//        sheet.addAction(UIAlertAction(title:"Do something 2", style:UIAlertActionStyle.default, handler:{ action in
-//            print ("Do something 2")
-//        }))
-//        sheet.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.cancel, handler:nil))
-//        AppDelegate.Top?.present(sheet, animated:true, completion:nil)
-//    }
-//}
 //
 //
 //
@@ -230,29 +141,7 @@ class Page4: UIViewController {
     }
 }
 
-//@UIApplicationMain
-//class AppDelegate: UIResponder, UIApplicationDelegate {
-//    var window: UIWindow?
-//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-//        self.window = UIWindow(frame: UIScreen.main.bounds)
-//        self.window!.rootViewController = Page()
-//        self.window?.makeKeyAndVisible()
-//        return true
-//    }
-//    //http://pinkstone.co.uk/how-to-avoid-whose-view-is-not-in-the-window-hierarchy-error-when-presenting-a-uiviewcontroller/
-//   func topMost ()-> UIViewController?{
-//        var  top = UIApplication.shared.keyWindow?.rootViewController!
-//        while top?.presentedViewController != nil{
-//            top = top!.presentedViewController
-//        }
-//        return top
-//    }
-//    class var Top :  UIViewController?{
-//        get {
-//        return (UIApplication.shared.delegate as! AppDelegate).topMost()
-//        }
-//    }
-//}
+
 
 
 // progress bar.进度值从 0到 1 ，而不是从 0 到 100
@@ -368,5 +257,109 @@ class Page102: UIViewController {
     func imageTapped(_ img: AnyObject)
     {
         v.isHighlighted = !v!.isHighlighted
+    }
+}
+class Page103: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    var items = [["Java","Swift","JavaScript","PHP","Python"],["OS X","Windows","Linux"]]
+    var collectionView: UICollectionView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        layout.itemSize = CGSize(width: 80, height: 60)
+        var frame = view.frame
+        frame.origin.y += 30
+        collectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.backgroundColor = UIColor.white
+        self.view.addSubview(collectionView)
+    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int{
+        return items.count
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items[section].count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        cell.backgroundColor = .blue
+        let l = UILabel()
+        l.text = items[indexPath.section][indexPath.row]
+        l.frame =  CGRect(x: 0.0, y: 0.0, width: 100.0,height: 20.0 )
+        cell.addSubview(l)
+        return cell
+    }
+}
+class Page106 :UIViewController{
+    var v : UIActivityIndicatorView?
+    override func viewDidLoad() {
+        v = UIActivityIndicatorView()
+        v!.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
+        view.addSubview(v!)
+        self.view.backgroundColor = UIColor.black
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        v!.startAnimating()
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        v!.stopAnimating()
+    }
+}
+//class AppDelegate: UIResponder, UIApplicationDelegate {
+//    var window: UIWindow?
+//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+//        self.window = UIWindow(frame: UIScreen.main.bounds)
+//        self.window!.rootViewController = Page()
+//        self.window?.makeKeyAndVisible()
+//        return true
+//    }
+//    //http://pinkstone.co.uk/how-to-avoid-whose-view-is-not-in-the-window-hierarchy-error-when-presenting-a-uiviewcontroller/
+//   func topMost ()-> UIViewController?{
+//        var  top = UIApplication.shared.keyWindow?.rootViewController!
+//        while top?.presentedViewController != nil{
+//            top = top!.presentedViewController
+//        }
+//        return top
+//    }
+//    class var Top :  UIViewController?{
+//        get {
+//        return (UIApplication.shared.delegate as! AppDelegate).topMost()
+//        }
+//    }
+//}
+class Page107:UIViewController{
+    override func viewDidAppear(_ animated: Bool) {
+        Alert()
+    }
+    func Alert(){
+        let alert = UIAlertController(title: "title", message: "message", preferredStyle:.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
+            print("OK")
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler:nil))
+        self.present(alert,animated: true,completion: nil)
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = UIColor.black
+    }
+}
+class Page107_1:UIViewController{
+    override func viewDidAppear(_ animated: Bool) {
+        ActionSheet()
+    }
+    func ActionSheet() {
+        let sheet: UIAlertController = UIAlertController(title:nil, message:nil, preferredStyle:UIAlertControllerStyle.actionSheet)
+        sheet.addAction(UIAlertAction(title:"Do something 1", style:UIAlertActionStyle.default, handler:{ action in
+            print ("Do something 1")
+        }))
+        sheet.addAction(UIAlertAction(title:"Do something 2", style:UIAlertActionStyle.default, handler:{ action in
+            print ("Do something 2")
+        }))
+        sheet.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.cancel, handler:nil))
+        self.present(sheet, animated:true, completion:nil)
     }
 }
