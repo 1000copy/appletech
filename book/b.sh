@@ -16,5 +16,6 @@ pandoc -o b.epub \
 	view/SearchBar.md \
 	view/TableView.md \
 	view/textview.md \
-	view/webview.md 
+	view/webview.md \
+	layout/1.intro.md
 	
