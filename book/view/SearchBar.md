@@ -1,3 +1,6 @@
+
+##SearchBar
+
 UISearchBar实现了一个用于填写文本以便搜索的控件。它由一个文本框、一个搜索按钮、一个书签按钮、一个取消按钮构成。它并不执行真正的搜索，而是通过实现UISearchBarDelegate协议，在协议函数内执行真正的搜索。
 
         import UIKit

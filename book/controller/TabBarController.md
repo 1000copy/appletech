@@ -1,3 +1,6 @@
+
+## TabBarController
+
 类UITabBarController是一个特殊的UIViewController，它可以包含多个UIViewController，并且在页面底部显示一个Tabbar作为UIViewController的切换显示开关。
 
 如下案例，展示了包含两个UIViewController的UITabBarController，可以通过底部的Tabbar来切换显示：

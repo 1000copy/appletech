@@ -1,3 +1,6 @@
+
+##PageViewController
+
 类PageViewController也是一个特殊的UIViewController，它可以管理多个页面，每个页面都是一个UIViewController，可程序控制或者用户手势来切换页面。
 
 如下代码，展示了PageViewController的使用：

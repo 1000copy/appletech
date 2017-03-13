@@ -1,6 +1,9 @@
+
+##TableView
+
 类UITableView表示一个列表视图，此视图可以显示列表，并且列表可以分为多个区间（section）。
 
-##显示列表
+####显示列表
 
 假设一个案例：
 
@@ -110,7 +113,7 @@ Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate�
 
 协议UITableViewDataSource,UITableViewDelegate还有很多可以实现的方法，具体参考iOS的开发者参考资料。
 
-## 添加删除修改
+#### 添加删除修改
 
 类UITableView不但可以显示内容，还可以配合很多操作。这些内容的操作的基本流程就是修改数据源，然后通知TableView重新装入。代码入下：
 
@@ -197,7 +200,7 @@ Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate�
 2. 在Table的init函数内，创建一个Timer，它每秒激发一个定时器事件，在不同的激发次数中，分别对数据做修改、添加、删除
 3. 调用reload方法，从而让UITableView重新加载数据
 
-## 默认提供的删除和列表重排
+### 默认提供的删除和列表重排
 
 可以自己添加按钮并执行对UITableView的列表的删除和重排。但是也可以使用它自己提供了删除和重排的UI。删除流程是这样的：
 
@@ -317,7 +320,7 @@ IndexPath)
 此函数需要实现，从而告诉UITableView那些行是可以拖动重排的。这里全部返还true，表示所有内容都可以重排。
 
 
-## TableView的装饰界面
+### TableView的装饰界面
 
 除了显示section和row之外，TableView可以加入表头表位，节头节尾，帮助程序员更好的组织内容。
 
@@ -408,7 +411,7 @@ IndexPath)
 
 
 
-##标记
+###标记
 
 类UITableView支持对每个行做标记和取消标记，标记可以有多种。其中比较常用的是打对号图标。如下代码，演示了如何对每个行打对号和取消打对号：
 
@@ -468,7 +471,7 @@ IndexPath)
 
 运行起来后，可看到三个行，点击任何一个行都会显示对号标记在行尾，再点击一次就会取消此标记。查询UITableViewCellAccessoryType的官方文档可以得到更多的标记类型。
 
-## 重用cell创建
+### 重用cell创建
 
 在之前的代码中，每次调用到函数：
 
@@ -524,7 +527,7 @@ UIKit会在内部对此过程优化。实例代码如下：
             }
         }
 
-##复合的Cell
+###复合的Cell
 
 之前的代码，创建的Cell都是简单文字；实际上，每个Cell都可以作为一个容器，装入更多的元素。如下代码展示了一个复合的Cell的创建：
 
@@ -581,7 +584,7 @@ UIKit会在内部对此过程优化。实例代码如下：
 本案例在每个Cell中添加了一个UISwitch按钮，并且可以如同一般的UIView一样的响应此按钮的事件。
 
 
-## 默认的Cell风格
+### 默认的Cell风格
 
 可以不必自己定制Cell样式，而是直接使用系统提供的，这样你可以通过设置不同的UITableViewCellAccessoryType、文字、文字1、图片、UITableViewCellStyle而让Cell外观变得丰富多彩：
 
@@ -690,7 +693,7 @@ UIKit会在内部对此过程优化。实例代码如下：
 是为了不必寻找图片，而可以即席按需创建出可以用于实例的图片，传递不同的颜色值，可以得到不同颜色的小方块图片。我们只是需要展示Cell的显示图片的能力，因此只有通过代码创建出图就好，不必为此单独寻找适合工程使用的图片。
 
 
-## UITableViewController
+### UITableViewController
 
 我们一直使用UITableView，把它加入到一个ViewController内，然后由AppDelegate加载后者。实际上，可以使用UITableViewController直接由AppDelegate加载：
 

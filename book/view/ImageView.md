@@ -1,3 +1,6 @@
+
+##ImageView
+
 UIImageView可以显示一张图、或者一组动图。
 
 如下代码显示一张图：

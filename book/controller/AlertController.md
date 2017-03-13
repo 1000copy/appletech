@@ -1,3 +1,6 @@
+
+##AlertController
+
 UIAlertController用来向用户显示一个警告信息。
 
 演示此类的App代码可以在装入后立刻显示一个警告信息，代码如下：

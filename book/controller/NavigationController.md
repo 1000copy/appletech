@@ -1,4 +1,4 @@
-# NavigationController
+## NavigationController
 
 控制器NavigationController常用于用来做层次化UI导航。类名为UINavigationController。
 

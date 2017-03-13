@@ -1,3 +1,5 @@
+##ActivityIndicatorView
+
 UIActivityIndicatorView就像一朵旋转的菊花，它常常用来指示有任务正在进行中。
 
 代码展示了它的使用：
