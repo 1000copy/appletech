@@ -1,5 +1,6 @@
 pandoc -o b.epub \
 	--toc --toc-depth=2 \
+	0.perface.md \
 	1.startup.md \
 	controller/1.intro.md \
 	controller/AlertController.md \
