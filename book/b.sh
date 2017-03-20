@@ -18,5 +18,7 @@ pandoc -o b.epub \
 	view/TableView.md \
 	view/textview.md \
 	view/webview.md \
-	layout/1.intro.md
+	layout/1.intro.md \
+	layout/stackview.md \
+	todoapp/1.intro.md
 	
