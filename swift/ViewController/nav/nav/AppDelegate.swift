@@ -1,61 +1,101 @@
+//
+//  ViewController.swift
+//  sqlite
+//
+//  Created by lcj on 2017/3/22.
+//  Copyright © 2017年 lcj. All rights reserved.
+//
+
 import UIKit
-
-class Level1: UIViewController {
+import SQLite
+class ViewController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Level 1"
-        let btn = UIButton()
-        btn.frame = CGRect(x: 10,y: 100,width: 100,height: 100)
-        btn.setTitle("Push", for: UIControlState())
-        btn.addTarget(self, action: #selector(Level1.drill(_:)), for: .touchDown)
-        self.view.addSubview(btn)
+        abc()
     }
-    func drill(_ sender: UIButton!){
-        self.navigationController!.pushViewController(Level2(), animated: true)
+    func abc(){
+        do{
+            let db = try Connection("mydb1.sqlite")
+            
+//            let users = Table("users")
+//            let id = Expression<Int64>("id")
+//            let name = Expression<String?>("name")
+//            let email = Expression<String>("email")
+//            
+//            try db.run(users.create { t in
+//                t.column(id, primaryKey: true)
+//                t.column(name)
+//                t.column(email, unique: true)
+//            })
+////             CREATE TABLE "users" (
+////                 "id" INTEGER PRIMARY KEY NOT NULL,
+////                 "name" TEXT,
+////                 "email" TEXT NOT NULL UNIQUE
+////             )
+//            
+//            let insert = users.insert(name <- "Alice", email <- "alice@mac.com")
+//            let rowid = try db.run(insert)
+//            // INSERT INTO "users" ("name", "email") VALUES ('Alice', 'alice@mac.com')
+//            
+//            for user in try db.prepare(users) {
+//                print("id: \(user[id]), name: \(user[name]), email: \(user[email])")
+//                // id: 1, name: Optional("Alice"), email: alice@mac.com
+//            }
+//            // SELECT * FROM "users"
+//            
+//            let alice = users.filter(id == rowid)
+//            
+//            try db.run(alice.update(email <- email.replace("mac.com", with: "me.com")))
+//            // UPDATE "users" SET "email" = replace("email", 'mac.com', 'me.com')
+//            // WHERE ("id" = 1)
+//            
+//            try db.run(alice.delete())
+//            // DELETE FROM "users" WHERE ("id" = 1)
+            
+//            try print(db.scalar(users.count) // 0
+            // SELECT count(*) FROM "users" SQLite.swift also works as a lightweight, Swift-friendly wrapper over the C API.
+            
+//            let stmt = try db.prepare("INSERT INTO users (email) VALUES (?)")
+//            for email in ["betty@icloud.com", "cathy@icloud.com"] {
+//                try stmt.run(email)
+//            }
+            
+            //        db.totalChanges    // 3
+            //        db.changes         // 1
+            //        db.lastInsertRowid // 3
+            //
+            for row in try db.prepare("SELECT id, email FROM users") {
+                print("id: \(row[0]), email: \(row[1])")
+                // id: Optional(2), email: Optional("betty@icloud.com")
+                // id: Optional(3), email: Optional("cathy@icloud.com")
+            }
+            
+            try print(db.scalar("SELECT count(*) FROM users")) // 2
+        }catch{
+            print("some \(error)")
+        }
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
 }
 
-class Level2: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.title = "Level 2"
-        let btn = UIButton()
-        btn.frame = CGRect(x: 10,y: 100,width: 100,height: 100)
-        btn.setTitle("Pop", for: UIControlState())
-        self.view.addSubview(btn)
-        btn.addTarget(self, action: #selector(Level2.pop(_:)), for: .touchDown)
-    }
-    func pop(_ sender: UIButton!){
-        self.navigationController!.popViewController(animated: true)
-    }
-}
 
 
-class Nav : UINavigationController{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let  p = Level1()
-        viewControllers = [p]
-    }
-}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    static var Delegate:AppDelegate{
-        return UIApplication.shared.delegate as! AppDelegate
-    }
-    var nav :Nav?
     var window: UIWindow?
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        nav = Nav()
-        self.window!.rootViewController = nav
+        self.window!.rootViewController = ViewController()
         self.window?.makeKeyAndVisible()
         return true
     }
 }
-
-//        navigationController!.navigationItem.rightBarButtonItem = editButtonItem()
-//        navigationItem.rightBarButtonItem = editButtonItem()
-//        let item = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "doAdd:")
-//        navigationItem.leftBarButtonItem = item
 

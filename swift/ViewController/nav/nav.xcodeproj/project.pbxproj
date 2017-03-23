@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F6AFACE1E8366CF00925F35 /* mydb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 6F6AFACD1E8366CF00925F35 /* mydb.sqlite */; };
 		B51AD70B1C7D37C200193739 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AD70A1C7D37C200193739 /* AppDelegate.swift */; };
 		B51AD70D1C7D37C200193739 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51AD70C1C7D37C200193739 /* ViewController.swift */; };
 		B51AD7101C7D37C200193739 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B51AD70E1C7D37C200193739 /* Main.storyboard */; };
@@ -15,6 +16,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6F6AFACD1E8366CF00925F35 /* mydb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = mydb.sqlite; sourceTree = "<group>"; };
+		6F6AFACF1E8369C500925F35 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge.h; sourceTree = "<group>"; };
 		B51AD7071C7D37C200193739 /* nav.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nav.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B51AD70A1C7D37C200193739 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B51AD70C1C7D37C200193739 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +41,8 @@
 		B51AD6FE1C7D37C200193739 = {
 			isa = PBXGroup;
 			children = (
+				6F6AFACF1E8369C500925F35 /* bridge.h */,
+				6F6AFACD1E8366CF00925F35 /* mydb.sqlite */,
 				B51AD7091C7D37C200193739 /* nav */,
 				B51AD7081C7D37C200193739 /* Products */,
 			);
@@ -124,6 +129,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F6AFACE1E8366CF00925F35 /* mydb.sqlite in Resources */,
 				B51AD7151C7D37C200193739 /* LaunchScreen.storyboard in Resources */,
 				B51AD7121C7D37C200193739 /* Assets.xcassets in Resources */,
 				B51AD7101C7D37C200193739 /* Main.storyboard in Resources */,
