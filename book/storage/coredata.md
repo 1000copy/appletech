@@ -1,21 +1,27 @@
 # Core Data
 
 行百里者半九十
+
+
         import UIKit
         import CoreData
 
         @UIApplicationMain
         class AppDelegate: UIResponder, UIApplicationDelegate {
             var window: UIWindow?
+            var p : PersistContext!
             func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-                let dataHelper = DataHelper(context: self.managedObjectContext)
+                p = PersistContext()
+                let dataHelper = DataHelper(context: p.managedObjectContext)
                 dataHelper.seedDataStore()
                 window?.rootViewController  = UIViewController()
                 return true
             }
             func applicationWillTerminate(_ application: UIApplication) {
-                self.saveContext()
+                p.saveContext()
             }
+        }
+        class PersistContext{
             lazy var applicationDocumentsDirectory: URL = {
                 // The directory the application uses to store the Core Data store file. This code uses a directory named "com.andrewcbancroft.Zootastic" in the application's documents Application Support directory.
                 let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -72,9 +78,6 @@
                 managedObjectContext.persistentStoreCoordinator = coordinator
                 return managedObjectContext
             }()
-            
-            // MARK: - Core Data Saving support
-            
             func saveContext () {
                 if managedObjectContext.hasChanges {
                     do {

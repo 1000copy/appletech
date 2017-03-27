@@ -1,67 +1,36 @@
-//
-//  AppDelegate.swift
-//  Zootastic
-//
-//  Created by Andrew Bancroft on 2/23/15.
-//  Copyright (c) 2015 Andrew Bancroft. All rights reserved.
-//
-
-import UIKit
-import CoreData
-
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+ import UIKit
+ import CoreData
+ 
+ @UIApplicationMain
+ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-    
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        
         let dataHelper = DataHelper(context: self.managedObjectContext)
         dataHelper.seedDataStore()
-        
-        
         window?.rootViewController  = UIViewController()
-        
         return true
     }
-    
     func applicationWillTerminate(_ application: UIApplication) {
         self.saveContext()
     }
-    
-    
-    // MARK: - Core Data stack
-    
     lazy var applicationDocumentsDirectory: URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.andrewcbancroft.Zootastic" in the application's documents Application Support directory.
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
-    
     internal var managedObjectModel: NSManagedObjectModel {
         let model = NSManagedObjectModel()
-        
-        // Create the entity
         let entity = NSEntityDescription()
         entity.name = "Zoo"
-
         var properties = Array<NSAttributeDescription>()
-        
         let remoteURLAttribute = NSAttributeDescription()
         remoteURLAttribute.name = "name"
         remoteURLAttribute.attributeType = .stringAttributeType
         remoteURLAttribute.isOptional = false
         remoteURLAttribute.isIndexed = true
         properties.append(remoteURLAttribute)
-        
         entity.properties = properties
-        
-        // Add entity to model
         model.entities = [entity]
-        
-        // Done :]
         return model
     }
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
@@ -74,8 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try FileManager.default.removeItem(at: url)
         } catch _ {
         }
-        
-        
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
@@ -92,7 +59,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
             abort()
         }
-        
         return coordinator
     }()
     
@@ -119,28 +85,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-}
-
-
-public class DataHelper {
+ }
+ public class DataHelper {
     let context: NSManagedObjectContext
-    
     public init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
     public func seedDataStore() {
         seedZoos()
         
     }
-    
     public func seedZoos() {
         let zoos = [
-            (name: "Oklahoma City Zoo", location: "Oklahoma City, OK"),
+            (name: "1111Oklahoma City Zoo", location: "Oklahoma City, OK"),
             (name: "Lowry Park Zoo", location: "Tampa, FL"),
             (name: "San Diego Zoo", location: "San Diego, CA")
         ]
-        
         for zoo in zoos {
             let a =  NSEntityDescription.insertNewObject(forEntityName: "Zoo", into: context)
             //            let newZoo = a as! Zoo
@@ -148,7 +108,6 @@ public class DataHelper {
             //            newZoo.name = zoo.name
             
         }
-        
         do {
             try context.save()
         } catch _ {
@@ -168,4 +127,4 @@ public class DataHelper {
         }
     }
     
-}
+ }
