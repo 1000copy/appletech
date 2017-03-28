@@ -1,4 +1,4 @@
-# Core Data
+## Core Data
 
 Core Data是官方对Sqlite访问的封装框架。使用它的好处是：
 
@@ -124,7 +124,12 @@ Core Data是官方对Sqlite访问的封装框架。使用它的好处是：
 此处的代码只是创建了一个内存中的模型，真正的创建使用了NSPersistentStoreCoordinator，在标注为：
 
         // section : coordinator
-开始的代码中进行。NSPersistentStoreCoordinator用来把模型和真实的存储关联起来。代码中对FileManager的引用的目的就是在文件存储中关联一个文件，如果存在就会删除它。接下来的NSManaged​Object​Context可以调用它的save()方法，把当前上下文的数据存储起来，也可以使用fetch方法，通过NSFetchRequest指定表名和条件来查询数据。如果需要插入数据，则需要使用NSEntityDescription的insertNewObject()方法。
+开始的代码中进行。NSPersistentStoreCoordinator用来把模型和真实的存储关联起来。NSPersistentStoreCoordinator的物理存储使用了Sqlite（NSSQLiteStoreType），但是也可以使用两位两种存储，分别为
+
+//            public let NSBinaryStoreType: String
+//            public let NSInMemoryStoreType: String
+
+代码中对FileManager的引用的目的就是在文件存储中关联一个文件，如果存在就会删除它。接下来的NSManaged​Object​Context可以调用它的save()方法，把当前上下文的数据存储起来，也可以使用fetch方法，通过NSFetchRequest指定表名和条件来查询数据。如果需要插入数据，则需要使用NSEntityDescription的insertNewObject()方法。
 
 这只是一个案例，真正的应用有可能正在编辑数据时，App被退出，那么数据将不能被保存。如果需要在退出前保存的话，需要在：
 

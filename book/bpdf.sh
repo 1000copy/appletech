@@ -1,4 +1,4 @@
-pandoc -o b.epub \
+ pandoc -s -o b.pdf \
 	--toc --toc-depth=2 \
 	0.perface.md \
 	1.startup.md \
