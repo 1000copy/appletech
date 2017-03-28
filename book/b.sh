@@ -20,5 +20,7 @@ pandoc -o b.epub \
 	view/webview.md \
 	layout/1.intro.md \
 	layout/stackview.md \
-	todoapp/1.intro.md
+	todoapp/1.intro.md \
+	storage/sqlite.md \
+	storage/coredata.md 
 	
