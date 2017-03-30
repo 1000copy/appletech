@@ -1,3 +1,4 @@
+#http://stackoverflow.com/questions/22081991/rmarkdown-pandoc-pdflatex-not-found
  pandoc -s -o b.pdf \
 	--toc --toc-depth=2 \
 	0.perface.md \
