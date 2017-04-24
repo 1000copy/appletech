@@ -1,4 +1,4 @@
-# archive
+# Archive
 
 想把对象序列化到文件，可以首先令此对象符合NSCoding协议，然后使用归档类完成序列化。
 
@@ -79,7 +79,7 @@
 
 完成反归档。
 
-更强大的是，如果对象内有成员指向到其他对象，归档类可以把这些指向对象一起归档，比如User类指向一个Todo列表，那么可以：
+更强大的是，如果对象内有成员指向到其他对象，归档类可以把这些指向对象一起归档，比如Man类通过一个成员wife指向一个Woman，那么可以连同此成员对象一起做归档。方法如下：
 
 
 	import UIKit
@@ -94,29 +94,33 @@
 	        return true
 	    }
 	}
-	class User : NSObject,NSCoding{
+	class Man : NSObject,NSCoding{
 	    var id : Int32
 	    var name : String
-	    var todos : [Todo]
-	    init(_ id: Int32 ,_ name : String,_ todos:[Todo]) {
+	    var wife : Woman
+	    init(_ id: Int32 ,_ name : String,_ wife : Woman) {
 	        self.id = id
 	        self.name = name
+	        self.wife = wife
 	    }
 	    required convenience init?(coder decoder: NSCoder) {
 	        guard let id = decoder.decodeInt32(forKey: "id") as? Int32,
-	            let name = decoder.decodeObject(forKey:"name") as? String
+	            let name = decoder.decodeObject(forKey:"name") as? String,
+	            let todo = decoder.decodeObject(forKey:"wife") as? Woman
 	            else { return nil }
 	        
-	        self.init(id,name)
+	        self.init(id,name,todo)
 	    }
 	    func encode(with coder: NSCoder) {
 	        coder.encode(self.id, forKey: "id")
 	        coder.encode(self.name, forKey: "name")
+	        coder.encode(wife,forKey:"wife")
+	        
 	    }
-	    override public var description: String { return "user:{id:\(id),name:\(name)}" }
+	    override public var description: String { return "Man:{id:\(id),name:\(name)},\(wife)" }
 	}
 
-	class Todo : NSObject,NSCoding{
+	class Woman : NSObject,NSCoding{
 	    var id : Int32
 	    var name : String
 	    init(_ id: Int32 ,_ name : String) {
@@ -134,11 +138,11 @@
 	        coder.encode(self.id, forKey: "id")
 	        coder.encode(self.name, forKey: "name")
 	    }
-	    override public var description: String { return "todo:{id:\(id),name:\(name)}" }
+	    override public var description: String { return "wife:{id:\(id),name:\(name)}" }
 	}
 
 	class Page: UIViewController {
-	    let filename = "/todo.archive"
+	    let filename = "/man.archive"
 	    override func viewDidLoad() {
 	        super.viewDidLoad()
 	        bar()
@@ -147,112 +151,109 @@
 	        do {
 	            let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
 	            let path = "\(documentDirectory)\(filename)"
-	            let u = User(1,"user")
+	            let u = Man(1,"Man1",Woman(1,"Wife1"))
 	            NSKeyedArchiver.archiveRootObject(u, toFile: path)
-	            let user1 = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? User
+	            let user1 = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? Man
 	            print(user1)
 	        }catch {print("\(error)")}
 	    }
 	}
 
+要点在于，在NSCoder协议需要的两个函数中，通过NSCoder对象，归档和反归档此成员对象，并且此成员对象也必须指向NSCoder协议即可。
+
+如果成员对象是一个对象的数组，做法是类似的。如下案例有两个类，Department和Task。Department通过成员Tasks包含一个Task的数组。把Task数组整体作为一个对象来处理，使用NSCoder.encode函数即可做归档，使用NSCoder.decodeObject即可反归档：
 
 
+	import UIKit
+	@UIApplicationMain
+	class AppDelegate: UIResponder, UIApplicationDelegate {
+	    var window : UIWindow?
+	    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+	        window = UIWindow()
+	        window!.rootViewController = Page()
+	        window!.rootViewController!.view.backgroundColor = .blue
+	        window!.makeKeyAndVisible()
+	        return true
+	    }
+	}
+	class Department: NSObject, NSCoding {
+	    var name = ""
+	    var manager = ""
+	    
+	    var tasks: [Task]?
+	    
+	    func encode(with aCoder: NSCoder) {
+	        aCoder.encode(name, forKey: "name")
+	        aCoder.encode(manager, forKey: "manager")
+	        aCoder.encode(tasks, forKey: "taskArray")
+	    }
+	    
+	    required convenience init?(coder aDecoder: NSCoder){
+	        self.init()
+	        
+	        name = aDecoder.decodeObject(forKey: "name") as! String
+	        manager = aDecoder.decodeObject(forKey: "manager") as! String
+	        tasks = aDecoder.decodeObject(forKey: "taskArray") as? [Task]
+	    }
+	    override public var description: String { return "dept:{name:\(name),tasks:\(tasks)" }
+	    override init() {
+	        super.init()
+	        name = "D1"
+	        manager = "TJ"
+	        tasks = []
+	        tasks?.append(Task("A1","N1"))
+	        tasks?.append(Task("A2","N2"))
+	        tasks?.append(Task("A3","N3"))
+	    }
+	}
 
-http://www.jianshu.com/p/dee076eda44e
+	class Task: NSObject, NSCoding {
+	    var title = ""
+	    var notes = ""
+	    override public var description: String { return "{title:\(title)}" }
+	    func encode(with aCoder: NSCoder)  {
+	        // Methods
+	        aCoder.encode(title, forKey: "title")
+	        aCoder.encode(notes, forKey: "notes")
+	    }
+	    
+	    required convenience init?(coder aDecoder: NSCoder) {
+	        // Methods
+	        
+	        let title = aDecoder.decodeObject(forKey: "title") as! String
+	        let notes = aDecoder.decodeObject(forKey: "notes") as! String
+	        self.init(title,notes)
+	    }
+	    
+	    init(_ title:String, _ notes : String) {
+	        self.title = title
+	        self.notes = notes
+	        super.init()
+	    }
+	}
+
+	class Page: UIViewController {
+	    let filename = "/man.archive"
+	    override func viewDidLoad() {
+	        super.viewDidLoad()
+	        bar()
+	    }
+	    func bar(){
+	        do {
+	            let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+	            let path = "\(documentDirectory)\(filename)"
+	            let u = Department()
+	            NSKeyedArchiver.archiveRootObject(u, toFile: path)
+	            let user1 = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? Department
+	            print(user1)
+	        }catch {print("\(error)")}
+	    }
+	}
+
+在控制台上期望输出的是：
+
+	Optional(dept:{name:D1,tasks:Optional([{title:A1}, {title:A2}, {title:A3}]))
 
 
-import UIKit
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window : UIWindow?
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        window = UIWindow()
-        window!.rootViewController = Page()
-        window!.rootViewController!.view.backgroundColor = .blue
-        window!.makeKeyAndVisible()
-        return true
-    }
-}
-class Page: UIViewController {
-    let filename = "/profile.plist"
-    let data:[String:String] = ["key1" : "value1", "key2":"value2", "key3":"value333"]
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        bar()
-        writePropertyList()
-        readPropertyList()
-    }
-    func bar(){
-        do {
-            let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-            let path = "\(documentDirectory)/\(filename)"
-            print(path)
-            let dict = NSDictionary(dictionary: data)
-            let isWritten = dict.write(toFile: path, atomically: true)
-            let dict1 = NSDictionary(contentsOfFile: path)
-            print(dict1)
-            print("file created: \(isWritten)")
-            let text = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
-            print(text)
-            readPropertyList()
-        }catch {print("\(error)")}
-        
-    }
-    func readPropertyList() {
-        var propertyListForamt =  PropertyListSerialization.PropertyListFormat.xml //Format of the Property List.
-        var plistData: [String: AnyObject] = [:] //Our data
-        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-        let path = "\(documentDirectory)/\(filename)"
-        print(path)
-        let plistPath: String? =  path
-        let plistXML = FileManager.default.contents(atPath: plistPath!)!
-        do {
-            plistData = try PropertyListSerialization.propertyList(from: plistXML, options: .mutableContainersAndLeaves, format: &propertyListForamt) as! [String:AnyObject]
-            print(plistData)
-            
-        } catch {
-            print("Error reading plist: \(error), format: \(propertyListForamt)")
-        }
-    }
-    func writePropertyList() {
-        var propertyListForamt =  PropertyListSerialization.PropertyListFormat.xml //Format of the Property List.
-        var plistData: [String: Any] = data
-        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-        let path = "\(documentDirectory)/\(filename)"
-        print(path)
-        let plistPath: String? =  path
-        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent(filename)
-        let plistXML = FileManager.default.contents(atPath: plistPath!)!
-        do {//convert the data to a dictionary and handle errors.
-            let o = OutputStream(url:fileURL,append:false)
-            PropertyListSerialization.writePropertyList(plistData, to: o!, format: propertyListForamt, options: 0, error: nil)
-            print(plistData)
-            
-        } catch {
-            print("Error reading plist: \(error), format: \(propertyListForamt)")
-        }
-    }
-}
-class Page1: UIViewController {
-    let filename = "/profile.plist"
-    let data:[String:String] = ["key1" : "value1", "key2":"value2", "key3":"value3"]
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        foo()
-    }
-    func foo(){
-        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let docURL = urls[urls.count-1]
-        let url = docURL.appendingPathComponent(filename)
-        if NSKeyedArchiver.archiveRootObject(data, toFile: url.path) {
-            print(true)
-        }
-        if let loadedDic = NSKeyedUnarchiver.unarchiveObject(withFile: url.path) as? [String:String] {
-            print(loadedDic)
-        }
-    }
-    
-}
 
 
