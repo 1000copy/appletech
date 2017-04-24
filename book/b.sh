@@ -23,5 +23,7 @@ pandoc -o b.epub \
 	todoapp/1.intro.md \
 	storage/1.intro.md \
 	storage/sqlite.md \
-	storage/coredata.md 
+	storage/coredata.md \
+	storage/plist.md \
+	storage/archive.md 
 	
