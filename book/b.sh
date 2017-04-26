@@ -25,5 +25,6 @@ pandoc -o b.epub \
 	storage/sqlite.md \
 	storage/coredata.md \
 	storage/plist.md \
-	storage/archive.md 
+	storage/archive.md \
+	pod/1.pod.md 
 	
