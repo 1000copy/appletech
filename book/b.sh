@@ -27,5 +27,7 @@ pandoc -o b.epub \
 	storage/plist.md \
 	storage/archive.md \
 	pod/1.pod.md \
-	http/1.readyhttpserver.md
+	http/1.visithttps.md \
+	http/2.readyhttpserver.md \
+	http/1.selfsignedhttps.md 
 	
