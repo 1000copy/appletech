@@ -26,5 +26,6 @@ pandoc -o b.epub \
 	storage/coredata.md \
 	storage/plist.md \
 	storage/archive.md \
-	pod/1.pod.md 
+	pod/1.pod.md \
+	http/1.readyhttpserver.md
 	
