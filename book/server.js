@@ -1,13 +1,10 @@
- const http = require('http')  
-    const port = 8000
-    const requestHandler = (request, response) => {  
-      console.log(request.url)
-      response.end(JSON.stringify({foo:"bar"}))
-    }
-    const server = http.createServer(requestHandler)
-    server.listen(port, (err) => {  
-      if (err) {
-        return console.log('something bad happened', err)
-      }
-      console.log(`server is listening on ${port}`)
-    })
+  var https = require('https');
+    var fs = require('fs');
+    var options = {
+      key: fs.readFileSync('key.pem'),
+      cert: fs.readFileSync('cert.pem')
+    };
+    var a = https.createServer(options, function (req, res) {
+      res.writeHead(200);
+      res.end(JSON.stringify({foo:"bar"}))
+    }).listen(8000);
