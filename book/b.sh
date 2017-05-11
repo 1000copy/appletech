@@ -2,22 +2,22 @@ pandoc -o b.epub \
 	--toc --toc-depth=2 \
 	0.perface.md \
 	1.startup.md \
-	controller/1.intro.md \
-	controller/AlertController.md \
-	controller/NavigationController.md \
-	controller/PageViewController.md\
-	controller/TabBarController.md \
-	view/1.intro.md \
-	view/ActivityIndicatorView.md \
-	view/CollectionView.md \
-	view/ImageView.md \
-	view/PickerView.md \
-	view/ProgressView.md \
-	view/ScrollView.md \
-	view/SearchBar.md \
-	view/TableView.md \
-	view/textview.md \
-	view/webview.md \
+	1.viewcontroller/1.intro.md \
+	1.viewcontroller/AlertController.md \
+	1.viewcontroller/NavigationController.md \
+	1.viewcontroller/PageViewController.md\
+	1.viewcontroller/TabBarController.md \
+	2.view/1.intro.md \
+	2.view/ActivityIndicatorView.md \
+	2.view/CollectionView.md \
+	2.view/ImageView.md \
+	2.view/PickerView.md \
+	2.view/ProgressView.md \
+	2.view/ScrollView.md \
+	2.view/SearchBar.md \
+	2.view/TableView.md \
+	2.view/textview.md \
+	2.view/webview.md \
 	layout/1.intro.md \
 	layout/stackview.md \
 	todoapp/1.intro.md \
