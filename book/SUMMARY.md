@@ -30,5 +30,8 @@
   * [sqlite](storage/sqlite.md )
 * [pod](pod/1.pod.md)
 * [http](http/1.visithttps.md)
+  * [visithttps](http/1.visithttps.md)
   * [readyhttpserver](http/2.readyhttpserver.md)
   * [selfsignedhttps](http/3.selfsignedhttps.md)
+  * [jsonserver](http/4.jsonserver.md)
+* [framework](framework/1.intro.md)

@@ -65,8 +65,8 @@ gitbook需要node，需要你首先安装它。
         
 ### 生成PDF
 
-    gitbook pdf .
-    open book.pdf
+    gitbook pdf . && open book.pdf
+     
 
 大功告成。
 
