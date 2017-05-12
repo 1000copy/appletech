@@ -1,6 +1,6 @@
 ## plist
 
-plist是一个XML的子集，使用UTF-8编码的文本文件，它的根节点是一个字典，内容由多个主键和值构成。常常用来存储App的配置信息。
+从存储角度来看，plist是一个XML的子集，使用UTF-8编码的文本文件；从Swift数据结构角度看，它的根节点是一个字典，内容由多个主键和值构成，常常用来存储App的配置信息。
 
 可以直接使用NSDictionary类直接存储它的内容到plist内，比如这样：
 
@@ -36,10 +36,10 @@ plist是一个XML的子集，使用UTF-8编码的文本文件，它的根节点�
                 let text = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
                 print(text)
             }catch {print("\(error)")}
-            
         }
     }
-类NSDictionary的方法write可以指定文件名，然后写入到指定文件。初始化方法 NSDictionary(contentsOfFile:)可以读取plist到词典对象内。
+
+类NSDictionary的方法write可以把一个词典写入到指定plist文件。初始化方法 NSDictionary(contentsOfFile:)可以读取plist到词典对象内。
 
 因为plist是UTF-8编码的文本文件，所以，可以使用String打开此文件，输出内容如下（去掉主题无关的文件头后）：
 

@@ -54,8 +54,6 @@
 	    }
 	}
 
-
-
 运行后输出的结果:
 
 	Optional({id:1,name:user})
@@ -67,15 +65,17 @@
 	    public init?(coder aDecoder: NSCoder) // NS_DESIGNATED_INITIALIZER
 	}
 
-方法encode(with:)是从NSCoder内解码数据，方法init?(coder:)是编码数据到NSCoder内。大体上函数内的实现就是一个个的用类似的代码把当前对象的成员做编码和解码。
+方法encode(with:)是从NSCoder对象中解码数据，方法init?(coder:)是编码数据到NSCoder对象内。函数内的实现代码大体类似，就是用类似的代码把当前对象的成员以NSCoder对象为源或者目标，做编码和解码。
 
 然后这个对象就可以传递给函数：
 
-		NSKeyedArchiver.archiveRootObject
+	NSKeyedArchiver.archiveRootObject
 
-完成归档，然后使用：
+完成归档。
 
-		NSKeyedUnarchiver.unarchiveObject(withFile: path) as? User
+然后使用：
+
+	NSKeyedUnarchiver.unarchiveObject(withFile: path) as? User
 
 完成反归档。
 
@@ -159,9 +159,13 @@
 	    }
 	}
 
-要点在于，在NSCoder协议需要的两个函数中，通过NSCoder对象，归档和反归档此成员对象，并且此成员对象也必须指向NSCoder协议即可。
+可以看到代码运行的输出为：
 
-如果成员对象是一个对象的数组，做法是类似的。如下案例有两个类，Department和Task。Department通过成员Tasks包含一个Task的数组。把Task数组整体作为一个对象来处理，使用NSCoder.encode函数即可做归档，使用NSCoder.decodeObject即可反归档：
+	Optional(Man:{id:1,name:Man1},wife:{id:1,name:Wife1})
+
+要点在于，在NSCoder协议需要的两个函数中，通过NSCoder对象，归档和反归档此成员对象，并且此成员对象本身也必须实现NSCoder协议即可。
+
+成员是一个对象的数组的话，做法也是类似的。如下案例有两个类，Department和Task。Department通过成员Tasks包含一个Task的数组。把Task数组整体作为一个对象来处理，使用NSCoder.encode函数即可做归档，使用NSCoder.decodeObject即可反归档：
 
 
 	import UIKit
@@ -179,15 +183,12 @@
 	class Department: NSObject, NSCoding {
 	    var name = ""
 	    var manager = ""
-	    
 	    var tasks: [Task]?
-	    
 	    func encode(with aCoder: NSCoder) {
 	        aCoder.encode(name, forKey: "name")
 	        aCoder.encode(manager, forKey: "manager")
 	        aCoder.encode(tasks, forKey: "taskArray")
 	    }
-	    
 	    required convenience init?(coder aDecoder: NSCoder){
 	        self.init()
 	        
@@ -206,7 +207,6 @@
 	        tasks?.append(Task("A3","N3"))
 	    }
 	}
-
 	class Task: NSObject, NSCoding {
 	    var title = ""
 	    var notes = ""
@@ -216,7 +216,6 @@
 	        aCoder.encode(title, forKey: "title")
 	        aCoder.encode(notes, forKey: "notes")
 	    }
-	    
 	    required convenience init?(coder aDecoder: NSCoder) {
 	        // Methods
 	        
@@ -231,7 +230,6 @@
 	        super.init()
 	    }
 	}
-
 	class Page: UIViewController {
 	    let filename = "/man.archive"
 	    override func viewDidLoad() {
