@@ -18,16 +18,15 @@ pandoc -o b.epub \
 	2.view/TableView.md \
 	2.view/textview.md \
 	2.view/webview.md \
-	layout/1.intro.md \
-	layout/stackview.md \
-	todoapp/1.intro.md \
-	storage/1.intro.md \
-	storage/sqlite.md \
-	storage/coredata.md \
-	storage/plist.md \
-	storage/archive.md \
-	pod/1.pod.md \
-	http/1.visithttps.md \
-	http/2.readyhttpserver.md \
-	http/3.selfsignedhttps.md 
+	3.layout/1.intro.md \
+	3.layout/stackview.md \
+	4.todoapp/1.intro.md \
+	5.storage/1.intro.md \
+	5.storage/coredata.md \
+	5.storage/plist.md \
+	5.storage/archive.md \
+	6.http/1.visithttps.md \
+	6.http/2.readyhttpserver.md \
+	6.http/3.selfsignedhttps.md \
+	6.http/4.jsonserver.md 
 	
