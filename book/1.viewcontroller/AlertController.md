@@ -1,9 +1,9 @@
 
 ##AlertController
 
-UIAlertController用来向用户显示一个警告信息。
+根据选择的风格的不同，UIAlertController可以用来向用户显示一个警告信息、或者是显示一个可触控的操作列表。
 
-如下代码可以运行时立刻显示一个警告信息，代码如下：
+首先查看一个警告信息的代码：
 
     import UIKit
     @UIApplicationMain
@@ -33,25 +33,26 @@ UIAlertController用来向用户显示一个警告信息。
             self.view.backgroundColor = UIColor.black
         }
     }
-UIAlertController可以通过：
+
+执行后可以显示一个有标题和内容的警告消息，可以点击警告消息框内的按钮来执行指定的代码。UIAlertController可以通过构造函数：
 
          UIAlertController(title: "title", message: "message", preferredStyle:.alert)
 
-指定警告信息的标题、正文和样式。可以通过类似如下的代码：
+来指定警告信息的标题、正文和样式。可以通过类似如下的代码：
 
            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
                     print("OK")
                 }))
 
-方法创建一个操作，此操作会以按钮形式出现在警告信息框内。点击操作按钮后要执行的代码以匿名函数的形式通过handle参数添加。
+在此警告框内创建一个可以点击的按钮，点击此按钮后要执行的代码以匿名函数的形式通过handle参数添加。
 
 可以使用：
 
-        present(_:animated:completion:) 
+        UIViewController.present(_:animated:completion:) 
 
-来显示它。
+来显示此警告框。
 
-除了.alert指定的样式外，还有.actionSheet类型的样式，它可以在屏幕下方显示一个类似菜单的选择器，每个选项都可以单独触控并执行代码。实例如下：
+设定preferredStyle为.alert创建的就是警告信息框，如果想创建操作列表框的话，那么请设定preferredStyle为.actionSheet即可。操作列表框就是一个在屏幕下方显示一个类似菜单的选择器，每个选项都可以单独触控并执行代码。实例如下：
 
     class Page:UIViewController{
         override func viewDidAppear(_ animated: Bool) {
@@ -70,7 +71,8 @@ UIAlertController可以通过：
         }
     }
 
-和.alert的使用方法是非常类似的。
+操作列表框的创建方法警告信息框的创建方法是非常类似的。
+
 
 
 

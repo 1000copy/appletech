@@ -1,12 +1,12 @@
 ## NavigationController
 
-类NavigationController常用于层次化UI导航。
+类NavigationController常用于层次化界面导航。
 
 NavigationController可以包含多个ViewController、一个UINavigationBar、一个可选的UIToolbar。
 
 本文演示一个三层导航的案例，操作和UI描述如下：
 
-1. 共三层层次化UI
+1. 共三层层次化界面
 2. 每一级页面内有一个按钮，可以继续导航到下一级页面
 3. 每一个页面的导航条的左侧按钮可以返还到上一级
 
@@ -91,13 +91,13 @@ NavigationController可以包含多个ViewController、一个UINavigationBar、�
     }
 
 
-解释下：
+解释下代码：
 
 1. 此代码共有5个类：AppDelegate、Nav、Level1、Level2、Level3
-2. 把Nav作为UINavigationController的子类，实例化此类并设置到window.rootViewController上
-3. 类Level1、Level2、Level4都继承于UIViewController
-3. Nav类视图加载完成后，把第一层Level1压入导航视图
-4. 无需任何用户代码，UINavigationController本身默认提供页面的顶部条状区域，它被称为导航条(UINavigationBar)，点击此导航条的左侧按钮可以返还到上一级页面；
-5. 导航条中间显示一个字符串，值为当前层次ViewController的title属性值
+2. 类Nav继承于UINavigationController，实例化此类并设置到window.rootViewController上
+3. 类Level1、Level2、Level3都继承于UIViewController
+3. Nav类视图加载完成后，把Level1的实例压入导航视图
+4. UINavigationController本身默认提供页面的顶部条状区域，它被称为导航条(UINavigationBar)，点击此导航条的左按钮可以返还到上一级页面；
+5. 导航条中间显示一个字符串，默认值为当前层次ViewController.title的属性值
 
 

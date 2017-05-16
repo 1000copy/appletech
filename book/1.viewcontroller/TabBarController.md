@@ -1,9 +1,16 @@
 
 ## TabBarController
 
-类UITabBarController是一个特殊的UIViewController，它可以包含多个UIViewController的实例，并且在页面底部显示一个Tabbar作为UIViewController的切换显示开关。
+类UITabBarController可以包含多个UIViewController的实例，并且在页面底部显示一个Tabbar作为UIViewController的切换显示开关。
 
-如下案例，展示了包含两个ViewController的UITabBarController的使用方法。可以通过底部的Tabbar来切换显示：
+案例界面和交互是这样的：
+
+1. 屏幕下方矩形内显示两个正方形操作图标，且图标下有文字，分别为Page1、Page2
+2. 左上角显示一个标签为“Page #1”
+3. 点击操作图标的Page 2，则左上角显示一个标签为“Page #2”
+4. 可以触控对应操作图标，在Page1、Page2之间切换
+
+代码如下：
 
     import UIKit
     class Page1: UIViewController {
@@ -70,8 +77,6 @@
         }
     }
     
-可以点击屏幕显示的下方按钮切换视图控制器。
-
 本案例中，共有三个需要关注的类：
 
 1. Page1。UIViewController的子类，内含一个UILabel,显示字符串为Page #1
@@ -82,7 +87,7 @@
         
 初始化此数组，创建需要选择的UIViewController实例进来即可。
 
-可以把Tabbar的实例它赋值给self.window!.rootViewController上，这样就把它设置为App的根视图控制器了。
+把Tabbar的实例它赋值给self.window!.rootViewController上，这样就把它设置为App的根视图控制器了。
 
 
 
