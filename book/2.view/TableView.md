@@ -745,7 +745,7 @@ UIKit会在内部对此实例的创建和获取过程优化。使用此优化方
 
 使用UITableViewController的不同之处在于：
 
-1. 不需要实现UITableViewDataSource和UITableViewDelegate的方法，而是覆盖已经在父类内实现过了的方法。
-2. 会自动把UITableView填满AppDelegate.window视图内，而不必程序员指定位置和大小。
+1. 不需要实现UITableViewDataSource和UITableViewDelegate的方法，而是覆盖已经在父类内实现过了的方法
+2. 会自动把UITableView填满AppDelegate.window视图内，而不必程序员指定位置和大小
 
 
