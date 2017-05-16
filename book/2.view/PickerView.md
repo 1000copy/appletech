@@ -1,7 +1,7 @@
 
 ## PickerView
 
-UIPickerView提供了类似机械密码锁一样风格的控件。它可以提供一组或者多组值的显示和选择。
+UIPickerView看起来是类似机械密码锁一样风格的控件。它可以提供一组或者多组值的显示和选择。
 
 如下代码展示了此控件的能力：
 
@@ -47,9 +47,7 @@ UIPickerView提供了类似机械密码锁一样风格的控件。它可以提�
         }
     }
 
-本案例提供了2组数据集合供控件用来显示内容和做出选择。
-
-为了提供数据给控件，需要实现UIPickerViewDataSource协议；为了监听事件，需要实现UIPickerViewDelegate协议。
+本案例提供了2组数据集合供控件用来显示可选择的内容。为了提供数据给控件，需要实现UIPickerViewDataSource协议；为了监听事件，需要实现UIPickerViewDelegate协议。
 
 
 

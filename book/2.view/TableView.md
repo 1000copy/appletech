@@ -1,9 +1,9 @@
 
-##TableView
+## TableView
 
 类UITableView是一个视图，它可以显示列表，并且列表可以分为多个分区（section）。
 
-####显示列表
+### 显示列表
 
 假设一个案例：
 
@@ -71,20 +71,16 @@
         }
     }
 
-代码创建了三个类，其中：
+代码中Page继承于UIViewController，并且在载入时把Table作为子视图加入进来。
 
-1. AppDelegate和之前的并没有什么不同
-2. Page继承于UIViewController，也和之前的代码类似，只是在载入时把Table作为子视图加入进来。
-3. 要特别介绍的是Table
-
-Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate，然后配合代码：
+类Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate，然后配合代码：
 
     self.dataSource = self
     self.delegate = self
 
-就设置了UITableView的数据源对象为Table对象，设置了委托对象也是Table对象。前者指明此对象是UITableView的数据提供者，后者指明此对象是UITableView的外观和行为的提供者。
+就设置了UITableView的数据源对象为Table对象，指明此对象是UITableView的数据提供者。随后指定委托对象为Table对象，也就指明此对象是UITableView的外观和行为的提供者。
 
-具体数据提供的方法就是在此类内实现方法：
+在此类内实现数据源协议的相关方法有：
 
 
     func numberOfSections(in: UITableView) -> Int {
@@ -102,7 +98,7 @@ Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate�
             
 第一个方法告诉TableView此列表共有两个区间要去显示。第二个方法告诉TableView此列表指定区间的行数，第三个方法告诉TableView指定的区间和行数的UITableViewCell对象值。
 
-实现以下这些方法，可以定制TableView的外观：
+实现以下委托方法，可以定制TableView的外观：
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let rect = CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 44)
@@ -116,9 +112,9 @@ Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate�
             
 第一个方法为指定的区间创建一个头视图，第二个方法指示指定区间的行高。
 
-协议UITableViewDataSource,UITableViewDelegate还有很多可以实现的方法，具体参考iOS的开发者参考资料。
+协议UITableViewDataSource,UITableViewDelegate还有很多可以实现的方法，具体参考iOS的开发者官方文档。
 
-#### 添加删除修改
+### 添加删除修改
 
 类UITableView不但可以显示内容，还可以实现添加删除修改数据的UI支持。接下来的代码会：
 
@@ -210,24 +206,24 @@ Table继承于UITableView，并实现UITableViewDataSource,UITableViewDelegate�
 2. 在Table的init函数内，创建一个Timer，它每秒激发一个定时器事件，在不同的激发次数中，分别对数据做修改、添加、删除
 3. 调用reload方法，从而让UITableView重新加载数据
 
-对数据的增加修改删除，可以通过reload方法传递到TableView界面上。
+对数据的增加修改删除，可以通过.reload方法传递到TableView界面上。
 
 ### 默认提供的删除和列表重排
 
 可以自己添加按钮并执行对UITableView的列表的删除和重排。但是也可以使用它自己提供了删除和重排的UI。其中，删除流程是这样的：
 
 1. 用户设置UITableView为编辑模式
-2. 系统在当前内容的基础上，加上删除按钮（内容左侧，红色的减号图标），以及重排按钮（内容右侧）
+2. 系统在当前行内容的基础上，自动加入删除按钮（内容左侧，红色的减号图标），以及重排按钮（内容右侧）
 3. 用户可以选择点击删除按钮，系统向左推移内容，显示一个delete按钮
 4. 用户点击delete按钮，系统就会调用程序员实现的委托对象的函数：func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: 
-IndexPath) 
+IndexPath)，执行真正的删除
 
 而重排流程是这样的：
 
 1. 用户设置UITableView为编辑模式
 2. 系统在当前内容的基础上，加上删除按钮（内容左侧，红色的减号图标），以及重排按钮（内容右侧）
 3. 用户可以选择按住拖动重排按钮，系统可视化这样拖动过程
-4. 用户拖动完成，系统就会调用程序员实现的委托对象的函数： func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+4. 用户拖动完成，系统就会调用程序员实现的委托对象的函数： func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)，执行真正的重排
 
 
 代码如下：
@@ -429,7 +425,7 @@ IndexPath)
 
 ### 标记
 
-类UITableView支持对每个行做标记和取消标记，标记可以有多种。其中比较常用的是打对号图标。如下代码，演示了如何对每个行打对号和取消打对号：
+类UITableView支持对每个行做标记和取消标记。标记可以有多种，其中比较常用的是打对号图标。如下代码，演示了如何对每个行打对号标记和取消打对号标记：
 
 
     import UIKit
@@ -546,7 +542,7 @@ UIKit会在内部对此实例的创建和获取过程优化。使用此优化方
 
 ###复合的Cell
 
-之前的实例代码中创建的Cell的内容都是简单文字，但是实际上每个Cell都可以作为一个容器，装入更多的视图。如下代码展示了一个复合的Cell的创建：
+之前的实例代码中创建的Cell的内容都是简单文字，但是实际上每个Cell都可以作为一个视图容器，装入更多的视图。如下代码展示了一个复合的Cell的创建：
 
     import UIKit
     @UIApplicationMain
@@ -603,7 +599,14 @@ UIKit会在内部对此实例的创建和获取过程优化。使用此优化方
 
 ### 默认的Cell风格
 
-可以不必自己定制Cell样式，而是直接使用系统提供的。你可以通过设置不同的UITableViewCellAccessoryType、文字、文字1、图片、UITableViewCellStyle而让Cell外观变得丰富多彩：
+可以不必自己定制Cell样式，而是直接使用系统提供的。你可以通过为
+1. .style属性
+2. textLabel属性
+3. detailTextLabel属性
+4. .imageView属性
+5. .accessoryType属性
+
+而让Cell外观变得丰富多彩：
 
     import UIKit
     @UIApplicationMain
@@ -703,11 +706,11 @@ UIKit会在内部对此实例的创建和获取过程优化。使用此优化方
         }
     }
 
-案例显示了三行，每行有不同的风格组合，都是通过设置UITableViewCellAccessoryType、文字、文字1、图片、UITableViewCellStyle来达成的。你可以实际运行此代码，了解不同样式的差异。可以通过官方手册查询UITableViewCellStyle和UITableViewCellAccessoryType的不同选择。
+你可以实际运行此代码，了解不同样式的差异。可以通过官方手册查询UITableViewCellStyle和UITableViewCellAccessoryType的不同选择。
 
 ### UITableViewController
 
-我们一直使用UITableView，把它加入到一个ViewController内，然后由AppDelegate加载后者。实际上可以直接使用UITableViewController：
+我们一直使用UITableView来显示一个列表，也可以使用UITableViewController来完成类似的工作。比如：
 
     import UIKit
     @UIApplicationMain
@@ -742,14 +745,7 @@ UIKit会在内部对此实例的创建和获取过程优化。使用此优化方
 
 使用UITableViewController的不同之处在于：
 
-1. 就不需要实现UITableViewDataSource和UITableViewDelegate的方法，而是覆盖已经在父类内实现过了的方法。
-2. 会自动把UITableView填满AppDelegate.window视图内。无需程序员指定位置和大小。
-
-
-
-
-
-
-
+1. 不需要实现UITableViewDataSource和UITableViewDelegate的方法，而是覆盖已经在父类内实现过了的方法。
+2. 会自动把UITableView填满AppDelegate.window视图内，而不必程序员指定位置和大小。
 
 

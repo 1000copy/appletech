@@ -3,7 +3,7 @@
 
 UIImageView可以显示一张图、或者一组动图。
 
-如下代码显示一张图：
+如下案例代码可以显示一张图片：
 
     import UIKit
     @UIApplicationMain
@@ -43,11 +43,7 @@ UIImageView可以显示一张图、或者一组动图。
 
     class func imageWithColor(_ color: UIColor) -> UIImage 
 
-现场生产一张指定颜色填充的图片。这里列出的类为UIImage扩展出来的方法：
-
-        class func imageWithColor(_ color: UIColor) -> UIImage
-
-是为了即席创建出可以用于实例的图片。通过传递不同的颜色值，就可以得到不同颜色的小方块图片。
+现场生产一张指定颜色填充的图片，通过传递不同的颜色值，就可以得到不同颜色的小方块图片对象。
 
 如果想要显示一组动图，可以这样写代码：
 
@@ -93,7 +89,7 @@ UIImageView可以显示一张图、或者一组动图。
         }
     }
 
-运行代码时，你可以看到一个矩形区域正在切换4种颜色的图片显示。
+运行代码时，你可以看到一个矩形区域正在切换4个图片的显示，每个图片是一种颜色。
 
 UIImageView可以响应事件，如下代码演示轻按事件：
 
