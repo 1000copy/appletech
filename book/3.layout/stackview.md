@@ -108,7 +108,7 @@
 
 属性distribution这里使用了一个新值：
 
-        verticalStackView.distribution = .fillEqually
+    verticalStackView.distribution = .fillEqually
 
 指示在StackView内的视图均等的填充全部的空间。此属性的完整取值和说明如下：
 
