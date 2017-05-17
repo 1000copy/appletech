@@ -2,7 +2,7 @@
 
 想把对象序列化到文件，可以首先令此对象符合NSCoding协议，然后使用归档类完成序列化。
 
-如下案例，可以把对象User序列化到文件内：
+如下案例，可以把对象User序列化到指定文件内：
 
 	import UIKit
 	@UIApplicationMain
@@ -65,7 +65,7 @@
 	    public init?(coder aDecoder: NSCoder) // NS_DESIGNATED_INITIALIZER
 	}
 
-方法encode(with:)是从NSCoder对象中解码数据，方法init?(coder:)是编码数据到NSCoder对象内。函数内的实现代码大体类似，就是用类似的代码把当前对象的成员以NSCoder对象为源或者目标，做编码和解码。
+方法encode(with:)编码数据到NSCoder对象内，方法init?(coder:)是从NSCoder对象中解码数据。函数内的实现代码就是把当前对象的成员以NSCoder对象为源或者目标，做编码和解码工作。
 
 然后这个对象就可以传递给函数：
 
@@ -79,7 +79,7 @@
 
 完成反归档。
 
-更强大的是，如果对象内有成员指向到其他对象，归档类可以把这些指向对象一起归档，比如Man类通过成员wife指向一个Woman类，那么可以连同此成员对象一起做归档。方法如下：
+如果对象内有成员指向到其他对象，归档类可以把这些指向对象一起归档，比如Man类通过成员wife指向一个Woman类，那么可以连同此成员对象一起做归档。方法如下：
 
 
 	import UIKit
@@ -163,9 +163,9 @@
 
 	Optional(Man:{id:1,name:Man1},wife:{id:1,name:Wife1})
 
-要点在于，在NSCoder协议需要的两个函数中，通过NSCoder对象，归档和反归档此成员对象，并且此成员对象本身也必须实现NSCoder协议即可。
+要点在于待归档对象内的成员对象也必须实现NSCoder协议即可。
 
-成员是一个对象的数组的话，做法也是类似的。如下案例有两个类，Department和Task。Department通过成员Tasks包含一个Task的数组。把Task数组整体作为一个对象来处理，使用NSCoder.encode函数即可做归档，使用NSCoder.decodeObject即可反归档：
+如果成员是一个对象数组的话，做法也是类似的。如下案例等待归档的类有两个：Department和Task。Department通过成员Tasks包含一个Task的数组。把Task数组整体作为一个对象来处理，使用NSCoder.encode函数即可做归档：
 
 
 	import UIKit
@@ -248,7 +248,7 @@
 	    }
 	}
 
-在控制台上期望输出的是：
+可以在控制台看到的输出是这样的：
 
 	Optional(dept:{name:D1,tasks:Optional([{title:A1}, {title:A2}, {title:A3}]))
 
