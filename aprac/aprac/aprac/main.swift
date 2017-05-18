@@ -81,17 +81,38 @@
  
  public class Button : UIButton{
     var p : Page?
+    var t : String?
     open var touch : String{
         get{return ""}
         set(value){
             addTarget(parent, action: Selector(value), for: .touchUpInside)
         }
     }
+    var r : [Int]?
+    open var rect : [Int]?{
+        get{return r}
+        set(value){
+            r = value
+            setFrame(r![0], r![1],r![2],r![3])
+        }
+    }
+    open var title : String?{
+        get{return t}
+        set(value){
+            t = value
+            setTitle(value,for: .normal)
+        }
+    }
+    
     open var parent : Page{
         get{return p!}
         set(value){
             self.p = value
         }
     }
+    public func setFrame(_ x: Int, _  y: Int, _  width: Int, _  height: Int){
+        frame = CGRect(x: x, y: y, width: width, height: height)
+    }
+    
     
  }

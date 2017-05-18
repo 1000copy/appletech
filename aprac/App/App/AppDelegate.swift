@@ -18,14 +18,10 @@ class P : Page{
     override func loaded() {
         self.title = "Level 1"
         let button   = Button(type: .system)
-//        button.frame = CGRect(x: 120, y: 100, width: 100, height: 50)
-         button.frame = Frame(120,100,100,50)
-        button.setTitle("Dive Into 2",for: .normal)
-//        button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
-//        button.addTarget(self, action: Selector("buttonAction:"), for: .touchUpInside)
         button.parent = self
         button.touch = "buttonAction:"
-        
+        button.rect = [120,100,100,50]
+        button.title = "Dive Into 2"
         view.addSubview(button)
     }
     func buttonAction(_ sender:UIButton!){
@@ -36,10 +32,11 @@ class P : Page{
 class P2 : Page{
     override func loaded() {
         self.title = "Level 2"
-        let button   = UIButton(type: .system)
-        button.frame = CGRect(x: 120, y: 100, width: 100, height: 50)
-        button.setTitle("Dive Into 3",for: .normal)
-        button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        let button   = Button(type: .system)
+        button.parent = self
+        button.touch = "buttonAction:"
+        button.rect = [120,100,100,50]
+        button.title = "Dive Into 3"
         view.addSubview(button)
     }
     func buttonAction(_ sender:UIButton!){
@@ -50,10 +47,11 @@ class P2 : Page{
 class P3 : Page{
     override func loaded() {
         self.title = "Level 3"
-        let button   = UIButton(type: .system)
-        button.frame = CGRect(x: 120, y: 100, width: 100, height: 50)
-        button.setTitle("Pop",for: .normal)
-        button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        let button   = Button(type: .system)
+        button.parent = self
+        button.touch = "buttonAction:"
+        button.rect = [120,100,100,50]
+        button.title = "Pop"
         view.addSubview(button)
     }
     func buttonAction(_ sender:UIButton!){
