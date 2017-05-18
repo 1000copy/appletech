@@ -22,6 +22,11 @@
     open  func main() -> Any{
         return Page()
     }
+    public class var gate : UIApplicationDelegate {
+        get{
+            return UIApplication.shared.delegate!
+        }
+    }
     var MainPage : UIViewController {
         get{
             return window!.rootViewController!
@@ -45,23 +50,48 @@
     }
  }
  
- public class Nav: UINavigationController {
-    var count = 0
-    var pages : [Page] = []
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    public init(_ pages : [Page]) {
-        self.pages = pages
-        super.init(rootViewController:pages[0])
-    }
+ open class Nav: UINavigationController {
     open func loaded(){
         
     }
-    public override func viewDidLoad() {
+    open var homePage:Page{
+        get {
+    
+        return Page()
+        }
+    }
+    open func push(_ p : Page){
+        self.pushViewController(p, animated: true)
+    }
+    open func pop(){
+        self.popViewController(animated: true)
+    }
+    open override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-//        self.pushViewController(pages[0], animated: true)
+        push(homePage)
         loaded()
     }
+ }
+
+ public func Frame(_ x: Int, _  y: Int, _  width: Int, _  height: Int) -> CGRect{
+    return CGRect(x: x, y: y, width: width, height: height)
+ }
+ 
+ 
+ public class Button : UIButton{
+    var p : Page?
+    open var touch : String{
+        get{return ""}
+        set(value){
+            addTarget(parent, action: Selector(value), for: .touchUpInside)
+        }
+    }
+    open var parent : Page{
+        get{return p!}
+        set(value){
+            self.p = value
+        }
+    }
+    
  }
