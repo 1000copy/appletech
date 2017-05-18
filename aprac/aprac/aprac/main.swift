@@ -116,3 +116,47 @@
     
     
  }
+ open class MultiPage :UIPageViewController,UIPageViewControllerDataSource{
+//    var vcs :[UIViewController]     
+    public required init(){
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    }
+    public required  init?(coder: NSCoder){
+        fatalError()
+    }
+    open func Pages() ->[Page]{
+        return []
+    }
+    var vcs : [Page]?
+    open override func viewDidLoad() {
+        vcs = Pages()
+        self.dataSource = self
+        setViewControllers( [vcs![0]], direction: .forward, animated: false, completion: nil)
+    }
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
+    {
+        let v = (viewController as! Page)
+        let i = vcs!.index(of: v)! - 1
+        if i < 0 {
+            return nil
+        }
+        return vcs![i]
+    }
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
+    {
+        let v = (viewController as! Page)
+        let i = vcs!.index(of: v)! + 1
+        if i > vcs!.count - 1 {
+            return nil
+        }
+        return vcs![i]
+    }
+    public func presentationCount(for pageViewController: UIPageViewController) -> Int
+    {
+        return vcs!.count
+    }
+    public func presentationIndex(for pageViewController: UIPageViewController) -> Int
+    {
+        return 0
+    }
+ }

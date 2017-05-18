@@ -2,9 +2,17 @@ import aprac
 @UIApplicationMain
 class App: AppBase {
     var nav : N?
+//    override func main() -> Any{
+//        nav = N()
+//        return nav!
+//    }
     override func main() -> Any{
-        nav = N()
-        return nav!
+        return  Pages()
+    }
+}
+class  Pages : MultiPage{
+    override func Pages() ->[Page]{
+        return [P(),P2()]
     }
 }
 class N : Nav{
