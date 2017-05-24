@@ -15,20 +15,41 @@
     
     import UIKit
     import DrawerController
-    var drawerController : DrawerController?
-    
+
+    var drawerController : DrawerPage?
+
     @UIApplicationMain
     class AppDelegate: UIResponder, UIApplicationDelegate {
         var window : UIWindow?
         func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
             window = UIWindow()
-            drawerController = DrawerController(centerViewController: CenterPage(), leftDrawerViewController: LeftPage(), rightDrawerViewController: RightPage());
+            drawerController = DrawerPage()
             window!.rootViewController = drawerController
-            drawerController!.openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
-            drawerController!.closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
             window!.rootViewController!.view.backgroundColor = .blue
             window!.makeKeyAndVisible()
             return true
+        }
+    }
+    class DrawerPage : DrawerBase{
+        init(){
+            super.init(CenterPage(),LeftPage(),RightPage())
+        }
+        // 哄编译器开心的代码
+        required init?(coder aDecoder: NSCoder) {
+            super.init(coder: aDecoder)
+        }
+    }
+    class DrawerBase : DrawerController{
+        init(_ center : UIViewController,_ left : UIViewController,_ right : UIViewController){
+            super.init(centerViewController: center, leftDrawerViewController: left, rightDrawerViewController: right)
+            openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
+            closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
+        }
+        // 从入门到入门： 
+        // 1. What exactly is init coder aDecoder?
+        // 2. What does the question mark means in public init?(coder aDecoder: NSCoder)?
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
         }
     }
     class LeftPage: UIViewController {
