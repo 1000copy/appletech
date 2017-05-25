@@ -97,5 +97,7 @@ Pod文件为：
 
 函数对：objc_getAssociatedObject和objc_setAssociatedObject看起来比较复杂，但是可以用于动态的为对象创建属性，因此颇为强大。
 
+此代码不好理解，也许使用Observer设计模式来替代更好。
+
 
 

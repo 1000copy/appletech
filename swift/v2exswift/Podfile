@@ -1,0 +1,6 @@
+target 'five' do
+  use_frameworks!
+  pod 'FXBlurView', '~> 1.6.4'
+  pod 'SnapKit', '~> 3.1.2'
+  pod 'SwiftIcons', '~> 1.4.1'
+end

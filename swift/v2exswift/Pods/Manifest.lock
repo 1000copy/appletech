@@ -1,0 +1,18 @@
+PODS:
+  - FXBlurView (1.6.4)
+  - SnapKit (3.1.2)
+  - SwiftIcons (1.4.1)
+
+DEPENDENCIES:
+  - FXBlurView (~> 1.6.4)
+  - SnapKit (~> 3.1.2)
+  - SwiftIcons (~> 1.4.1)
+
+SPEC CHECKSUMS:
+  FXBlurView: db786c2561cb49a09ae98407f52460096ab8a44f
+  SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
+  SwiftIcons: 7a3fb54d2876b5b207a68c5e34dfbde2c4e00296
+
+PODFILE CHECKSUM: bf9cf3979fe5ac7678fd110ec16e79f89785cd7b
+
+COCOAPODS: 1.2.1
