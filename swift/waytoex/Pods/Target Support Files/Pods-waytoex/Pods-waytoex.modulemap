@@ -1,0 +1,6 @@
+framework module Pods_waytoex {
+  umbrella header "Pods-waytoex-umbrella.h"
+
+  export *
+  module * { export * }
+}

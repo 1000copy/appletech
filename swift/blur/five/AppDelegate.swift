@@ -1,5 +1,4 @@
 import UIKit
-import FXBlurView
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -12,20 +11,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 class Page: UIViewController {
-    var backgroundImageView:UIImageView?
-    var frostedView = FXBlurView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.backgroundImageView = UIImageView()
-        self.backgroundImageView!.frame = self.view.frame
-        self.backgroundImageView!.contentMode = .scaleToFill
-        view.addSubview(self.backgroundImageView!)
-        frostedView.underlyingView = self.backgroundImageView!
-        frostedView.isDynamic = true
-        frostedView.tintColor = UIColor.black
-        frostedView.frame = self.view.frame
-        self.view.addSubview(frostedView)
-        self.backgroundImageView?.image = UIImage(named: "1.jpg")
-        self.frostedView.updateAsynchronously(true, completion: nil)
+        view.backgroundColor = .blue
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+    }
+    func applicationWillEnterForeground(){
+        print("applicationWillEnterForeground")
+    }
+    func applicationDidEnterBackground(){
+        print("applicationDidEnterBackground")
     }
 }
