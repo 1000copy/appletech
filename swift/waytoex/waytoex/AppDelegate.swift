@@ -1,14 +1,8 @@
 import UIKit
 
-import ObjectMapper
-import Alamofire
 
-import Ji
-import YYText
-import KVOController
-
-import KeychainSwift
 @UIApplicationMain
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window : UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -21,13 +15,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
+import ObjectMapper
+import Alamofire
+
+import Ji
+import YYText
+import KVOController
+
+import KeychainSwift
 import UIKit
 import SnapKit
 
 import Alamofire
 import AlamofireObjectMapper
 
-import Ji
+
 import MJRefresh
 
 let kHomeTab = "me.fin.homeTab"
@@ -58,6 +60,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.navigationItem.title="V2EX";
         self.tab = V2EXSettings.sharedInstance[kHomeTab]
         self.setupNavigationItem()
