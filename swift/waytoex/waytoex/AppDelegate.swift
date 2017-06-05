@@ -1,8 +1,10 @@
+
 import UIKit
-
-
 @UIApplicationMain
 
+
+import UIKit
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window : UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -15,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
+
 import ObjectMapper
 import Alamofire
 
@@ -84,9 +87,6 @@ class HomeViewController: UIViewController {
         footer?.centerOffset = -4
         self.tableView.mj_footer = footer
         
-        self.thmemChangedHandler = {[weak self] (style) -> Void in
-            self?.tableView.backgroundColor = V2EXColor.colors.v2_backgroundColor
-        }
     }
     func setupNavigationItem(){
         let leftButton = NotificationMenuButton()
@@ -395,13 +395,7 @@ class TopicListModel:NSObject {
             self.topicTitleAttributedString?.yy_lineSpacing = 3
             
             //监听颜色配置文件变化，当有变化时，改变自身颜色
-            self.thmemChangedHandler = {[weak self] (style) -> Void in
-                if let str = self?.topicTitleAttributedString {
-                    str.yy_color = V2EXColor.colors.v2_TopicListTitleColor
-                    self?.topicTitleLayout = YYTextLayout(containerSize: CGSize(width: SCREEN_WIDTH-24, height: 9999), text: str)
-                }
-            }
-        }
+                 }
     }
 }
 
@@ -1420,30 +1414,6 @@ extension NSObject {
     /// 当前主题更改时、第一次设置时 自动调用的闭包
     public typealias ThemeChangedClosure = @convention(block) (_ style:String) -> Void
     
-    /// 自动调用的闭包
-    /// 设置时，会设置一个KVO监听，当V2Style.style更改时、第一次赋值时 会自动调用这个闭包
-    var thmemChangedHandler:ThemeChangedClosure? {
-        get {
-            let closureObject: AnyObject? = objc_getAssociatedObject(self, &AssociatedKeys.thmemChanged) as AnyObject?
-            guard closureObject != nil else{
-                return nil
-            }
-            let closure = unsafeBitCast(closureObject, to: ThemeChangedClosure.self)
-            return closure
-        }
-        set{
-            guard let value = newValue else{
-                return
-            }
-            let dealObject: AnyObject = unsafeBitCast(value, to: AnyObject.self)
-            objc_setAssociatedObject(self, &AssociatedKeys.thmemChanged,dealObject,objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            //设置KVO监听
-            self.kvoController.observe(V2EXColor.sharedInstance, keyPath: "style", options: [.initial,.new] , block: {[weak self] (nav, color, change) -> Void in
-                self?.thmemChangedHandler?(V2EXColor.sharedInstance.style)
-                }
-            )
-        }
-    }
 }
 import UIKit
 import DrawerController
@@ -1525,34 +1495,7 @@ class V2EXNavigationController: UINavigationController {
             make.top.bottom.left.right.equalTo(maskingView);
         }
         
-        self.thmemChangedHandler = {[weak self] (style) -> Void in
-            self?.navigationBar.tintColor = V2EXColor.colors.v2_navigationBarTintColor
-            
-            self?.navigationBar.titleTextAttributes = [
-                NSFontAttributeName : v2Font(18),
-                NSForegroundColorAttributeName : V2EXColor.colors.v2_TopicListTitleColor
-            ]
-            
-            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
-                self?.frostedView.barStyle = .default
-                UIApplication.shared.setStatusBarStyle(.default, animated: true);
-                
-                //全局键盘颜色
-                UITextView.appearance().keyboardAppearance = .light
-                UITextField.appearance().keyboardAppearance = .light
-                YYTextView.appearance().keyboardAppearance = .light
-                
-            }
-            else{
-                self?.frostedView.barStyle = .black
-                UIApplication.shared.setStatusBarStyle(.lightContent, animated: true);
-                
-                UITextView.appearance().keyboardAppearance = .dark
-                UITextField.appearance().keyboardAppearance = .dark
-                YYTextView.appearance().keyboardAppearance = .dark
-            }
-        }
-    }
+          }
 }
 class V2RefreshHeader: MJRefreshHeader {
     var loadingView:UIActivityIndicatorView?
@@ -1593,17 +1536,7 @@ class V2RefreshHeader: MJRefreshHeader {
         self.arrowImage = UIImageView(image: UIImage.imageUsedTemplateMode("ic_arrow_downward"))
         self.addSubview(self.arrowImage!)
         
-        self.thmemChangedHandler = {[weak self] (style) -> Void in
-            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
-                self?.loadingView?.activityIndicatorViewStyle = .gray
-                self?.arrowImage?.tintColor = UIColor.gray
-            }
-            else{
-                self?.loadingView?.activityIndicatorViewStyle = .white
-                self?.arrowImage?.tintColor = UIColor.gray
-            }
         }
-    }
     
     /**
      在这里设置子控件的位置和尺寸
@@ -1718,17 +1651,7 @@ class V2RefreshFooter: MJRefreshAutoFooter {
         
         self.noMoreDataStateString = "没有更多数据了"
         
-        self.thmemChangedHandler = {[weak self] (style) -> Void in
-            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
-                self?.loadingView?.activityIndicatorViewStyle = .gray
-                self?.stateLabel!.textColor = UIColor(white: 0, alpha: 0.3)
-            }
-            else{
-                self?.loadingView?.activityIndicatorViewStyle = .white
-                self?.stateLabel!.textColor = UIColor(white: 1, alpha: 0.3)
-            }
-        }
-    }
+     }
     
     /**
      在这里设置子控件的位置和尺寸
@@ -2114,10 +2037,7 @@ class V2Style: NSObject {
         if let fontScaleString = V2EXSettings.sharedInstance[kFONTSCALE] , let scale = Float(fontScaleString){
             self._fontScale = scale
         }
-        //监听主题配色，切换相应的配色
-        self.thmemChangedHandler = {[weak self] (style) -> Void in
-            self?.remakeCSS()
-        }
+
         
     }
     
