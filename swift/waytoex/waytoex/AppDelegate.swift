@@ -1,10 +1,8 @@
-
 import UIKit
+
+
 @UIApplicationMain
 
-
-import UIKit
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window : UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -17,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
-
 import ObjectMapper
 import Alamofire
 
@@ -63,7 +60,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.navigationItem.title="V2EX";
         self.tab = V2EXSettings.sharedInstance[kHomeTab]
         self.setupNavigationItem()
@@ -87,6 +84,9 @@ class HomeViewController: UIViewController {
         footer?.centerOffset = -4
         self.tableView.mj_footer = footer
         
+        self.thmemChangedHandler = {[weak self] (style) -> Void in
+            self?.tableView.backgroundColor = V2EXColor.colors.v2_backgroundColor
+        }
     }
     func setupNavigationItem(){
         let leftButton = NotificationMenuButton()
@@ -212,18 +212,17 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//outlets
-//        let item = self.topicList![indexPath.row]
-
-//        if let id = item.topicId {
-//            let topicDetailController = TopicDetailViewController();
-//            topicDetailController.topicId = id ;
-//            topicDetailController.ignoreTopicHandler = {[weak self] (topicId) in
-//                self?.perform(#selector(HomeViewController.ignoreTopicHandler(_:)), with: topicId, afterDelay: 0.6)
-//            }
-//            self.navigationController?.pushViewController(topicDetailController, animated: true)
-//            tableView .deselectRow(at: indexPath, animated: true);
-//        }
+        //outlets
+        //        let item = self.topicList![indexPath.row]
+        //        if let id = item.topicId {
+        //            let topicDetailController = TopicDetailViewController();
+        //            topicDetailController.topicId = id ;
+        //            topicDetailController.ignoreTopicHandler = {[weak self] (topicId) in
+        //                self?.perform(#selector(HomeViewController.ignoreTopicHandler(_:)), with: topicId, afterDelay: 0.6)
+        //            }
+        //            self.navigationController?.pushViewController(topicDetailController, animated: true)
+        //            tableView .deselectRow(at: indexPath, animated: true);
+        //        }
     }
     
     func ignoreTopicHandler(_ topicId:String) {
@@ -395,7 +394,13 @@ class TopicListModel:NSObject {
             self.topicTitleAttributedString?.yy_lineSpacing = 3
             
             //监听颜色配置文件变化，当有变化时，改变自身颜色
-                 }
+            self.thmemChangedHandler = {[weak self] (style) -> Void in
+                if let str = self?.topicTitleAttributedString {
+                    str.yy_color = V2EXColor.colors.v2_TopicListTitleColor
+                    self?.topicTitleLayout = YYTextLayout(containerSize: CGSize(width: SCREEN_WIDTH-24, height: 9999), text: str)
+                }
+            }
+        }
     }
 }
 
@@ -590,7 +595,6 @@ func v2ScaleFont(_ fontSize: CGFloat) -> UIFont{
 //  Created by skyline on 16/3/28.
 //  Copyright © 2016年 Fin. All rights reserved.
 //
-
 import UIKit
 import Alamofire
 import Ji
@@ -779,7 +783,6 @@ class V2User: NSObject {
     }
 }
 //
-
 import UIKit
 
 let keyPrefix =  "me.fin.V2EXSettings."
@@ -837,7 +840,6 @@ func getCell<T: UITableViewCell>(_ tableView:UITableView ,cell: T.Type ,indexPat
 //  Created by skyline on 16/3/29.
 //  Copyright © 2016年 Fin. All rights reserved.
 //
-
 import UIKit
 import SVProgressHUD
 
@@ -1064,11 +1066,11 @@ class HomeTopicListTableViewCell: UITableViewCell {
     
     func userNameTap(_ sender:UITapGestureRecognizer) {
         //outlets
-//        if let _ = self.itemModel , let username = itemModel?.userName {
-//            let memberViewController = MemberViewController()
-//            memberViewController.username = username
-//            V2Client.sharedInstance.centerNavigation?.pushViewController(memberViewController, animated: true)
-//        }
+        //        if let _ = self.itemModel , let username = itemModel?.userName {
+        //            let memberViewController = MemberViewController()
+        //            memberViewController.username = username
+        //            V2Client.sharedInstance.centerNavigation?.pushViewController(memberViewController, animated: true)
+        //        }
     }
     
     
@@ -1117,7 +1119,6 @@ class HomeTopicListTableViewCell: UITableViewCell {
 //  Created by huangfeng on 1/11/16.
 //  Copyright © 2016 Fin. All rights reserved.
 //
-
 import UIKit
 import KVOController
 
@@ -1131,7 +1132,6 @@ func colorWith255RGBA(_ r:CGFloat , g:CGFloat, b:CGFloat,a:CGFloat) ->UIColor {
 
 
 //使用协议 方便以后切换颜色配置文件、或者做主题配色之类乱七八糟产品经理最爱的功能
-
 protocol V2EXColorProtocol{
     var v2_backgroundColor: UIColor { get }
     var v2_navigationBarTintColor: UIColor { get }
@@ -1414,6 +1414,30 @@ extension NSObject {
     /// 当前主题更改时、第一次设置时 自动调用的闭包
     public typealias ThemeChangedClosure = @convention(block) (_ style:String) -> Void
     
+    /// 自动调用的闭包
+    /// 设置时，会设置一个KVO监听，当V2Style.style更改时、第一次赋值时 会自动调用这个闭包
+    var thmemChangedHandler:ThemeChangedClosure? {
+        get {
+            let closureObject: AnyObject? = objc_getAssociatedObject(self, &AssociatedKeys.thmemChanged) as AnyObject?
+            guard closureObject != nil else{
+                return nil
+            }
+            let closure = unsafeBitCast(closureObject, to: ThemeChangedClosure.self)
+            return closure
+        }
+        set{
+            guard let value = newValue else{
+                return
+            }
+            let dealObject: AnyObject = unsafeBitCast(value, to: AnyObject.self)
+            objc_setAssociatedObject(self, &AssociatedKeys.thmemChanged,dealObject,objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            //设置KVO监听
+            self.kvoController.observe(V2EXColor.sharedInstance, keyPath: "style", options: [.initial,.new] , block: {[weak self] (nav, color, change) -> Void in
+                self?.thmemChangedHandler?(V2EXColor.sharedInstance.style)
+                }
+            )
+        }
+    }
 }
 import UIKit
 import DrawerController
@@ -1495,7 +1519,34 @@ class V2EXNavigationController: UINavigationController {
             make.top.bottom.left.right.equalTo(maskingView);
         }
         
-          }
+        self.thmemChangedHandler = {[weak self] (style) -> Void in
+            self?.navigationBar.tintColor = V2EXColor.colors.v2_navigationBarTintColor
+            
+            self?.navigationBar.titleTextAttributes = [
+                NSFontAttributeName : v2Font(18),
+                NSForegroundColorAttributeName : V2EXColor.colors.v2_TopicListTitleColor
+            ]
+            
+            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
+                self?.frostedView.barStyle = .default
+                UIApplication.shared.setStatusBarStyle(.default, animated: true);
+                
+                //全局键盘颜色
+                UITextView.appearance().keyboardAppearance = .light
+                UITextField.appearance().keyboardAppearance = .light
+                YYTextView.appearance().keyboardAppearance = .light
+                
+            }
+            else{
+                self?.frostedView.barStyle = .black
+                UIApplication.shared.setStatusBarStyle(.lightContent, animated: true);
+                
+                UITextView.appearance().keyboardAppearance = .dark
+                UITextField.appearance().keyboardAppearance = .dark
+                YYTextView.appearance().keyboardAppearance = .dark
+            }
+        }
+    }
 }
 class V2RefreshHeader: MJRefreshHeader {
     var loadingView:UIActivityIndicatorView?
@@ -1536,7 +1587,17 @@ class V2RefreshHeader: MJRefreshHeader {
         self.arrowImage = UIImageView(image: UIImage.imageUsedTemplateMode("ic_arrow_downward"))
         self.addSubview(self.arrowImage!)
         
+        self.thmemChangedHandler = {[weak self] (style) -> Void in
+            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
+                self?.loadingView?.activityIndicatorViewStyle = .gray
+                self?.arrowImage?.tintColor = UIColor.gray
+            }
+            else{
+                self?.loadingView?.activityIndicatorViewStyle = .white
+                self?.arrowImage?.tintColor = UIColor.gray
+            }
         }
+    }
     
     /**
      在这里设置子控件的位置和尺寸
@@ -1651,7 +1712,17 @@ class V2RefreshFooter: MJRefreshAutoFooter {
         
         self.noMoreDataStateString = "没有更多数据了"
         
-     }
+        self.thmemChangedHandler = {[weak self] (style) -> Void in
+            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
+                self?.loadingView?.activityIndicatorViewStyle = .gray
+                self?.stateLabel!.textColor = UIColor(white: 0, alpha: 0.3)
+            }
+            else{
+                self?.loadingView?.activityIndicatorViewStyle = .white
+                self?.stateLabel!.textColor = UIColor(white: 1, alpha: 0.3)
+            }
+        }
+    }
     
     /**
      在这里设置子控件的位置和尺寸
@@ -1780,7 +1851,6 @@ extension DataRequest {
 //  Created by huangfeng on 1/23/16.
 //  Copyright © 2016 Fin. All rights reserved.
 //
-
 import UIKit
 import Alamofire
 import Ji
@@ -1998,7 +2068,6 @@ extension UserModel{
 //  Created by huangfeng on 3/10/16.
 //  Copyright © 2016 Fin. All rights reserved.
 //
-
 import UIKit
 //CSS基本样式
 private let BASE_CSS = try! String(contentsOfFile: Bundle.main.path(forResource: "baseStyle", ofType: "css")!, encoding: String.Encoding.utf8)
@@ -2037,7 +2106,10 @@ class V2Style: NSObject {
         if let fontScaleString = V2EXSettings.sharedInstance[kFONTSCALE] , let scale = Float(fontScaleString){
             self._fontScale = scale
         }
-
+        //监听主题配色，切换相应的配色
+        self.thmemChangedHandler = {[weak self] (style) -> Void in
+            self?.remakeCSS()
+        }
         
     }
     
