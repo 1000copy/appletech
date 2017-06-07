@@ -75,15 +75,26 @@ class TopicList : Table {
             cell._avatar.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
         }
         cell._user.text = model.userName;
-        if let layout = model.topicTitleLayout {
+        
             // flash is prevented
-            if layout.text.string == cell.itemModel?.topicTitleLayout?.text.string {
+            if cell.itemModel?.topicTitle == model.topicTitle {
                 return
             }
             else{
+                let layout = model.topicTitleLayout
                 cell._title.textLayout = layout
+                cell.itemModel?.topicTitle = model.topicTitle
             }
-        }
+//        if let layout = model.topicTitleLayout {
+//            // flash is prevented
+//            if layout.text.string == cell.itemModel?.topicTitleLayout?.text.string {
+//                return
+//            }
+//            else{
+//                cell._title.textLayout = layout
+//                cell.itemModel?.topicTitle = model.topicTitle
+//            }
+//        }
         if let avata = model.avata {
             cell._avatar.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
         }
@@ -251,34 +262,29 @@ class TopicCell:UITableViewCell{
     }
 }
 class TopicListModel:TopicListModel1 {
-    var topicTitleAttributedString: NSMutableAttributedString?
+    
     var topicTitleLayout: YYTextLayout?
     override func setupTitleLayout(){
-        if let title = self.topicTitle {
-            self.topicTitleAttributedString = NSMutableAttributedString(string: title,
-                                                                        attributes: [
-                                                                            NSFontAttributeName:v2Font(17),
-                                                                            NSForegroundColorAttributeName:V2EXColor.colors.v2_TopicListTitleColor,
-                                                                            ])
-            self.topicTitleAttributedString?.yy_lineSpacing = 3
-            self.topicTitleLayout = YYTextLayout(containerSize: CGSize(width: UIScreen.main.bounds.size.width-24, height: 9999), text: topicTitleAttributedString!)
-        }
+        self.topicTitleLayout = getYYLayout(self.topicTitle)
     }
     // IamHigh (self.topicTitle)
     func IamHigh() -> CGFloat{
         return IamHigh(self.topicTitle!)
     }
-    func IamHigh(_ title : String) -> CGFloat{
+    func getYYLayout(_ title : String?)->YYTextLayout?{
         var topicTitleAttributedString: NSMutableAttributedString?
         var topicTitleLayout: YYTextLayout?
-        topicTitleAttributedString = NSMutableAttributedString(string: title,
-                                                                        attributes: [
-                                                                            NSFontAttributeName:v2Font(17),
-                                                                            NSForegroundColorAttributeName:V2EXColor.colors.v2_TopicListTitleColor,
-                                                                            ])
+        topicTitleAttributedString = NSMutableAttributedString(string: title!,
+                                                               attributes: [
+                                                                NSFontAttributeName:v2Font(17),
+                                                                NSForegroundColorAttributeName:V2EXColor.colors.v2_TopicListTitleColor,
+                                                                ])
         topicTitleAttributedString?.yy_lineSpacing = 3
         topicTitleLayout = YYTextLayout(containerSize: CGSize(width: UIScreen.main.bounds.size.width-24, height: 9999), text: topicTitleAttributedString!)
-        //}
+        return topicTitleLayout
+    }
+    func IamHigh(_ title : String) -> CGFloat{
+        let topicTitleLayout = getYYLayout(title)
         return topicTitleLayout?.textBoundingRect.size.height ?? 0
     }
 }
