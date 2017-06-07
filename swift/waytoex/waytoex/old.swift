@@ -176,7 +176,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = self.topicList![indexPath.row]
-        let titleHeight = item.topicTitleLayout?.textBoundingRect.size.height ?? 0
+        let titleHeight = Foo.OccupyHigh(item.topicTitle!)
         //          上间隔   头像高度  头像下间隔       标题高度    标题下间隔 cell间隔
         let height = 12    +  35     +  12      + titleHeight   + 12      + 8
         
@@ -913,25 +913,25 @@ class HomeTopicListTableViewCell: UITableViewCell {
     
     
     func bind(_ model:TopicListModel){
-        self.userNameLabel.text = model.userName;
-        if let layout = model.topicTitleLayout {
-            //如果新旧model标题相同,则不需要赋值
-            //不然layout需要重新绘制，会造成刷新闪烁
-            if layout.text.string == self.itemModel?.topicTitleLayout?.text.string {
-                return
-            }
-            else{
-                self.topicTitleLabel.textLayout = layout
-            }
-        }
-        if let avata = model.avata {
-            self.avatarImageView.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
-        }
-        self.replyCountLabel.text = model.replies;
-        
-        self.itemModel = model
-        self.dateAndLastPostUserLabel.text = model.date
-        self.nodeNameLabel.text = model.nodeName
+//        self.userNameLabel.text = model.userName;
+//        if let layout = model.topicTitleLayout {
+//            //如果新旧model标题相同,则不需要赋值
+//            //不然layout需要重新绘制，会造成刷新闪烁
+//            if layout.text.string == self.itemModel?.topicTitleLayout?.text.string {
+//                return
+//            }
+//            else{
+//                self.topicTitleLabel.textLayout = layout
+//            }
+//        }
+//        if let avata = model.avata {
+//            self.avatarImageView.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
+//        }
+//        self.replyCountLabel.text = model.replies;
+//        
+//        self.itemModel = model
+//        self.dateAndLastPostUserLabel.text = model.date
+//        self.nodeNameLabel.text = model.nodeName
     }
 }
 

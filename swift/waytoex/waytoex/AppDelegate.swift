@@ -81,8 +81,8 @@ class TopicList : Table {
                 return
             }
             else{
-                let layout = model.topicTitleLayout
-                cell._title.textLayout = layout
+//                let layout = model.getYYLayout()
+                cell._title.textLayout = Foo.getYYLayout(model.topicTitle)
                 cell.itemModel?.topicTitle = model.topicTitle
             }
 //        if let layout = model.topicTitleLayout {
@@ -111,8 +111,7 @@ class TopicList : Table {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = self.topicList![indexPath.row]
-//        let titleHeight = item.topicTitleLayout?.textBoundingRect.size.height ?? 0
-        let titleHeight = item.IamHigh()
+        let titleHeight = Foo.OccupyHigh(item.topicTitle!)
         //          上间隔   头像高度  头像下间隔       标题高度    标题下间隔 cell间隔
         let height = 12    +  35     +  12      + titleHeight   + 12      + 8
         
@@ -261,17 +260,9 @@ class TopicCell:UITableViewCell{
         // Configure the view for the selected state
     }
 }
-class TopicListModel:TopicListModel1 {
-    
-    var topicTitleLayout: YYTextLayout?
-    override func setupTitleLayout(){
-        self.topicTitleLayout = getYYLayout(self.topicTitle)
-    }
-    // IamHigh (self.topicTitle)
-    func IamHigh() -> CGFloat{
-        return IamHigh(self.topicTitle!)
-    }
-    func getYYLayout(_ title : String?)->YYTextLayout?{
+
+class Foo {
+    class func getYYLayout(_ title : String?)->YYTextLayout?{
         var topicTitleAttributedString: NSMutableAttributedString?
         var topicTitleLayout: YYTextLayout?
         topicTitleAttributedString = NSMutableAttributedString(string: title!,
@@ -283,12 +274,14 @@ class TopicListModel:TopicListModel1 {
         topicTitleLayout = YYTextLayout(containerSize: CGSize(width: UIScreen.main.bounds.size.width-24, height: 9999), text: topicTitleAttributedString!)
         return topicTitleLayout
     }
-    func IamHigh(_ title : String) -> CGFloat{
+    class func OccupyHigh(_ title : String) -> CGFloat{
         let topicTitleLayout = getYYLayout(title)
         return topicTitleLayout?.textBoundingRect.size.height ?? 0
     }
+    
 }
-class TopicListModel1:NSObject {
+
+class TopicListModel:NSObject {
     var topicId: String?
     var avata: String?
     var nodeName: String?
