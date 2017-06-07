@@ -35,21 +35,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 class Page : UIViewController{
     var tab:String? = nil
     var currentPage = 0
-    var _table :TopicList!
+    var _table :TopicTable!
     override func viewDidLoad() {
-        _table = TopicList()
+        _table = TopicTable()
         self.view.addSubview(_table)
         _table.snp.makeConstraints{
             $0.top.right.bottom.left.equalTo(view)
         }
-        print(view.frame)
         load()
-        
     }
     func load() {
         TopicListModel.getTopicList(tab){[weak self](response) -> Void in
-            if response.success {
-                self?._table?.topicList = response.value
+            if  response.count > 0 {
+                self?._table?.topicList = response
                 self?.currentPage = 0
                 self?._table.ds = [(self?._table!.topicList!)!]
                 self?._table.load()
@@ -57,8 +55,10 @@ class Page : UIViewController{
         }
     }
 }
-class TopicList : Table {
+class TopicTable : Table {
     var topicList:[TopicListModel]?
+    var currentPage = 0
+    var tab = "all"
     init() {
         super.init(frame: CGRect.zero, style: .plain)// if it is .grouped ,then a blanket line appeared on top of tableview,FUCK
         let _table = self
@@ -67,6 +67,39 @@ class TopicList : Table {
             let ds = obj as! TopicListModel
             let c = cell as! TopicCell
             self.loadData(ds,c)
+        }
+
+    }
+
+    override func scrollUp(){
+        TopicListModel.getTopicList(tab){
+            [weak self](response) -> Void in
+                self?.topicList = response
+                self?.reloadData()
+                self?.currentPage = 0
+        }
+    }
+    override func scrollDown(){
+        if let count = self.topicList?.count , count <= 0{
+            mj_footer.endRefreshing()
+            return;
+        }
+        //根据 tab name 获取帖子列表
+        self.currentPage += 1
+        TopicListModel.getTopicList(tab,page: self.currentPage){
+            [weak self](response:[TopicListModel]) -> Void in
+            
+            if response.count > 0 {
+                //                if let count = response.count, count > 0 {
+                self?.topicList? += response
+                self?.reloadData()
+                //                }
+            }
+            else{
+                //加载失败，重置page
+                self?.currentPage -= 1
+            }
+            
         }
     }
     func loadData(_ model : TopicListModel ,_ cell : TopicCell){
@@ -81,20 +114,9 @@ class TopicList : Table {
                 return
             }
             else{
-//                let layout = model.getYYLayout()
                 cell._title.textLayout = Foo.getYYLayout(model.topicTitle)
                 cell.itemModel?.topicTitle = model.topicTitle
             }
-//        if let layout = model.topicTitleLayout {
-//            // flash is prevented
-//            if layout.text.string == cell.itemModel?.topicTitleLayout?.text.string {
-//                return
-//            }
-//            else{
-//                cell._title.textLayout = layout
-//                cell.itemModel?.topicTitle = model.topicTitle
-//            }
-//        }
         if let avata = model.avata {
             cell._avatar.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
         }
@@ -287,30 +309,19 @@ class TopicListModel:NSObject {
     var nodeName: String?
     var userName: String?
     var topicTitle: String?
-    
-    
     var date: String?
     var lastReplyUserName: String?
     var replies: String?
-    
     var hits: String?
-    
-    override init() {
-        super.init()
-    }
     init(rootNode: JiNode) {
         super.init()
-        
         self.avata = rootNode.xPath("./table/tr/td[1]/a[1]/img[@class='avatar']").first?["src"]
         self.nodeName = rootNode.xPath("./table/tr/td[3]/span[1]/a[1]").first?.content
         self.userName = rootNode.xPath("./table/tr/td[3]/span[1]/strong[1]/a[1]").first?.content
         
         let node = rootNode.xPath("./table/tr/td[3]/span[2]/a[1]").first
         self.topicTitle = node?.content
-        self.setupTitleLayout()
-        
         var topicIdUrl = node?["href"];
-        
         if var id = topicIdUrl {
             if let range = id.range(of: "/t/") {
                 id.replaceSubrange(range, with: "");
@@ -321,8 +332,6 @@ class TopicListModel:NSObject {
             }
         }
         self.topicId = topicIdUrl
-        
-        
         self.date = rootNode.xPath("./table/tr/td[3]/span[3]").first?.content
         
         var lastReplyUserName:String? = nil
@@ -336,81 +345,43 @@ class TopicListModel:NSObject {
             replies = reply.content
         }
         self.replies  = replies
-        
     }
-    init(favoritesRootNode:JiNode) {
-        super.init()
-        self.avata = favoritesRootNode.xPath("./table/tr/td[1]/a[1]/img[@class='avatar']").first?["src"]
-        self.nodeName = favoritesRootNode.xPath("./table/tr/td[3]/span[2]/a[1]").first?.content
-        self.userName = favoritesRootNode.xPath("./table/tr/td[3]/span[2]/strong[1]/a").first?.content
+    class func getTopicList(
+        _ tab: String? = nil ,
+        page:Int = 0 ,
+//        completionHandler: @escaping (V2ValueResponse<[TopicListModel]>) -> Void
+        completionHandler: @escaping ([TopicListModel]) -> Void
+        )->Void{
         
-        let node = favoritesRootNode.xPath("./table/tr/td[3]/span/a[1]").first
-        self.topicTitle = node?.content
-        self.setupTitleLayout()
-        
-        var topicIdUrl = node?["href"];
-        
-        if var id = topicIdUrl {
-            if let range = id.range(of: "/t/") {
-                id.replaceSubrange(range, with: "");
-            }
-            if let range = id.range(of: "#") {
-                id = id.substring(to: range.lowerBound)
-                topicIdUrl = id
-            }
+        var params:[String:String] = [:]
+        if let tab = tab {
+            params["tab"]=tab
         }
-        self.topicId = topicIdUrl
-        
-        
-        let date = favoritesRootNode.xPath("./table/tr/td[3]/span[2]").first?.content
-        if let date = date {
-            let array = date.components(separatedBy: "•")
-            if array.count == 4 {
-                self.date = array[3].trimmingCharacters(in: NSCharacterSet.whitespaces)
-                
-            }
+        else {
+            params["tab"] = "all"
         }
         
-        self.lastReplyUserName = favoritesRootNode.xPath("./table/tr/td[3]/span[2]/strong[2]/a[1]").first?.content
+        var url = V2EXURL
+        if params["tab"] == "all" && page > 0 {
+            params.removeAll()
+            params["p"] = "\(page)"
+            url = V2EXURL + "recent"
+        }
         
-        self.replies = favoritesRootNode.xPath("./table/tr/td[4]/a[1]").first?.content
+        Alamofire.request(url, parameters: params, headers: MOBILE_CLIENT_HEADERS).responseJiHtml { (response) -> Void in
+            var resultArray:[TopicListModel] = []
+            if  let jiHtml = response.result.value{
+//                print(jiHtml)
+                if let aRootNode = jiHtml.xPath("//body/div[@id='Wrapper']/div[@class='content']/div[@class='box']/div[@class='cell item']"){
+                    for aNode in aRootNode {
+                        let topic = TopicListModel(rootNode:aNode)
+                        resultArray.append(topic);
+                    }
+                }
+            }
+//            let t = V2ValueResponse<[TopicListModel]>(value:resultArray, success: response.result.isSuccess)
+            completionHandler(resultArray);
+        }
     }
-    
-    init(nodeRootNode:JiNode) {
-        super.init()
-        self.avata = nodeRootNode.xPath("./table/tr/td[1]/a[1]/img[@class='avatar']").first?["src"]
-        self.userName = nodeRootNode.xPath("./table/tr/td[3]/span[2]/strong").first?.content
-        
-        let node = nodeRootNode.xPath("./table/tr/td[3]/span/a[1]").first
-        self.topicTitle = node?.content
-        self.setupTitleLayout()
-        
-        var topicIdUrl = node?["href"];
-        
-        if var id = topicIdUrl {
-            if let range = id.range(of: "/t/") {
-                id.replaceSubrange(range, with: "");
-            }
-            if let range = id.range(of: "#") {
-                id = id.substring(to: range.lowerBound)
-                topicIdUrl = id
-            }
-        }
-        self.topicId = topicIdUrl
-        
-        
-        self.hits = nodeRootNode.xPath("./table/tr/td[3]/span[last()]/text()").first?.content
-        if var hits = self.hits {
-            hits = hits.substring(from: hits.index(hits.startIndex, offsetBy: 5))
-            self.hits = hits
-        }
-        var replies:String? = nil;
-        if let reply = nodeRootNode.xPath("./table/tr/td[4]/a[1]").first {
-            replies = reply.content
-        }
-        self.replies  = replies
-    }
-    
-    func setupTitleLayout(){
-    }
+
 }

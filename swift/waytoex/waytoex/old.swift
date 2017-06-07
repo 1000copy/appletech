@@ -103,9 +103,9 @@ class HomeViewController: UIViewController {
         TopicListModel.getTopicList(tab){
             (response) -> Void in
             
-            if response.success {
+            if true {
                 
-                self.topicList = response.value
+                self.topicList = response
                 self.tableView.reloadData()
                 
                 //判断标签是否能加载下一页, 不能就提示下
@@ -135,13 +135,13 @@ class HomeViewController: UIViewController {
         //根据 tab name 获取帖子列表
         self.currentPage += 1
         TopicListModel.getTopicList(tab,page: self.currentPage){
-            (response:V2ValueResponse<[TopicListModel]>) -> Void in
+            (response:[TopicListModel]) -> Void in
             
-            if response.success {
-                if let count = response.value?.count, count > 0 {
-                    self.topicList? += response.value!
+            if response.count > 0 {
+//                if let count = response.count, count > 0 {
+                    self.topicList? += response
                     self.tableView.reloadData()
-                }
+//                }
             }
             else{
                 //加载失败，重置page
@@ -347,150 +347,6 @@ class TopicListModel_:NSObject {
 }
 
 //MARK: - Request
-extension TopicListModel {
-    /**
-     获取首页帖子列表
-     
-     - parameter tab:               tab名
-     */
-    class func getTopicList(
-        _ tab: String? = nil ,
-        page:Int = 0 ,
-        completionHandler: @escaping (V2ValueResponse<[TopicListModel]>) -> Void
-        )->Void{
-        
-        var params:[String:String] = [:]
-        if let tab = tab {
-            params["tab"]=tab
-        }
-        else {
-            params["tab"] = "all"
-        }
-        
-        var url = V2EXURL
-        if params["tab"] == "all" && page > 0 {
-            params.removeAll()
-            params["p"] = "\(page)"
-            url = V2EXURL + "recent"
-        }
-        
-        Alamofire.request(url, parameters: params, headers: MOBILE_CLIENT_HEADERS).responseJiHtml { (response) -> Void in
-            var resultArray:[TopicListModel] = []
-            if  let jiHtml = response.result.value{
-                if let aRootNode = jiHtml.xPath("//body/div[@id='Wrapper']/div[@class='content']/div[@class='box']/div[@class='cell item']"){
-                    for aNode in aRootNode {
-                        let topic = TopicListModel(rootNode:aNode)
-                        resultArray.append(topic);
-                    }
-                    
-                    //更新通知数量
-                    V2User.sharedInstance.getNotificationsCount(jiHtml.rootNode!)
-                }
-                DispatchQueue.global().async {
-                    //领取奖励
-                    if let aRootNode = jiHtml.xPath("//body/div[@id='Wrapper']/div[@class='content']/div[@class='box']/div[@class='inner']/a[@href='/mission/daily']")?.first {
-                        if aRootNode.content == "领取今日的登录奖励" {
-                            print("有登录奖励可领取")
-                            UserModel.dailyRedeem()
-                        }
-                    }
-                }
-                
-            }
-            
-            let t = V2ValueResponse<[TopicListModel]>(value:resultArray, success: response.result.isSuccess)
-            completionHandler(t);
-        }
-    }
-    
-    class func getTopicList(
-        _ nodeName: String,
-        page:Int,
-        completionHandler: @escaping (V2ValueResponse<([TopicListModel] ,String?)>) -> Void
-        )->Void{
-        
-        let url =  V2EXURL + "go/" + nodeName + "?p=" + "\(page)"
-        
-        Alamofire.request(url, headers: MOBILE_CLIENT_HEADERS).responseJiHtml { (response) -> Void in
-            var resultArray:[TopicListModel] = []
-            var favoriteUrl :String?
-            if  let jiHtml = response.result.value{
-                if let aRootNode = jiHtml.xPath("//*[@id='Wrapper']/div[@class='content']/div[@class='box']/div[@class='cell']"){
-                    for aNode in aRootNode {
-                        let topic = TopicListModel(nodeRootNode: aNode)
-                        resultArray.append(topic);
-                    }
-                    
-                    //更新通知数量
-                    V2User.sharedInstance.getNotificationsCount(jiHtml.rootNode!)
-                }
-                
-                if let node = jiHtml.xPath("//*[@id='Wrapper']/div/div[1]/div[1]/div[1]/a")?.first{
-                    favoriteUrl = node["href"]
-                }
-            }
-            
-            let t = V2ValueResponse<([TopicListModel], String?)>(value:(resultArray,favoriteUrl), success: response.result.isSuccess)
-            completionHandler(t);
-        }
-    }
-    
-    
-    /**
-     获取我的收藏帖子列表
-     
-     */
-    class func getFavoriteList(_ page:Int = 1, completionHandler: @escaping (V2ValueResponse<([TopicListModel],Int)>) -> Void){
-        Alamofire.request(V2EXURL+"my/topics?p=\(page)", headers: MOBILE_CLIENT_HEADERS).responseJiHtml { (response) -> Void in
-            var resultArray:[TopicListModel] = []
-            var maxPage = 1
-            if let jiHtml = response.result.value {
-                if let aRootNode = jiHtml.xPath("//*[@class='cell item']"){
-                    for aNode in aRootNode {
-                        let topic = TopicListModel(favoritesRootNode:aNode)
-                        resultArray.append(topic);
-                    }
-                }
-                //更新通知数量
-                V2User.sharedInstance.getNotificationsCount(jiHtml.rootNode!)
-                
-                //获取最大页码 只有第一页需要获取maxPage
-                if page <= 1
-                    ,let aRootNode = jiHtml.xPath("//*[@class='page_normal']")?.last
-                    , let page = aRootNode.content
-                    , let pageInt = Int(page)
-                {
-                    maxPage = pageInt
-                }
-            }
-            
-            let t = V2ValueResponse<([TopicListModel],Int)>(value:(resultArray,maxPage), success: response.result.isSuccess)
-            completionHandler(t);
-        }
-    }
-    
-    /**
-     收藏节点
-     
-     - parameter nodeId: 节点ID
-     - parameter type:   操作 0 : 收藏 1：取消收藏
-     */
-    class func favorite(
-        _ nodeId:String,
-        type:NSInteger
-        ){
-        V2User.sharedInstance.getOnce { (response) in
-            if(response.success){
-                let action = type == 0 ? "favorite/node/" : "unfavorite/node/"
-                let url = V2EXURL + action + nodeId + "?once=" + V2User.sharedInstance.once!
-                Alamofire.request(url , headers: MOBILE_CLIENT_HEADERS).responseJiHtml { (response) in
-                    
-                }
-            }
-        }
-    }
-    
-}
 import UIKit
 
 
