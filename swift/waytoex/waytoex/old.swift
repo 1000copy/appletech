@@ -195,7 +195,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     
 }
 
-class TopicListModel:NSObject {
+class TopicListModel_:NSObject {
     var topicId: String?
     var avata: String?
     var nodeName: String?
