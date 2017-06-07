@@ -68,7 +68,6 @@ class TopicTable : Table {
             let c = cell as! TopicCell
             self.loadData(ds,c)
         }
-
     }
 
     override func scrollUp(){
@@ -217,9 +216,9 @@ class TopicCell:UITableViewCell{
         //点击用户头像，跳转到用户主页
         self._avatar.isUserInteractionEnabled = true
         self._user.isUserInteractionEnabled = true
-        var userNameTap = UITapGestureRecognizer(target: self, action: #selector(HomeTopicListTableViewCell.userNameTap(_:)))
+        var userNameTap = UITapGestureRecognizer(target: self, action: #selector(userNameTap(_:)))
         self._avatar.addGestureRecognizer(userNameTap)
-        userNameTap = UITapGestureRecognizer(target: self, action: #selector(HomeTopicListTableViewCell.userNameTap(_:)))
+        userNameTap = UITapGestureRecognizer(target: self, action: #selector(userNameTap(_:)))
         self._user.addGestureRecognizer(userNameTap)
     }
     func layout(_ view : UIView,_ closure: (_ make: ConstraintMaker) -> Void){
@@ -373,6 +372,7 @@ class TopicListModel:NSObject {
             if  let jiHtml = response.result.value{
 //                print(jiHtml)
                 if let aRootNode = jiHtml.xPath("//body/div[@id='Wrapper']/div[@class='content']/div[@class='box']/div[@class='cell item']"){
+//                if let aRootNode = jiHtml.xPath("div[@class='cell']"){
                     for aNode in aRootNode {
                         let topic = TopicListModel(rootNode:aNode)
                         resultArray.append(topic);

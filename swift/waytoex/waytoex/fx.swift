@@ -1,6 +1,8 @@
+import Kingfisher
 import MJRefresh
 import UIKit
-
+import Alamofire
+import Ji
 typealias  OnCellData = (_ cell : UITableViewCell ,_ obj : Any)->Void
 class Table: UITableView,UITableViewDataSource,UITableViewDelegate{
     var ds_ : [[Any]]?
@@ -123,17 +125,7 @@ class MJFooter: MJRefreshAutoFooter {
         self.addSubview(self.stateLabel!)
         
         self.noMoreDataStateString = "没有更多数据了"
-        
-        self.thmemChangedHandler = {[weak self] (style) -> Void in
-            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
-                self?.loadingView?.activityIndicatorViewStyle = .gray
-                self?.stateLabel!.textColor = UIColor(white: 0, alpha: 0.3)
-            }
-            else{
-                self?.loadingView?.activityIndicatorViewStyle = .white
-                self?.stateLabel!.textColor = UIColor(white: 1, alpha: 0.3)
-            }
-        }
+    
     }
     
     /**
@@ -185,16 +177,6 @@ class MJHeader: MJRefreshHeader {
         self.arrowImage = UIImageView(image: UIImage.imageUsedTemplateMode("ic_arrow_downward"))
         self.addSubview(self.arrowImage!)
         
-        self.thmemChangedHandler = {[weak self] (style) -> Void in
-            if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault {
-                self?.loadingView?.activityIndicatorViewStyle = .gray
-                self?.arrowImage?.tintColor = UIColor.gray
-            }
-            else{
-                self?.loadingView?.activityIndicatorViewStyle = .white
-                self?.arrowImage?.tintColor = UIColor.gray
-            }
-        }
     }
     
     /**
@@ -220,3 +202,467 @@ class MJHeader: MJRefreshHeader {
     }
     
 }
+func v2Font(_ fontSize: CGFloat) -> UIFont {
+    return UIFont.systemFont(ofSize: fontSize);
+}
+
+extension UIImage {
+    
+    func roundedCornerImageWithCornerRadius(_ cornerRadius:CGFloat) -> UIImage {
+        
+        let w = self.size.width
+        let h = self.size.height
+        
+        var targetCornerRadius = cornerRadius
+        if cornerRadius < 0 {
+            targetCornerRadius = 0
+        }
+        if cornerRadius > min(w, h) {
+            targetCornerRadius = min(w,h)
+        }
+        
+        let imageFrame = CGRect(x: 0, y: 0, width: w, height: h)
+        UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
+        
+        UIBezierPath(roundedRect: imageFrame, cornerRadius: targetCornerRadius).addClip()
+        self.draw(in: imageFrame)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
+    
+    class func imageUsedTemplateMode(_ named:String) -> UIImage? {
+        let image = UIImage(named: named)
+        if image == nil {
+            return nil
+        }
+        return image!.withRenderingMode(.alwaysTemplate)
+    }
+}
+func fin_defaultImageModification() -> ((_ image:UIImage) -> UIImage) {
+    return { ( image) -> UIImage in
+        let roundedImage = image.roundedCornerImageWithCornerRadius(3)
+        return roundedImage
+    }
+}
+import Kingfisher
+private var lastURLKey: Void?
+extension UIImageView {
+    
+    public var fin_webURL: URL? {
+        return objc_getAssociatedObject(self, &lastURLKey) as? URL
+    }
+    
+    fileprivate func fin_setWebURL(_ URL: Foundation.URL) {
+        objc_setAssociatedObject(self, &lastURLKey, URL, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    }
+    
+    func fin_setImageWithUrl (_ URL: Foundation.URL ,placeholderImage: UIImage? = nil
+        ,imageModificationClosure:((_ image:UIImage) -> UIImage)? = nil){
+        
+        self.image = placeholderImage
+        
+        let resource = ImageResource(downloadURL: URL)
+        fin_setWebURL(resource.downloadURL)
+        KingfisherManager.shared.cache.retrieveImage(forKey: resource.cacheKey, options: nil) { (image, cacheType) -> () in
+            if image != nil {
+                dispatch_sync_safely_main_queue({ () -> () in
+                    self.image = image
+                })
+            }
+            else {
+                KingfisherManager.shared.downloader.downloadImage(with: resource.downloadURL, options: nil, progressBlock: nil, completionHandler: { (image, error, imageURL, originalData) -> () in
+                    if let error = error , error.code == KingfisherError.notModified.rawValue {
+                        KingfisherManager.shared.cache.retrieveImage(forKey: resource.cacheKey, options: nil, completionHandler: { (cacheImage, cacheType) -> () in
+                            self.fin_setImage(cacheImage!, imageURL: imageURL!)
+                        })
+                        return
+                    }
+                    
+                    if var image = image, let originalData = originalData {
+                        //处理图片
+                        if let img = imageModificationClosure?(image) {
+                            image = img
+                        }
+                        
+                        //保存图片缓存
+                        KingfisherManager.shared.cache.store(image, original: originalData, forKey: resource.cacheKey, toDisk: true, completionHandler: nil)
+                        self.fin_setImage(image, imageURL: imageURL!)
+                    }
+                })
+            }
+        }
+    }
+    
+    fileprivate func fin_setImage(_ image:UIImage,imageURL:URL) {
+        
+        dispatch_sync_safely_main_queue { () -> () in
+            guard imageURL == self.fin_webURL else {
+                return
+            }
+            self.image = image
+        }
+        
+    }
+    
+}
+
+func fin_defaultImageModification2() -> ((_ image:UIImage) -> UIImage) {
+    return { ( image) -> UIImage in
+        let roundedImage = image.roundedCornerImageWithCornerRadius(3)
+        return roundedImage
+    }
+}
+func dispatch_sync_safely_main_queue(_ block: ()->()) {
+    if Thread.isMainThread {
+        block()
+    } else {
+        DispatchQueue.main.sync {
+            block()
+        }
+    }
+}
+let V2EXURL = "https://www.v2ex.com/"
+//使用协议 方便以后切换颜色配置文件、或者做主题配色之类乱七八糟产品经理最爱的功能
+protocol V2EXColorProtocol{
+    var v2_backgroundColor: UIColor { get }
+    var v2_navigationBarTintColor: UIColor { get }
+    var v2_TopicListTitleColor : UIColor { get }
+    var v2_TopicListUserNameColor : UIColor { get }
+    var v2_TopicListDateColor : UIColor { get }
+    
+    var v2_LinkColor : UIColor { get }
+    
+    var v2_TextViewBackgroundColor: UIColor { get }
+    
+    var v2_CellWhiteBackgroundColor : UIColor { get }
+    
+    var v2_NodeBackgroundColor : UIColor { get }
+    
+    var v2_SeparatorColor : UIColor { get }
+    
+    var v2_LeftNodeBackgroundColor : UIColor { get }
+    var v2_LeftNodeBackgroundHighLightedColor : UIColor { get }
+    var v2_LeftNodeTintColor: UIColor { get }
+    
+    /// 小红点背景颜色
+    var v2_NoticePointColor : UIColor { get }
+    
+    var v2_ButtonBackgroundColor : UIColor { get }
+}
+
+class V2EXDefaultColor: NSObject,V2EXColorProtocol {
+    static let sharedInstance = V2EXDefaultColor()
+    fileprivate override init(){
+        super.init()
+    }
+    
+    var v2_backgroundColor : UIColor{
+        get{
+            return colorWith255RGB(242, g: 243, b: 245);
+        }
+    }
+    var v2_navigationBarTintColor : UIColor{
+        get{
+            return colorWith255RGB(102, g: 102, b: 102);
+        }
+    }
+    
+    
+    var v2_TopicListTitleColor : UIColor{
+        get{
+            return colorWith255RGB(15, g: 15, b: 15);
+        }
+    }
+    
+    var v2_TopicListUserNameColor : UIColor{
+        get{
+            return colorWith255RGB(53, g: 53, b: 53);
+        }
+    }
+    
+    var v2_TopicListDateColor : UIColor{
+        get{
+            return colorWith255RGB(173, g: 173, b: 173);
+        }
+    }
+    
+    var v2_LinkColor : UIColor {
+        get {
+            return colorWith255RGB(119, g: 128, b: 135)
+        }
+    }
+    
+    var v2_TextViewBackgroundColor :UIColor {
+        get {
+            return colorWith255RGB(255, g: 255, b: 255)
+        }
+    }
+    
+    var v2_CellWhiteBackgroundColor :UIColor {
+        get {
+            return colorWith255RGB(255, g: 255, b: 255)
+        }
+    }
+    
+    var v2_NodeBackgroundColor : UIColor {
+        get {
+            return colorWith255RGB(242, g: 242, b: 242)
+        }
+    }
+    var v2_SeparatorColor : UIColor {
+        get {
+            return colorWith255RGB(190, g: 190, b: 190)
+        }
+    }
+    
+    var v2_LeftNodeBackgroundColor : UIColor {
+        get {
+            return colorWith255RGBA(255, g: 255, b: 255, a: 76)
+        }
+    }
+    var v2_LeftNodeBackgroundHighLightedColor : UIColor {
+        get {
+            return colorWith255RGBA(255, g: 255, b: 255, a: 56)
+        }
+    }
+    var v2_LeftNodeTintColor : UIColor {
+        get {
+            return colorWith255RGBA(0, g: 0, b: 0, a: 140)
+        }
+    }
+    
+    var v2_NoticePointColor : UIColor {
+        get {
+            return colorWith255RGB(207, g: 70, b: 71)
+        }
+    }
+    var v2_ButtonBackgroundColor : UIColor {
+        get {
+            return colorWith255RGB(85, g: 172, b: 238)
+        }
+    }
+}
+
+
+/// Dark Colors
+class V2EXDarkColor: NSObject,V2EXColorProtocol {
+    static let sharedInstance = V2EXDarkColor()
+    fileprivate override init(){
+        super.init()
+    }
+    
+    var v2_backgroundColor : UIColor{
+        get{
+            return colorWith255RGB(32, g: 31, b: 35);
+        }
+    }
+    var v2_navigationBarTintColor : UIColor{
+        get{
+            return colorWith255RGB(165, g: 165, b: 165);
+        }
+    }
+    
+    
+    var v2_TopicListTitleColor : UIColor{
+        get{
+            return colorWith255RGB(145, g: 145, b: 145);
+        }
+    }
+    
+    var v2_TopicListUserNameColor : UIColor{
+        get{
+            return colorWith255RGB(125, g: 125, b: 125);
+        }
+    }
+    
+    var v2_TopicListDateColor : UIColor{
+        get{
+            return colorWith255RGB(100, g: 100, b: 100);
+        }
+    }
+    
+    var v2_LinkColor : UIColor {
+        get {
+            return colorWith255RGB(119, g: 128, b: 135)
+        }
+    }
+    
+    var v2_TextViewBackgroundColor :UIColor {
+        get {
+            return colorWith255RGB(35, g: 34, b: 38)
+        }
+    }
+    
+    var v2_CellWhiteBackgroundColor :UIColor {
+        get {
+            return colorWith255RGB(35, g: 34, b: 38)
+        }
+    }
+    
+    var v2_NodeBackgroundColor : UIColor {
+        get {
+            return colorWith255RGB(40, g: 40, b: 40)
+        }
+    }
+    var v2_SeparatorColor : UIColor {
+        get {
+            return colorWith255RGB(46, g: 45, b: 49)
+        }
+    }
+    
+    var v2_LeftNodeBackgroundColor : UIColor {
+        get {
+            return colorWith255RGBA(255, g: 255, b: 255, a: 76)
+        }
+    }
+    var v2_LeftNodeBackgroundHighLightedColor : UIColor {
+        get {
+            return colorWith255RGBA(255, g: 255, b: 255, a: 56)
+        }
+    }
+    var v2_LeftNodeTintColor : UIColor {
+        get {
+            return colorWith255RGBA(0, g: 0, b: 0, a: 140)
+        }
+    }
+    
+    var v2_NoticePointColor : UIColor {
+        get {
+            return colorWith255RGB(207, g: 70, b: 71)
+        }
+    }
+    var v2_ButtonBackgroundColor : UIColor {
+        get {
+            return colorWith255RGB(207, g: 70, b: 71)
+        }
+    }
+}
+
+
+class V2EXColor :NSObject  {
+    fileprivate static let STYLE_KEY = "styleKey"
+    
+    static let V2EXColorStyleDefault = "Default"
+    static let V2EXColorStyleDark = "Dark"
+    
+    fileprivate static var _colors:V2EXColorProtocol?
+    static var colors :V2EXColorProtocol {
+        get{
+            
+            if let c = V2EXColor._colors {
+                return c
+            }
+            else{
+                if V2EXColor.sharedInstance.style == V2EXColor.V2EXColorStyleDefault{
+                    return V2EXDefaultColor.sharedInstance
+                }
+                else{
+                    return V2EXDarkColor.sharedInstance
+                }
+            }
+            
+        }
+        set{
+            V2EXColor._colors = newValue
+        }
+    }
+    
+    dynamic var style:String
+    static let sharedInstance = V2EXColor()
+    fileprivate override init(){
+        if let style = V2EXSettings.sharedInstance[V2EXColor.STYLE_KEY] {
+            self.style = style
+        }
+        else{
+            self.style = V2EXColor.V2EXColorStyleDefault
+        }
+        super.init()
+    }
+    func setStyleAndSave(_ style:String){
+        if self.style == style {
+            return
+        }
+        
+        if style == V2EXColor.V2EXColorStyleDefault {
+            V2EXColor.colors = V2EXDefaultColor.sharedInstance
+        }
+        else{
+            V2EXColor.colors = V2EXDarkColor.sharedInstance
+        }
+        
+        self.style = style
+        V2EXSettings.sharedInstance[V2EXColor.STYLE_KEY] = style
+    }
+    
+}
+let USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4";
+let MOBILE_CLIENT_HEADERS = ["user-agent":USER_AGENT]
+let keyPrefix =  "me.fin.V2EXSettings."
+
+class V2EXSettings: NSObject {
+    static let sharedInstance = V2EXSettings()
+    fileprivate override init(){
+        super.init()
+    }
+    
+    subscript(key:String) -> String? {
+        get {
+            return UserDefaults.standard.object(forKey: keyPrefix + key) as? String
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: keyPrefix + key )
+        }
+    }
+}
+extension String {
+    public var Lenght:Int {
+        get{
+            return self.characters.count;
+        }
+    }
+}
+func colorWith255RGB(_ r:CGFloat , g:CGFloat, b:CGFloat) ->UIColor {
+    return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: 255)
+}
+func colorWith255RGBA(_ r:CGFloat , g:CGFloat, b:CGFloat,a:CGFloat) ->UIColor {
+    return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: a/255)
+}
+extension DataRequest {
+    enum ErrorCode: Int {
+        case noData = 1
+        case dataSerializationFailed = 2
+    }
+    internal static func newError(_ code: ErrorCode, failureReason: String) -> NSError {
+        let errorDomain = "me.fin.v2ex.error"
+        let userInfo = [NSLocalizedFailureReasonErrorKey: failureReason]
+        let returnError = NSError(domain: errorDomain, code: code.rawValue, userInfo: userInfo)
+        return returnError
+    }
+    
+    static func JIHTMLResponseSerializer() -> DataResponseSerializer<Ji> {
+        return DataResponseSerializer { request, response, data, error in
+            guard error == nil else { return .failure(error!) }
+            
+            guard let validData = data else {
+                return .failure(AFError.responseSerializationFailed(reason: .inputDataNil))
+            }
+            
+            if  let jiHtml = Ji(htmlData: validData){
+                return .success(jiHtml)
+            }
+            
+            let failureReason = "ObjectMapper failed to serialize response."
+            let error = newError(.dataSerializationFailed, failureReason: failureReason)
+            return .failure(error)
+        }
+    }
+    
+    @discardableResult
+    public func responseJiHtml(queue: DispatchQueue? = nil,  completionHandler: @escaping (DataResponse<Ji>) -> Void) -> Self {
+        return response(responseSerializer: Alamofire.DataRequest.JIHTMLResponseSerializer(), completionHandler: completionHandler);
+    }
+}
+
