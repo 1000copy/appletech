@@ -174,9 +174,16 @@ class MJHeader: MJRefreshHeader {
         self.loadingView = UIActivityIndicatorView(activityIndicatorStyle: .white)
         self.addSubview(self.loadingView!)
         
-        self.arrowImage = UIImageView(image: UIImage.imageUsedTemplateMode("ic_arrow_downward"))
+        self.arrowImage = UIImageView(image: imageUsedTemplateMode("ic_arrow_downward"))
         self.addSubview(self.arrowImage!)
         
+    }
+    func imageUsedTemplateMode(_ str : String)-> UIImage?{
+        let image = UIImage(named: str)
+        if image == nil {
+            return nil
+        }
+        return image!.withRenderingMode(.alwaysTemplate)
     }
     
     /**
@@ -206,124 +213,6 @@ func v2Font(_ fontSize: CGFloat) -> UIFont {
     return UIFont.systemFont(ofSize: fontSize);
 }
 
-extension UIImage {
-    
-    func roundedCornerImageWithCornerRadius(_ cornerRadius:CGFloat) -> UIImage {
-        
-        let w = self.size.width
-        let h = self.size.height
-        
-        var targetCornerRadius = cornerRadius
-        if cornerRadius < 0 {
-            targetCornerRadius = 0
-        }
-        if cornerRadius > min(w, h) {
-            targetCornerRadius = min(w,h)
-        }
-        
-        let imageFrame = CGRect(x: 0, y: 0, width: w, height: h)
-        UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
-        
-        UIBezierPath(roundedRect: imageFrame, cornerRadius: targetCornerRadius).addClip()
-        self.draw(in: imageFrame)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image!
-    }
-    
-    class func imageUsedTemplateMode(_ named:String) -> UIImage? {
-        let image = UIImage(named: named)
-        if image == nil {
-            return nil
-        }
-        return image!.withRenderingMode(.alwaysTemplate)
-    }
-}
-func fin_defaultImageModification() -> ((_ image:UIImage) -> UIImage) {
-    return { ( image) -> UIImage in
-        let roundedImage = image.roundedCornerImageWithCornerRadius(3)
-        return roundedImage
-    }
-}
-import Kingfisher
-private var lastURLKey: Void?
-extension UIImageView {
-    
-    public var fin_webURL: URL? {
-        return objc_getAssociatedObject(self, &lastURLKey) as? URL
-    }
-    
-    fileprivate func fin_setWebURL(_ URL: Foundation.URL) {
-        objc_setAssociatedObject(self, &lastURLKey, URL, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
-    func fin_setImageWithUrl (_ URL: Foundation.URL ,placeholderImage: UIImage? = nil
-        ,imageModificationClosure:((_ image:UIImage) -> UIImage)? = nil){
-        
-        self.image = placeholderImage
-        
-        let resource = ImageResource(downloadURL: URL)
-        fin_setWebURL(resource.downloadURL)
-        KingfisherManager.shared.cache.retrieveImage(forKey: resource.cacheKey, options: nil) { (image, cacheType) -> () in
-            if image != nil {
-                dispatch_sync_safely_main_queue({ () -> () in
-                    self.image = image
-                })
-            }
-            else {
-                KingfisherManager.shared.downloader.downloadImage(with: resource.downloadURL, options: nil, progressBlock: nil, completionHandler: { (image, error, imageURL, originalData) -> () in
-                    if let error = error , error.code == KingfisherError.notModified.rawValue {
-                        KingfisherManager.shared.cache.retrieveImage(forKey: resource.cacheKey, options: nil, completionHandler: { (cacheImage, cacheType) -> () in
-                            self.fin_setImage(cacheImage!, imageURL: imageURL!)
-                        })
-                        return
-                    }
-                    
-                    if var image = image, let originalData = originalData {
-                        //处理图片
-                        if let img = imageModificationClosure?(image) {
-                            image = img
-                        }
-                        
-                        //保存图片缓存
-                        KingfisherManager.shared.cache.store(image, original: originalData, forKey: resource.cacheKey, toDisk: true, completionHandler: nil)
-                        self.fin_setImage(image, imageURL: imageURL!)
-                    }
-                })
-            }
-        }
-    }
-    
-    fileprivate func fin_setImage(_ image:UIImage,imageURL:URL) {
-        
-        dispatch_sync_safely_main_queue { () -> () in
-            guard imageURL == self.fin_webURL else {
-                return
-            }
-            self.image = image
-        }
-        
-    }
-    
-}
-
-func fin_defaultImageModification2() -> ((_ image:UIImage) -> UIImage) {
-    return { ( image) -> UIImage in
-        let roundedImage = image.roundedCornerImageWithCornerRadius(3)
-        return roundedImage
-    }
-}
-func dispatch_sync_safely_main_queue(_ block: ()->()) {
-    if Thread.isMainThread {
-        block()
-    } else {
-        DispatchQueue.main.sync {
-            block()
-        }
-    }
-}
 let V2EXURL = "https://www.v2ex.com/"
 
 let USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4";

@@ -101,10 +101,18 @@ class TopicTable : Table {
             
         }
     }
+    func loadImage(_ image : UIImageView,_ url : String){
+        image.kf.setImage(with: URL(string:"https:" + url)!)
+//        image.fin_setImageWithUrl(URL(string:url)!, placeholderImage: nil ){ ( image) -> UIImage in
+//            let roundedImage = image.roundedCornerImageWithCornerRadius(3)
+//            return roundedImage
+//        }
+    }
     func loadData(_ model : TopicListModel ,_ cell : TopicCell){
         cell._title.text = model.topicTitle
         if let avata = model.avata {
-            cell._avatar.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
+            loadImage(cell._avatar, avata)
+            
         }
         cell._user.text = model.userName;
         
@@ -117,7 +125,8 @@ class TopicTable : Table {
                 cell.itemModel?.topicTitle = model.topicTitle
             }
         if let avata = model.avata {
-            cell._avatar.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
+            loadImage(cell._avatar,avata)
+//            cell._avatar.fin_setImageWithUrl(URL(string: "https:" + avata)!, placeholderImage: nil, imageModificationClosure: fin_defaultImageModification() )
         }
         cell._replies.text = model.replies;
         
