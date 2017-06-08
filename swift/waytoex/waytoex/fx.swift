@@ -136,6 +136,17 @@ class MJFooter: MJRefreshAutoFooter {
         self.loadingView!.center = CGPoint(x: self.mj_w/2, y: self.mj_h/2 + self.centerOffset);
         self.stateLabel!.center = CGPoint(x: self.mj_w/2, y: self.mj_h/2  + self.centerOffset);
     }
+    override func scrollViewContentOffsetDidChange(_ change: [AnyHashable: Any]!) {
+        super.scrollViewContentOffsetDidChange(change)
+    }
+    
+    override func scrollViewContentSizeDidChange(_ change: [AnyHashable: Any]!) {
+        super.scrollViewContentOffsetDidChange(change)
+    }
+    
+    override func scrollViewPanStateDidChange(_ change: [AnyHashable: Any]!) {
+        super.scrollViewPanStateDidChange(change)
+    }
     
 }
 class MJHeader: MJRefreshHeader {
@@ -183,6 +194,7 @@ class MJHeader: MJRefreshHeader {
         if image == nil {
             return nil
         }
+        //Always draw the image as a template image, ignoring its color information.
         return image!.withRenderingMode(.alwaysTemplate)
     }
     
@@ -196,51 +208,18 @@ class MJHeader: MJRefreshHeader {
         self.arrowImage!.center = self.loadingView!.center
     }
     
-    override func scrollViewContentOffsetDidChange(_ change: [AnyHashable: Any]!) {
-        super.scrollViewContentOffsetDidChange(change)
-    }
+
     
     override func scrollViewContentSizeDidChange(_ change: [AnyHashable: Any]!) {
         super.scrollViewContentOffsetDidChange(change)
     }
-    
-    override func scrollViewPanStateDidChange(_ change: [AnyHashable: Any]!) {
-        super.scrollViewPanStateDidChange(change)
-    }
-    
+
 }
 func v2Font(_ fontSize: CGFloat) -> UIFont {
     return UIFont.systemFont(ofSize: fontSize);
 }
 
-let V2EXURL = "https://www.v2ex.com/"
 
-let USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4";
-let MOBILE_CLIENT_HEADERS = ["user-agent":USER_AGENT]
-let keyPrefix =  "me.fin.V2EXSettings."
-
-class V2EXSettings: NSObject {
-    static let sharedInstance = V2EXSettings()
-    fileprivate override init(){
-        super.init()
-    }
-    
-    subscript(key:String) -> String? {
-        get {
-            return UserDefaults.standard.object(forKey: keyPrefix + key) as? String
-        }
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: keyPrefix + key )
-        }
-    }
-}
-extension String {
-    public var Lenght:Int {
-        get{
-            return self.characters.count;
-        }
-    }
-}
 extension DataRequest {
     enum ErrorCode: Int {
         case noData = 1
