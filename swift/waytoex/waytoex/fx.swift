@@ -18,16 +18,15 @@ class Table: UITableView,UITableViewDataSource,UITableViewDelegate{
 
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame,style:style)
-        mj_header = MJHeader(refreshingBlock: {[weak self] in
-            self?.scrollUp()
-            self?.mj_header.endRefreshing()
-        })
-        let footer = MJFooter(refreshingBlock: {[weak self] () -> Void in
+        mj_header = MJRefreshNormalHeader(refreshingBlock: {[weak self] in
+                        self?.scrollUp()
+                        self?.mj_header.endRefreshing()
+                    })
+        mj_footer = MJRefreshBackNormalFooter(refreshingBlock: {[weak self] in
             self?.scrollDown()
             self?.mj_footer.endRefreshing()
         })
-        footer?.centerOffset = -4
-        mj_footer = footer
+
     }
     
     required init?(coder aDecoder: NSCoder) {
