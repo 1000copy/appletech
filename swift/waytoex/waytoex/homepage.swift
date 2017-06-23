@@ -44,16 +44,31 @@ class TopicTable : Table {
             self.loadData(ds,c)
         }
     }
-    
-    override func scrollUp(){
+    override func onClick() {
+        print("onClick")
+        print(self.indexPathForSelectedRow)
+//        let item = self.topicList![indexPath.row]
+//        
+//        if let id = item.topicId {
+//            let topicDetailController = TopicDetailViewController();
+//            topicDetailController.topicId = id ;
+//            topicDetailController.ignoreTopicHandler = {[weak self] (topicId) in
+//                self?.perform(#selector(HomeViewController.ignoreTopicHandler(_:)), with: topicId, afterDelay: 0.6)
+//            }
+//            self.navigationController?.pushViewController(topicDetailController, animated: true)
+//            tableView .deselectRow(at: indexPath, animated: true);
+//        }
+    }
+    override func scrollUp(doneHandler: @escaping(()->Void)){
         v2.getTopicList(tab){
             [weak self](response) -> Void in
             self?.topicList = response
             self?.reloadData()
             self?.currentPage = 0
+            doneHandler()
         }
     }
-    override func scrollDown(){
+    override func scrollDown(doneHandler: @escaping(()->Void)){
         if let count = self.topicList?.count , count <= 0{
             mj_footer.endRefreshing()
             return;
@@ -71,6 +86,7 @@ class TopicTable : Table {
                 //加载失败，重置page
                 self?.currentPage -= 1
             }
+            doneHandler()
         }
     }
     func loadImage(_ image : UIImageView,_ url : String){
@@ -89,7 +105,7 @@ class TopicTable : Table {
             return
         }
         else{
-            cell._title.textLayout = Foo.getYYLayout(model.topicTitle)
+            cell._title.textLayout = Text.getYYLayout(model.topicTitle)
             cell.itemModel?.topicTitle = model.topicTitle
         }
         if let avata = model.avata {
@@ -109,7 +125,7 @@ class TopicTable : Table {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = self.topicList![indexPath.row]
-        let titleHeight = Foo.OccupyHigh(item.topicTitle!,UIScreen.main.bounds.size.width - 24)
+        let titleHeight = Text.OccupyHigh(item.topicTitle!,UIScreen.main.bounds.size.width - 24)
         //          上间隔   头像高度  头像下间隔       标题高度    标题下间隔 cell间隔
         let height = 12    +  35     +  12      + titleHeight   + 12      + 8
         

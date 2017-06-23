@@ -20,6 +20,7 @@
 		6F69BA0E1EE020A10040AA72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F69BA0C1EE020A10040AA72 /* LaunchScreen.storyboard */; };
 		6F69BA191EE020A10040AA72 /* waytoexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F69BA181EE020A10040AA72 /* waytoexTests.swift */; };
 		6FABAE7B1EE7F4F200F9C6CE /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FABAE7A1EE7F4F200F9C6CE /* color.swift */; };
+		6FDCB7771EFB4AB1001C6CEE /* detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FDCB7761EFB4AB1001C6CEE /* detail.swift */; };
 		6FE663AF1EE69D5400DD7249 /* fx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE663AE1EE69D5400DD7249 /* fx.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		6F69BA181EE020A10040AA72 /* waytoexTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = waytoexTests.swift; sourceTree = "<group>"; };
 		6F69BA1A1EE020A10040AA72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6FABAE7A1EE7F4F200F9C6CE /* color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = color.swift; sourceTree = "<group>"; };
+		6FDCB7761EFB4AB1001C6CEE /* detail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = detail.swift; sourceTree = "<group>"; };
 		6FE663AE1EE69D5400DD7249 /* fx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fx.swift; sourceTree = "<group>"; };
 		75B4573F5BC839D1E8D36141 /* Pods-waytoex.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-waytoex.debug.xcconfig"; path = "Pods/Target Support Files/Pods-waytoex/Pods-waytoex.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,6 +135,7 @@
 				6F3AE6E01EE9006300886C65 /* v2.swift */,
 				6F3AE6E21EE901A100886C65 /* homepage.swift */,
 				6F3AE6E41EE9054700886C65 /* setting.swift */,
+				6FDCB7761EFB4AB1001C6CEE /* detail.swift */,
 			);
 			path = waytoex;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 			files = (
 				6F69BA061EE020A10040AA72 /* ViewController.swift in Sources */,
 				6FABAE7B1EE7F4F200F9C6CE /* color.swift in Sources */,
+				6FDCB7771EFB4AB1001C6CEE /* detail.swift in Sources */,
 				6F3AE6E11EE9006300886C65 /* v2.swift in Sources */,
 				6F3AE6E51EE9054700886C65 /* setting.swift in Sources */,
 				6FE663AF1EE69D5400DD7249 /* fx.swift in Sources */,
