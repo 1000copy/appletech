@@ -81,3 +81,21 @@ NotificationCenter还可以监听系统通知，比如App进入前景和背景�
 再度执行App可以看到输出：
     
     applicationWillEnterForeground
+    
+可以传递和接受对象作为参数，像是这样传递：
+
+    let cd = {(_ a : String) in print(a)}
+    NotificationCenter.default.post(name: Notification.Name("dive2"), object: [1,"2",cd])
+
+像是这样接收：
+
+    func dive2(_ obj : Any){
+            nav?.pushViewController(Level2(), animated: true)
+            print(obj)
+    //        {name = dive2; object = (
+    //        1,
+    //        2,
+    //        "(Function)"
+    //        )}
+    
+        }

@@ -1,4 +1,4 @@
-extension可以为类添加新的方法。但是如果想要添加数据成员的话就会被阻止，比如如下代码：
+extension可以为类添加新的方法，但是如果想要添加数据成员的话就会被阻止，比如如下代码：
 
     extension Foo {
         var _title: String?
@@ -16,7 +16,9 @@ extension可以为类添加新的方法。但是如果想要添加数据成员�
     
     Extensions may not contain stored properties
 
-就是说，通过extension无法直接为类添加数据成员。但是稍微转换下，还是可以做到的，方法就是使用一对看起来奇奇怪怪的方法：
+就是说，通过extension无法直接为类添加数据成员。
+
+然而，需求是客观存在的，在多个扩展方法之间共享一些数据成员是必要的。这就需要使用一些动态修改类的方法。具体来说，就是使用一对看起来奇奇怪怪的方法：
 
     objc_getAssociatedObject/objc_setAssociatedObject
 
