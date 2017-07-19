@@ -1,3 +1,9 @@
+设置UILabel.text,意味着显示的文本是单一的，整个文本只能有一种同样的文本效果。而设置UILabel.attributedText，就可以可以分段设置的不同的字体、阴影效果等，比如前几个字为一个阴影效果，后几个字使用下划线效果。
+
+如下代码我做了些改变，以便在Swift 3.0上可以运行，本来的代码来自 https://makeapppie.com/2016/07/05/using-attributed-strings-in-swift-3-0/ ，
+
+可以运行起来，查看效果：
+
     import UIKit
     @UIApplicationMain
     class AppDelegate: UIResponder, UIApplicationDelegate {
