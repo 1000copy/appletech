@@ -3,7 +3,7 @@
 如下案例，假设一个Cell内有两个Label，其中一个单行，第二个多行，根据第二个Label的内容的不同，高度也会不同，这个高度的变大，会导致Cell跟着变高。
 
 具体代码如下：
-
+```swift
     import UIKit
     @UIApplicationMain
     class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -92,7 +92,7 @@
             self.details = details
         }
     }
-
+```
 此代码中，关键点有三个，分别标注在代码体内。
 
 1. 设置估计行高和行高设置为UITableViewAutomaticDimension。此代码设置后，动态调整能力就会起作用。尽管名字和功能并不那么相符，但是确实就需要设置它才可以
